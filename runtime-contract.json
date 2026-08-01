@@ -1,0 +1,23 @@
+{
+  "contractName": "PTX Summer Cup 2026 Runtime Contract",
+  "version": "2.5.0-baseline",
+  "criticalRoutes": [
+    "home",
+    "teams",
+    "players",
+    "fixtures",
+    "standings",
+    "statistics",
+    "gallery",
+    "video",
+    "admin"
+  ],
+  "requiredDomAnchors": [
+    "app"
+  ],
+  "allowedLegacyAssets": 0,
+  "allowedMissingAssets": 0,
+  "allowedDuplicateIds": 0,
+  "allowedConsoleErrors": 0,
+  "allowedMissingHandlers": 0
+}
