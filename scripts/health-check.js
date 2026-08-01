@@ -37,13 +37,17 @@ const jsKeywords = new Set([
     'removeEventListener', 'focus', 'blur', 'preventDefault', 'stopPropagation', 'reload'
 ]);
 
-// 1. Scan Assets in HTML
+// 1. Scan Assets in HTML & JS Registry Arrays
+const assetPathRegex = /["'](public\/(?:images|media)\/[^"']+)["']/gi;
 const srcRegex = /(?:src|href|poster)\s*=\s*["']([^"']+)["']/gi;
 const bgUrlRegex = /url\s*\(\s*["']?([^"'\)]+)["']?\s*\)/gi;
 
 const scannedAssets = new Set();
 let match;
 
+while ((match = assetPathRegex.exec(html)) !== null) {
+    scannedAssets.add(match[1]);
+}
 while ((match = srcRegex.exec(html)) !== null) {
     const val = match[1];
     if (!val.startsWith('http://') && !val.startsWith('https://') && !val.startsWith('data:') && !val.startsWith('#') && !val.startsWith('mailto:') && !val.startsWith('tel:')) {
@@ -58,7 +62,8 @@ while ((match = bgUrlRegex.exec(html)) !== null) {
 }
 
 scannedAssets.forEach(ref => {
-    if (ref.includes('thư viện/') || ref.includes('th%C6%B0')) {
+    if (ref.includes('thư viện/') || ref.includes('th%C6%B0') || ref.includes('thu vi')) {
+        console.warn(`  ⚠️ Legacy Path Detected: ${ref}`);
         legacyPathsCount++;
     }
 
@@ -134,6 +139,7 @@ console.log(`Service Worker Errors:   ${swErrors}`);
 console.log('--------------------------------------------------');
 
 const pass = missingAssets <= contract.allowedMissingAssets &&
+             legacyPathsCount <= contract.allowedLegacyAssets &&
              missingHandlers <= contract.allowedMissingHandlers &&
              duplicateIds <= contract.allowedDuplicateIds;
 

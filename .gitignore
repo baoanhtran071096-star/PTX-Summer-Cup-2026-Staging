@@ -11,3 +11,11 @@ Thumbs.db
 
 # Temp scratch files
 scratch/
+
+# Legacy backup folders
+PTX-*/
+PTX-*
+thư viện/
+.netlify/
+"thư viện/"
+"th\306\260 vi\341\273\207n/"
