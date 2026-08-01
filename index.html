@@ -3904,14 +3904,15 @@
                     setTimeout(function() { s.style.display = 'none'; }, 400);
                 }
             }
-            setTimeout(closeSplash, 1000);
+            setTimeout(closeSplash, 300);
+            setTimeout(closeSplash, 800);
             window.addEventListener('load', closeSplash);
             if (document.readyState !== 'loading') closeSplash(); else document.addEventListener('DOMContentLoaded', closeSplash);
         })();
     </script>
     <!-- FIREBASE COMPAT CDN FOR REALTIME CLOUD SYNC -->
-    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 
     <!-- GOAL CELEBRATION OVERLAY -->
     <div id="goalCelebrationOverlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;z-index:999999;pointer-events:none;align-items:center;justify-content:center;flex-direction:column;background:rgba(0,0,0,0.7);backdrop-filter:blur(6px);">
