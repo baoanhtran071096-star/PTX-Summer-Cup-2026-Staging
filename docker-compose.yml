@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: ptx_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: ptx_user
+      POSTGRES_PASSWORD: ptx_password_2026
+      POSTGRES_DB: ptx_summer_cup
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database_schema.sql:/docker-entrypoint-initdb.d/init.sql
+
+  backend:
+    build: ./backend
+    container_name: ptx_backend
+    restart: always
+    ports:
+      - "5000:5000"
+    environment:
+      PORT: 5000
+      DATABASE_URL: "postgresql://ptx_user:ptx_password_2026@postgres:5432/ptx_summer_cup?schema=public"
+      JWT_SECRET: "ptx_summer_cup_secret_key_2026"
+    depends_on:
+      - postgres
+
+  frontend:
+    build: ./frontend
+    container_name: ptx_frontend
+    restart: always
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:

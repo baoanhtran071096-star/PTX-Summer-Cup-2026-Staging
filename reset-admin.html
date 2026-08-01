@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔐 Reset Admin — PTX Summer Cup 2026</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0f172a;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .card {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 20px;
+            padding: 40px;
+            width: 100%;
+            max-width: 440px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+        .logo {
+            text-align: center;
+            font-size: 48px;
+            margin-bottom: 8px;
+        }
+        h1 {
+            text-align: center;
+            font-size: 22px;
+            font-weight: 900;
+            color: #f97316;
+            margin-bottom: 6px;
+        }
+        .sub {
+            text-align: center;
+            font-size: 13px;
+            color: #64748b;
+            margin-bottom: 32px;
+        }
+        label {
+            display: block;
+            font-size: 12px;
+            font-weight: 700;
+            color: #94a3b8;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+        input {
+            width: 100%;
+            padding: 14px 16px;
+            background: #0f172a;
+            border: 1.5px solid #334155;
+            border-radius: 12px;
+            color: #fff;
+            font-size: 15px;
+            font-family: 'Inter', sans-serif;
+            margin-bottom: 18px;
+            transition: border-color 0.2s;
+            outline: none;
+        }
+        input:focus { border-color: #f97316; }
+        .btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #f97316, #ef4444);
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: 'Inter', sans-serif;
+            letter-spacing: 0.5px;
+        }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(249,115,22,0.4); }
+        .btn:active { transform: translateY(0); }
+        .status {
+            margin-top: 18px;
+            padding: 14px 16px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            display: none;
+            text-align: center;
+        }
+        .status.success {
+            background: rgba(34,197,94,0.15);
+            border: 1px solid rgba(34,197,94,0.4);
+            color: #4ade80;
+            display: block;
+        }
+        .status.error {
+            background: rgba(239,68,68,0.15);
+            border: 1px solid rgba(239,68,68,0.4);
+            color: #f87171;
+            display: block;
+        }
+        .warning {
+            background: rgba(249,115,22,0.1);
+            border: 1px solid rgba(249,115,22,0.3);
+            border-radius: 12px;
+            padding: 14px 16px;
+            font-size: 13px;
+            color: #fdba74;
+            margin-bottom: 28px;
+            line-height: 1.6;
+        }
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #475569;
+            font-size: 13px;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .back-link:hover { color: #f97316; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="logo">🔐</div>
+        <h1>Reset Tài Khoản Admin</h1>
+        <p class="sub">PTX Summer Cup 2026 — Công cụ khôi phục quyền truy cập</p>
+
+        <div class="warning">
+            ⚠️ Tất cả dữ liệu giải đấu (kết quả, thống kê...) sẽ được <strong>giữ nguyên</strong>. Chỉ tài khoản admin được tạo lại.
+        </div>
+
+        <div>
+            <label>Tên đăng nhập mới</label>
+            <input type="text" id="newUser" value="admin" placeholder="admin">
+
+            <label>Mật khẩu mới</label>
+            <input type="password" id="newPass" placeholder="Nhập mật khẩu (ít nhất 4 ký tự)">
+
+            <label>Xác nhận mật khẩu</label>
+            <input type="password" id="confirmPass" placeholder="Nhập lại mật khẩu">
+
+            <button class="btn" onclick="resetAdmin()">🔄 Đặt Lại Mật Khẩu</button>
+        </div>
+
+        <div id="status" class="status"></div>
+
+        <a href="PTX Summer Cup 2026 2.4 - Update Version.html" class="back-link">← Quay về trang chính</a>
+    </div>
+
+    <script>
+        function getSalt() {
+            let salt = localStorage.getItem('ptx_salt');
+            if (!salt) {
+                salt = Math.random().toString(36).substring(2, 12) + Date.now().toString(36);
+                localStorage.setItem('ptx_salt', salt);
+            }
+            return salt;
+        }
+
+        async function hashPassword(pw) {
+            const salt = getSalt();
+            const encoder = new TextEncoder();
+            const data = encoder.encode(salt + pw);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            return 'h_' + hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        async function resetAdmin() {
+            const user = document.getElementById('newUser').value.trim();
+            const pass = document.getElementById('newPass').value;
+            const confirm = document.getElementById('confirmPass').value;
+            const status = document.getElementById('status');
+
+            status.className = 'status';
+            status.textContent = '';
+
+            if (!user) {
+                status.className = 'status error';
+                status.textContent = '❌ Vui lòng nhập tên đăng nhập!';
+                return;
+            }
+            if (pass.length < 4) {
+                status.className = 'status error';
+                status.textContent = '❌ Mật khẩu phải có ít nhất 4 ký tự!';
+                return;
+            }
+            if (pass !== confirm) {
+                status.className = 'status error';
+                status.textContent = '❌ Mật khẩu xác nhận không khớp!';
+                return;
+            }
+
+            // Clear old credentials
+            localStorage.removeItem('ptx_admin_hash');
+            localStorage.removeItem('ptx_admin_user');
+            localStorage.removeItem('ptx_salt');
+            localStorage.removeItem('adminLoggedIn');
+
+            // Set new credentials
+            const hash = await hashPassword(pass);
+            localStorage.setItem('ptx_admin_hash', hash);
+            localStorage.setItem('ptx_admin_user', user);
+
+            status.className = 'status success';
+            status.textContent = '✅ Đặt lại mật khẩu thành công! Đang chuyển về trang chính...';
+
+            setTimeout(() => {
+                window.location.href = 'PTX Summer Cup 2026 2.4 - Update Version.html';
+            }, 2000);
+        }
+
+        // Allow Enter key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') resetAdmin();
+        });
+    </script>
+</body>
+</html>
