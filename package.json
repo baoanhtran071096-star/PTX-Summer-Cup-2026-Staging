@@ -1,10 +1,14 @@
 {
   "name": "ptx-summer-cup-2026",
-  "version": "2.5.0-baseline",
+  "version": "2.6.0-vite-parity",
   "description": "Giải bóng đá truyền thống Công đoàn PTX Group Việt Nam 2026",
   "main": "index.html",
+  "type": "module",
   "scripts": {
-    "health": "node scripts/health-check.js",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "health": "node scripts/health-check.cjs",
     "test": "npm run health"
   },
   "keywords": [
@@ -13,5 +17,8 @@
     "football"
   ],
   "author": "PTX Group",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "vite": "^5.0.0"
+  }
 }
