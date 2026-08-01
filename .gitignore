@@ -1,13 +1,17 @@
 # Dependencies & Logs
 node_modules/
+dist/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
 # OS Files & Zip backups
 *.zip
+*.html.bak
 .DS_Store
 Thumbs.db
+PTX Summer Cup 2026 2.4 - Update Version.html
+PTX*.html
 
 # Temp scratch files
 scratch/
