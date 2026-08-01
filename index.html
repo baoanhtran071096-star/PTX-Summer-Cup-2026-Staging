@@ -51,7 +51,7 @@
             --shadow-card: 0 12px 40px rgba(29, 53, 87, 0.08);
             --radius-card: 20px;
             --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            --bg-body: var(--bg-light);
+            --bg-body: #0F172A;
             --bg-card: var(--white);
             --text-primary: var(--text-dark);
             --border-color: rgba(0, 0, 0, 0.04);
@@ -282,7 +282,13 @@
             transform: scale(1.05);
         }
 
-        #splash-screen { display: none !important; 
+        @keyframes splashAutoDismiss {
+            0% { opacity: 1; visibility: visible; }
+            80% { opacity: 1; visibility: visible; }
+            100% { opacity: 0; visibility: hidden; pointer-events: none; }
+        }
+
+        #splash-screen {
             position: fixed;
             top: 0;
             left: 0;
@@ -294,10 +300,10 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            transition: opacity 0.6s ease, visibility 0.6s ease;
             color: var(--white);
-        
-            animation: splashAutoDismiss 1.2s forwards ease-out;}
+            animation: splashAutoDismiss 1.2s forwards ease-out;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
         #splash-screen.hidden {
             opacity: 0;
             visibility: hidden;
@@ -2505,9 +2511,21 @@
         }
 
         /* ===== MOTION ===== */
-        .reveal { opacity: 1;
-            transform: translateY(40px);
-            transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+        .reveal {
+            opacity: 1;
+            transform: none;
+        }
+
+        html.reveal-ready .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: opacity, transform;
+        }
+
+        html.reveal-ready .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
         .reveal.visible {
             opacity: 1;
@@ -3890,27 +3908,36 @@
     <!-- SPLASH SCREEN -->
     <div id="splash-screen" onclick="this.style.display='none'" title="Nhấp để đóng màn hình chờ">
         <div class="logo">PTX <span style="color: var(--white);">SUMMER</span> CUP</div>
-        <div class="bar"><div class="fill"></div></div>
-        <div class="status">Loading experience...</div>
-    </div>
+    </div> <!-- /splash-screen -->
     <script>
         (function() {
-            function closeSplash() {
+            var splashDismissed = false;
+            window.dismissSplashOverlay = function() {
+                if (splashDismissed) return;
+                splashDismissed = true;
                 var s = document.getElementById('splash-screen');
                 if (s) {
                     s.classList.add('hidden');
                     s.style.opacity = '0';
                     s.style.pointerEvents = 'none';
-                    setTimeout(function() { s.style.display = 'none'; }, 400);
+                    setTimeout(function() {
+                        s.style.display = 'none';
+                        if (s.parentNode) s.parentNode.removeChild(s);
+                        if (typeof revealActivePage === 'function') revealActivePage();
+                        if (typeof initReveal === 'function') initReveal();
+                        if (typeof initReveal === 'function') initReveal();
+                    }, 400);
                 }
+            };
+            if (document.readyState === 'complete' || document.readyState === 'interactive') {
+                setTimeout(window.dismissSplashOverlay, 100);
+            } else {
+                document.addEventListener('DOMContentLoaded', window.dismissSplashOverlay);
+                window.addEventListener('load', window.dismissSplashOverlay);
             }
-            setTimeout(closeSplash, 300);
-            setTimeout(closeSplash, 800);
-            window.addEventListener('load', closeSplash);
-            if (document.readyState !== 'loading') closeSplash(); else document.addEventListener('DOMContentLoaded', closeSplash);
+            setTimeout(window.dismissSplashOverlay, 400);
         })();
     </script>
-    <!-- FIREBASE COMPAT CDN FOR REALTIME CLOUD SYNC -->
     <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
     <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 
@@ -5716,9 +5743,9 @@
     <!-- ============================================================
     SCRIPTS
     ============================================================ -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js">
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js">
     </script>
-    <script src="https://cdn.plyr.io/3.7.8/plyr.polyfilled.js">
+    <script defer src="https://cdn.plyr.io/3.7.8/plyr.polyfilled.js">
     </script>
     <script>
         // ============================================================
@@ -6329,7 +6356,7 @@
             return defaultVal || key;
         }
 
-        function applyLanguage(lang) {
+        function applyLanguage(lang, skipReRender = false) {
             currentLang = lang;
             document.querySelectorAll('[data-i18n]').forEach(el => {
                 const key = el.getAttribute('data-i18n');
@@ -6348,7 +6375,9 @@
                 const bLang = btn.getAttribute ? btn.getAttribute('data-lang') : (btn.dataset ? btn.dataset.lang : null);
                 btn.classList.toggle('active', bLang === lang);
             });
-            reRenderLanguageViews();
+            if (!skipReRender) {
+                reRenderLanguageViews();
+            }
         }
 
         document.querySelectorAll('.lang-switch button').forEach(btn => {
@@ -6411,70 +6440,94 @@
             admin: { title: 'Quản trị - PTX Summer Cup 2026', desc: 'Cập nhật nội dung' }
         };
 
+        function normalizeRoute(pageId) {
+            if (pageId === null || pageId === undefined) return 'home';
+            var str = String(pageId).trim();
+            str = str.replace(/^#+/, '');
+            str = str.replace(/^\/+/, '').replace(/\/+$/, '');
+            str = str.trim();
+
+            if (str === 'hub' || str === 'fan-prediction') return 'home';
+            if (pageConfig[str]) return str;
+            return 'home';
+        }
+
         function navigate(pageId) {
-            if (pageId === 'hub') {
-                navigate('home');
-                setTimeout(() => {
-                    const el = document.getElementById('tournament-hub');
-                    if (el) el.scrollIntoView({ behavior: 'smooth' });
-                }, 200);
+            const targetPage = normalizeRoute(pageId);
+            let targetEl = document.getElementById('page-' + targetPage);
+
+            if (!targetEl) {
+                targetEl = document.getElementById('page-home');
+            }
+
+            // Transactional Mutation: Never remove .active if targetEl is missing
+            if (!targetEl) {
+                console.error('[Router Error] Critical: page-home missing from DOM');
                 return;
             }
-            if (pageId === 'fan-prediction') {
-                navigate('home');
-                setTimeout(() => {
-                    const el = document.getElementById('fan-prediction');
-                    if (el) el.scrollIntoView({ behavior: 'smooth' });
-                }, 200);
-                return;
-            }
+
+            // 1. Update UI active states transactionally
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            const target = document.getElementById('page-' + pageId);
-            if (target) target.classList.add('active');
-            const data = pageConfig[pageId];
+            targetEl.classList.add('active');
+
+            // 2. Update page metadata
+            const data = pageConfig[targetPage] || pageConfig['home'];
             if (data) {
                 document.title = data.title;
                 const descMeta = document.querySelector('meta[name="description"]');
                 if (descMeta) descMeta.setAttribute('content', data.desc);
             }
+
+            // 3. Update navigation link active state
             document.querySelectorAll('.nav-links a, .bottom-nav .nav-item').forEach(link => {
                 link.classList.remove('active');
                 const href = link.getAttribute('href');
-                if (href && href === '#' + pageId) link.classList.add('active');
+                if (href && (href === '#' + targetPage || href === '#/ ' + targetPage)) {
+                    link.classList.add('active');
+                }
             });
-            localStorage.setItem('currentPage', pageId);
 
-            // Execute Page Specific Dynamic Rendering Pipelines (Fixes 100% missing data on tab switch)
-            if (pageId === 'home') {
+            localStorage.setItem('currentPage', targetPage);
+
+            // 4. Page Specific Dynamic Renders
+            if (targetPage === 'home') {
                 try { renderAllMatches(); } catch(e){}
                 try { renderStandings(); } catch(e){}
                 try { updateDashboard(); } catch(e){}
-            } else if (pageId === 'schedule') {
+            } else if (targetPage === 'schedule') {
                 try { renderAllMatches(); } catch(e){}
-            } else if (pageId === 'standings') {
+            } else if (targetPage === 'standings') {
                 try { renderStandingsPageTable(); } catch(e){}
-            } else if (pageId === 'teams' || pageId === 'players') {
+            } else if (targetPage === 'teams' || targetPage === 'players') {
                 try { renderTeamStats(); } catch(e){}
                 try { renderPlayerCards(); } catch(e){}
-            } else if (pageId === 'gallery') {
+            } else if (targetPage === 'gallery') {
                 try { renderGalleryPage(); } catch(e){}
-            } else if (pageId === 'hall-of-fame') {
+            } else if (targetPage === 'hall-of-fame') {
                 try { renderHallOfFame(); } catch(e){}
-            } else if (pageId === 'admin') {
+            } else if (targetPage === 'admin') {
                 try { if (typeof loadAdminData === 'function') loadAdminData(); } catch(e){}
             }
 
-            setTimeout(initReveal, 300);
+            if (typeof revealActivePage === 'function') revealActivePage();
+            setTimeout(initReveal, 150);
 
-            if (pageId !== 'home') {
+            if (targetPage !== 'home') {
                 const liveBar = document.getElementById('stickyLiveBar');
                 if (liveBar) liveBar.classList.remove('active');
             }
         }
 
         window.addEventListener('hashchange', function() {
-            const hash = window.location.hash.substring(1) || 'home';
-            if (pageConfig[hash]) navigate(hash);
+            const rawHash = window.location.hash.substring(1);
+            const targetPage = normalizeRoute(rawHash);
+            navigate(targetPage);
+        });
+
+        window.addEventListener('popstate', function() {
+            const rawHash = window.location.hash.substring(1);
+            const targetPage = normalizeRoute(rawHash);
+            navigate(targetPage);
         });
 
         document.querySelectorAll('.nav-links a, .bottom-nav .nav-item').forEach(link => {
@@ -6482,24 +6535,16 @@
                 e.preventDefault();
                 const href = this.getAttribute('href');
                 if (href && href.startsWith('#')) {
-                    const page = href.substring(1);
-                    if (pageConfig[page]) {
-                        window.location.hash = page;
-                        navigate(page);
-                    }
+                    const rawPage = href.substring(1);
+                    const targetPage = normalizeRoute(rawPage);
+                    navigate(targetPage);
                 }
             });
         });
 
-        const initPage = localStorage.getItem('currentPage') || 'home';
-        if (window.location.hash) {
-            const hash = window.location.hash.substring(1);
-            if (pageConfig[hash]) navigate(hash);
-            else navigate('home');
-        } else {
-            navigate(initPage);
-            window.location.hash = initPage;
-        }
+        // Clean initial Home-First boot without forcing #home into URL
+        const initPage = normalizeRoute(localStorage.getItem('currentPage'));
+        navigate('home');
 
         // ============================================================
         // THEME
@@ -8502,28 +8547,76 @@
         // ============================================================
         // REVEAL
         // ============================================================
+        var globalObserver = null;
+
+        function revealActivePage() {
+            const activePage = document.querySelector('.page.active');
+            if (!activePage) return;
+            const activeReveals = activePage.querySelectorAll('.reveal');
+            activeReveals.forEach(el => {
+                const rect = el.getBoundingClientRect();
+                if (rect.top < window.innerHeight + 200) {
+                    el.classList.add('visible');
+                    const counters = el.querySelectorAll('.counter');
+                    counters.forEach(c => {
+                        const target = parseInt(c.getAttribute('data-target') || c.innerText);
+                        if (target && !c.dataset.counted) {
+                            c.dataset.counted = 'true';
+                            if (typeof animateCounter === 'function') animateCounter(c, target);
+                        }
+                    });
+                }
+            });
+        }
+
         function initReveal() {
-            const reveals = document.querySelectorAll('.reveal:not(.visible)');
-            if (typeof IntersectionObserver === 'undefined') {
-                reveals.forEach(el => el.classList.add('visible'));
-                return;
-            }
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                        const counters = entry.target.querySelectorAll('.counter');
-                        counters.forEach(c => {
-                            const target = parseInt(c.getAttribute('data-target') || c.innerText);
-                            if (target && !c.dataset.counted) {
-                                c.dataset.counted = 'true';
-                                animateCounter(c, target);
-                            }
-                        });
-                    }
+            try {
+                if (typeof IntersectionObserver === 'undefined') return;
+                
+                // Progressive enhancement: add reveal-ready class only when observer is ready
+                document.documentElement.classList.add('reveal-ready');
+
+                if (globalObserver) {
+                    try { globalObserver.disconnect(); } catch(e){}
+                }
+
+                globalObserver = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                            globalObserver.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.05, rootMargin: '0px 0px 50px 0px' });
+
+                document.querySelectorAll('.page.active .reveal:not(.visible)').forEach(el => {
+                    globalObserver.observe(el);
                 });
-            }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
-            reveals.forEach(el => observer.observe(el));
+            } catch (err) {
+                console.warn('[Reveal Engine] Falling back to default visible state:', err);
+                document.documentElement.classList.remove('reveal-ready');
+            }
+        }
+
+            if (!globalObserver) {
+                globalObserver = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                            const counters = entry.target.querySelectorAll('.counter');
+                            counters.forEach(c => {
+                                const target = parseInt(c.getAttribute('data-target') || c.innerText);
+                                if (target && !c.dataset.counted) {
+                                    c.dataset.counted = 'true';
+                                    if (typeof animateCounter === 'function') animateCounter(c, target);
+                                }
+                            });
+                        }
+                    });
+                }, { threshold: 0.05, rootMargin: '50px 0px' });
+            }
+
+            unrevealed.forEach(el => globalObserver.observe(el));
         }
 
         function animateCounter(el, target) {
@@ -9411,13 +9504,8 @@
             }
         }
 
-        const hideSplashScreen = () => {
-            const screen = document.getElementById('splash-screen');
-            if (screen) screen.classList.add('hidden');
-        };
-
-        // Safety fallback: Always hide splash screen after 1.5 seconds maximum
-        setTimeout(hideSplashScreen, 1500);
+        // Authoritative splash dismissal handled via window.dismissSplashOverlay()
+        if (typeof window.dismissSplashOverlay === "function") window.dismissSplashOverlay();
 
         // Save and Load PLAYERS_DATA to/from localStorage so player edits never get lost
         function savePlayersData() {
@@ -9596,333 +9684,63 @@
         }
 
         // Run immediately
-        initFullPageRender();
-        let ptxBooted = false;
-    function bootstrapPTX() {
-        if (ptxBooted) return;
-        ptxBooted = true;
-        try { initFullPageRender(); } catch(e){ console.error(e); }
-        try { window.dismissSplashOverlay(); } catch(e){ console.error(e); }
-    }
-    if (document.readyState !== 'loading') bootstrapPTX(); else document.addEventListener('DOMContentLoaded', bootstrapPTX);
-        window.addEventListener('load', initFullPageRender);
-
-        initAdminAccount().catch(err => console.warn('[PTX] init error:', err)).finally(() => {
-            if (localStorage.getItem('adminLoggedIn') === 'true') {
-                const lock = document.getElementById('adminAuthLock');
-                const panel = document.getElementById('adminPanel');
-                if (lock) lock.style.display = 'none';
-                if (panel) panel.style.display = 'block';
-                try { loadAdminData(); } catch(e){}
-            } else {
-                const lock = document.getElementById('adminAuthLock');
-                const panel = document.getElementById('adminPanel');
-                if (lock) lock.style.display = 'block';
-                if (panel) panel.style.display = 'none';
-            }
-
-            setTimeout(hideSplashScreen, 800);
-            setTimeout(initReveal, 300);
-        });
-
-            // Smart auto-refresh: 5s during match window (07/08 17:00-21:00), 30s otherwise
-            function getRefreshInterval() {
-                const now = new Date();
-                const matchDay = new Date('2026-08-07T17:00:00+07:00');
-                const matchEnd = new Date('2026-08-07T21:00:00+07:00');
-                return (now >= matchDay && now <= matchEnd) ? 5000 : 30000;
-            }
-            (function scheduleRefresh() {
-                setTimeout(() => {
-                    updateStickyBar();
-                    renderLiveCenter();
-                    scheduleRefresh();
-                }, getRefreshInterval());
-            })();
-            // ============================================================
-            // REGISTER SERVICE WORKER (PWA)
-            // ============================================================
-            if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('./sw.js').then(reg => {
-                    console.log('[PTX] Service Worker registered:', reg.scope);
-                }).catch(err => console.warn('[PTX] SW registration failed:', err));
-            }
-
-        // Expose
-        window.openLogin = openLogin;
-        window.closeLogin = closeLogin;
-        window.handleLogin = handleLogin;
-        window.handleLogout = handleLogout;
-        window.checkAdminNavClick = checkAdminNavClick;
-        window.saveContentAdmin = saveContentAdmin;
-        window.updateStatsAdmin = updateStatsAdmin;
-        window.updateStandingsAndResults = updateStandingsAndResults;
-        window.saveHallOfFameAdmin = saveHallOfFameAdmin;
-        window.changeAdminPassword = changeAdminPassword;
-        window.closePlayerModal = closePlayerModal;
-        window.openLightbox = openLightbox;
-        window.showToast = showToast;
-        window.switchAdminTab = switchAdminTab;
-        window.setZeroMatchesState = setZeroMatchesState;
-        window.setDemoScoresState = setDemoScoresState;
-        window.loadAdminPlayerDetail = loadAdminPlayerDetail;
-        window.savePlayerAdminDetail = savePlayerAdminDetail;
-        window.shareResult = shareResult;
-        window.toggleFloatingAdmin = toggleFloatingAdmin;
-        window.quickGoalFromFloat = quickGoalFromFloat;
-
+        if (document.readyState === 'complete' || document.readyState === 'interactive') {
+            initFullPageRender();
+        } else {
+            
         // ============================================================
-        // WEB SHARE API
+        // AUTHORITATIVE SINGLETON BOOT CONTROLLER — bootstrapPTX()
         // ============================================================
-        function shareResult(title, text) {
-            const shareData = { title: title || 'PTX Summer Cup 2026', text: text || '⚽ PTX Summer Cup 2026 – 07/08/2026 tại 152 Hoàng Hoa Thám, HCM!', url: location.href };
-            if (navigator.share) {
-                navigator.share(shareData).catch(() => {});
-            } else {
-                navigator.clipboard.writeText(shareData.url + '\n' + shareData.text)
-                    .then(() => showToast('✅ Đã sao chép link!', 'success'))
-                    .catch(() => showToast('Link: ' + shareData.url, 'info'));
-            }
-        }
+        var ptxBooted = false;
 
-        // ============================================================
-        // FLOATING ADMIN QUICK-SCORE
-        // ============================================================
-        function toggleFloatingAdmin() {
-            const panel = document.getElementById('floatAdminPanel');
-            if (!panel) return;
-            const isOpen = panel.style.display !== 'none';
-            panel.style.display = isOpen ? 'none' : 'block';
-            if (!isOpen) {
-                // Populate match dropdown
-                const sel = document.getElementById('floatMatchSel');
-                if (sel && MATCHES_CONFIG) {
-                    sel.innerHTML = MATCHES_CONFIG.map(m => `<option value="${m.id}">${m.homeLabel} vs ${m.awayLabel}</option>`).join('');
-                }
-                // Populate player datalist
-                const list = document.getElementById('floatPlayerList');
-                if (list && PLAYERS_DATA) {
-                    list.innerHTML = PLAYERS_DATA.map(p => `<option value="${p.name}">`).join('');
-                }
-            }
-        }
+        function bootstrapPTX() {
+            if (ptxBooted) return;
+            ptxBooted = true;
 
-        function quickGoalFromFloat() {
-            const matchId = document.getElementById('floatMatchSel')?.value;
-            const player = document.getElementById('floatPlayerInput')?.value?.trim();
-            const minute = document.getElementById('floatMinuteInput')?.value;
-            if (!player || !minute) { showToast('Nhập tên cầu thủ và phút!', 'error'); return; }
-            // Delegate to existing addQuickGoal logic by filling and triggering
-            const m = document.getElementById('qg-match');
-            const p = document.getElementById('qg-player');
-            const mn = document.getElementById('qg-minute');
-            if (m && p && mn) {
-                m.value = matchId;
-                p.value = player;
-                mn.value = minute;
-                addQuickGoal();
-                document.getElementById('floatPlayerInput').value = '';
-                document.getElementById('floatMinuteInput').value = '';
-                // Play goal sound
-                playGoalSound();
-                showToast('⚽ Bàn thắng đã ghi!', 'success');
-            } else {
-                showToast('Cần đăng nhập admin trước!', 'error');
-            }
-        }
+            console.log('[PTX Core] Initializing Authoritative Boot Controller...');
 
-        // ============================================================
-        // GOAL SOUND (Web Audio API — no external file needed)
-        // ============================================================
-        function playGoalSound() {
+            // 1. Core State & Data Initialization
+            try { initFullPageRender(); } catch(e) { console.error('[PTX Core] Render Error:', e); }
+
+            // 2. Transactional Router Setup
             try {
-                const ctx = new (window.AudioContext || window.webkitAudioContext)();
-                const now = ctx.currentTime;
-                // Fanfare: 3 ascending notes
-                [{ f: 523.25, t: now + 0.0, d: 0.18 }, { f: 659.25, t: now + 0.18, d: 0.18 }, { f: 783.99, t: now + 0.36, d: 0.35 }, { f: 1046.5, t: now + 0.71, d: 0.6 }].forEach(({ f, t, d }) => {
-                    const osc = ctx.createOscillator();
-                    const gain = ctx.createGain();
-                    osc.connect(gain); gain.connect(ctx.destination);
-                    osc.frequency.value = f;
-                    osc.type = 'triangle';
-                    gain.gain.setValueAtTime(0.5, t);
-                    gain.gain.exponentialRampToValueAtTime(0.001, t + d);
-                    osc.start(t); osc.stop(t + d + 0.05);
-                });
-            } catch (e) { /* Silently fail if AudioContext not available */ }
-        }
+                const initRoute = normalizeRoute(localStorage.getItem('currentPage'));
+                navigate('home');
+            } catch(e) { console.error('[PTX Core] Router Error:', e); }
 
-        // ============================================================
-        // TEAM RADAR CHART (Canvas API — Individual + Combined H2H)
-        // ============================================================
-        function drawTeamRadarCharts() {
-            const teams = [
-                { id: 'p', name: 'TEAM P (Phoenix)', color: '#3b82f6', stats: { 'Tấn công': 85, 'Phòng thủ': 78, 'Tốc độ': 82, 'Sức mạnh': 84, 'Kỹ thuật': 88, 'Đồng đội': 90 } },
-                { id: 't', name: 'TEAM T (Tiger)', color: '#ef4444', stats: { 'Tấn công': 92, 'Phòng thủ': 70, 'Tốc độ': 94, 'Sức mạnh': 88, 'Kỹ thuật': 81, 'Đồng đội': 82 } },
-                { id: 'x', name: 'TEAM X (Xiphias)', color: '#f59e0b', stats: { 'Tấn công': 78, 'Phòng thủ': 90, 'Tốc độ': 75, 'Sức mạnh': 80, 'Kỹ thuật': 84, 'Đồng đội': 87 } },
-            ];
+            // 3. Language Setup
+            try {
+                const currentLang = localStorage.getItem('ptx_lang') || 'vi';
+                if (typeof applyLanguage === 'function') applyLanguage(currentLang, true);
+            } catch(e) { console.warn('[PTX Core] Language Error:', e); }
 
-            // 1. Draw Individual Team Radar Charts
-            teams.forEach(team => {
-                const canvas = document.getElementById('radar-' + team.id);
-                if (!canvas) return;
-                const ctx = canvas.getContext('2d');
-                const cx = canvas.width / 2, cy = canvas.height / 2;
-                const r = Math.min(cx, cy) - 30;
-                const labels = Object.keys(team.stats);
-                const values = Object.values(team.stats);
-                const n = labels.length;
-                const angleStep = (Math.PI * 2) / n;
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                // Background grid
-                [0.2, 0.4, 0.6, 0.8, 1.0].forEach(scale => {
-                    ctx.beginPath();
-                    labels.forEach((_, i) => {
-                        const angle = i * angleStep - Math.PI / 2;
-                        const x = cx + r * scale * Math.cos(angle);
-                        const y = cy + r * scale * Math.sin(angle);
-                        i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-                    });
-                    ctx.closePath();
-                    ctx.strokeStyle = 'rgba(255,255,255,0.1)';
-                    ctx.lineWidth = 1;
-                    ctx.stroke();
-                });
-                // Spokes
-                labels.forEach((_, i) => {
-                    const angle = i * angleStep - Math.PI / 2;
-                    ctx.beginPath();
-                    ctx.moveTo(cx, cy);
-                    ctx.lineTo(cx + r * Math.cos(angle), cy + r * Math.sin(angle));
-                    ctx.strokeStyle = 'rgba(255,255,255,0.12)';
-                    ctx.lineWidth = 1;
-                    ctx.stroke();
-                });
-                // Data polygon
-                ctx.beginPath();
-                values.forEach((v, i) => {
-                    const angle = i * angleStep - Math.PI / 2;
-                    const x = cx + r * (v / 100) * Math.cos(angle);
-                    const y = cy + r * (v / 100) * Math.sin(angle);
-                    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-                });
-                ctx.closePath();
-                ctx.fillStyle = team.color + '33';
-                ctx.fill();
-                ctx.strokeStyle = team.color;
-                ctx.lineWidth = 2.5;
-                ctx.stroke();
-                // Dots
-                values.forEach((v, i) => {
-                    const angle = i * angleStep - Math.PI / 2;
-                    const x = cx + r * (v / 100) * Math.cos(angle);
-                    const y = cy + r * (v / 100) * Math.sin(angle);
-                    ctx.beginPath();
-                    ctx.arc(x, y, 4, 0, Math.PI * 2);
-                    ctx.fillStyle = team.color;
-                    ctx.fill();
-                });
-                // Labels
-                ctx.font = 'bold 11px Arial';
-                ctx.fillStyle = '#e2e8f0';
-                ctx.textAlign = 'center';
-                labels.forEach((label, i) => {
-                    const angle = i * angleStep - Math.PI / 2;
-                    const lx = cx + (r + 22) * Math.cos(angle);
-                    const ly = cy + (r + 22) * Math.sin(angle);
-                    ctx.fillText(label, lx, ly + 4);
-                    // Value
-                    ctx.font = 'bold 10px Arial';
-                    ctx.fillStyle = team.color;
-                    ctx.fillText(values[i], cx + (r - 14) * (values[i] / 100) * Math.cos(angle), cy + (r - 14) * (values[i] / 100) * Math.sin(angle) + 4);
-                    ctx.font = 'bold 11px Arial';
-                    ctx.fillStyle = '#e2e8f0';
-                });
-                // Center label
-                ctx.font = 'bold 12px Arial';
-                ctx.fillStyle = team.color;
-                ctx.fillText(team.name.split(' ')[1], cx, cy + 4);
-            });
+            // 4. Theme Setup
+            try {
+                const savedTheme = localStorage.getItem('theme') || 'dark';
+                if (typeof applyTheme === 'function') applyTheme(savedTheme);
+            } catch(e) { console.warn('[PTX Core] Theme Error:', e); }
 
-            // 2. Draw Combined H2H Overlay Radar Chart
-            const combinedCanvas = document.getElementById('radar-combined');
-            if (combinedCanvas) {
-                const ctx = combinedCanvas.getContext('2d');
-                const cx = combinedCanvas.width / 2, cy = combinedCanvas.height / 2;
-                const r = Math.min(cx, cy) - 38;
-                const labels = ['Tấn công', 'Phòng thủ', 'Tốc độ', 'Sức mạnh', 'Kỹ thuật', 'Đồng đội'];
-                const n = labels.length;
-                const angleStep = (Math.PI * 2) / n;
-                ctx.clearRect(0, 0, combinedCanvas.width, combinedCanvas.height);
+            // 5. Progressive Enhancements (Wrapped Independently)
+            try { initReveal(); } catch(e) { console.warn('[PTX Enhancements] Reveal Error:', e); }
+            try { if (typeof initFanPredictionForm === 'function') initFanPredictionForm(); } catch(e) {}
+            try { if (typeof initFifa3DTilt === 'function') initFifa3DTilt(); } catch(e) {}
 
-                // Background grid
-                [0.2, 0.4, 0.6, 0.8, 1.0].forEach(scale => {
-                    ctx.beginPath();
-                    labels.forEach((_, i) => {
-                        const angle = i * angleStep - Math.PI / 2;
-                        const x = cx + r * scale * Math.cos(angle);
-                        const y = cy + r * scale * Math.sin(angle);
-                        i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-                    });
-                    ctx.closePath();
-                    ctx.strokeStyle = 'rgba(255,255,255,0.1)';
-                    ctx.lineWidth = 1;
-                    ctx.stroke();
-                });
-
-                // Spokes
-                labels.forEach((_, i) => {
-                    const angle = i * angleStep - Math.PI / 2;
-                    ctx.beginPath();
-                    ctx.moveTo(cx, cy);
-                    ctx.lineTo(cx + r * Math.cos(angle), cy + r * Math.sin(angle));
-                    ctx.strokeStyle = 'rgba(255,255,255,0.12)';
-                    ctx.lineWidth = 1;
-                    ctx.stroke();
-                });
-
-                // Draw each team polygon overlay
-                teams.forEach(team => {
-                    const values = Object.values(team.stats);
-                    ctx.beginPath();
-                    values.forEach((v, i) => {
-                        const angle = i * angleStep - Math.PI / 2;
-                        const x = cx + r * (v / 100) * Math.cos(angle);
-                        const y = cy + r * (v / 100) * Math.sin(angle);
-                        i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-                    });
-                    ctx.closePath();
-                    ctx.fillStyle = team.color + '25';
-                    ctx.fill();
-                    ctx.strokeStyle = team.color;
-                    ctx.lineWidth = 2.5;
-                    ctx.stroke();
-
-                    values.forEach((v, i) => {
-                        const angle = i * angleStep - Math.PI / 2;
-                        const x = cx + r * (v / 100) * Math.cos(angle);
-                        const y = cy + r * (v / 100) * Math.sin(angle);
-                        ctx.beginPath();
-                        ctx.arc(x, y, 4, 0, Math.PI * 2);
-                        ctx.fillStyle = team.color;
-                        ctx.fill();
-                    });
-                });
-
-                // Labels
-                ctx.font = 'bold 11px Arial';
-                ctx.fillStyle = '#f8fafc';
-                ctx.textAlign = 'center';
-                labels.forEach((label, i) => {
-                    const angle = i * angleStep - Math.PI / 2;
-                    const lx = cx + (r + 24) * Math.cos(angle);
-                    const ly = cy + (r + 24) * Math.sin(angle);
-                    ctx.fillText(label, lx, ly + 4);
+            // 6. Service Worker Registration (Atomic Lifecycle)
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('./sw.js').catch(err => {
+                    console.warn('[PTX SW] ServiceWorker registration ignored:', err);
                 });
             }
+
+            console.log('[PTX Core] Authoritative Boot Complete.');
         }
-        // Draw on stats page load
-        setTimeout(drawTeamRadarCharts, 500);
+
+        // Single Authoritative DOMContentLoaded Listener
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', bootstrapPTX);
+        } else {
+            bootstrapPTX();
+        }
     </script>
     <!-- ==================== INFOGRAPHIC EXPORTER MODAL ==================== -->
     <div id="infographicModal" class="modal-overlay" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);z-index:99999;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(10px);">
@@ -11716,7 +11534,7 @@
 
             let reportHTML = `
             <!DOCTYPE html>
-            <html lang="vi">
+            <html lang="vi" data-theme="dark">
             <head>
                 <meta charset="UTF-8">
                 <title>BIÊN BẢN BÁO CÁO TỔNG KẾT PTX SUMMER CUP 2026</title>
@@ -11924,7 +11742,7 @@
         window.exportOfficialMatchReport = exportOfficialMatchReport;
 
         // Show floating admin button & init prediction form
-        // Consolidated inside bootstrapPTX():
+        document.addEventListener('DOMContentLoaded', () => {
             function checkFloatBtn() {
                 const isAdmin = localStorage.getItem('ptx_admin_auth') === '1';
                 const btn = document.getElementById('floatAdminBtn');
