@@ -30,8 +30,13 @@ import {
     openRefereeToolkitAdapter
 } from '../adapters/match.adapters.js';
 
+let matchEventsInitialized = false;
+
 export function initMatchEvents() {
-    let initialized = false;
+    if (matchEventsInitialized) {
+        return false; // Idempotent guard: already initialized
+    }
+    matchEventsInitialized = true;
 
     // 1. Admin Page Controls
     const adminPage = document.getElementById('adminPage');
@@ -66,7 +71,7 @@ export function initMatchEvents() {
 
     // 2. Referee Toolkit Modal
     const refereeToolkitModal = document.getElementById('refereeToolkitModal') || document.getElementById('refereeModal');
-    const refMatchSel = document.getElementById('refMatchSel');
+    const refMatchSel = document.getElementById('refMatchSelect') || document.getElementById('refMatchSel');
     if (refMatchSel) {
         refMatchSel.addEventListener('change', (event) => {
             onRefMatchChangeAdapter(event.target.value);
@@ -118,7 +123,7 @@ export function initMatchEvents() {
     }
 
     // 3. LiveStream Match Selector
-    const liveStreamMatchSel = document.getElementById('liveStreamMatchSel') || document.getElementById('livestreamMatchSelect');
+    const liveStreamMatchSel = document.getElementById('liveStreamMatchSelect') || document.getElementById('liveStreamMatchSel');
     if (liveStreamMatchSel) {
         liveStreamMatchSel.addEventListener('change', (event) => {
             onLiveStreamMatchChangeAdapter(event.target.value);
@@ -158,13 +163,22 @@ export function initMatchEvents() {
     }
 
     // 6. Header / Referee Toolkit Trigger Button
-    const refToolkitTrigger = document.querySelector('[data-action="open-referee-toolkit"]');
-    if (refToolkitTrigger) {
-        refToolkitTrigger.addEventListener('click', (event) => {
-            openRefereeToolkitAdapter(event);
+    const header = document.getElementById('header') || document.querySelector('header');
+    if (header) {
+        header.addEventListener('click', (event) => {
+            const btn = event.target.closest('[data-action="open-referee-toolkit"]');
+            if (btn && header.contains(btn)) {
+                openRefereeToolkitAdapter(event);
+            }
         });
+    } else {
+        const refToolkitTrigger = document.querySelector('[data-action="open-referee-toolkit"]');
+        if (refToolkitTrigger) {
+            refToolkitTrigger.addEventListener('click', (event) => {
+                openRefereeToolkitAdapter(event);
+            });
+        }
     }
 
-    initialized = true;
-    return initialized;
+    return true;
 }

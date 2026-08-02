@@ -87,7 +87,7 @@
         "click"
       ],
       "category": "match_score",
-      "bindingStrategy": "form_direct",
+      "bindingStrategy": "bounded_delegation",
       "nativeBindingModule": "src/events/match.events.js",
       "migrationStatus": "migrated",
       "wave": "2E.4",
@@ -113,7 +113,7 @@
         "click"
       ],
       "category": "navigation_ui",
-      "bindingStrategy": "direct",
+      "bindingStrategy": "bounded_delegation",
       "nativeBindingModule": "src/events/match.events.js",
       "migrationStatus": "migrated",
       "wave": "2E.4",
@@ -152,7 +152,7 @@
         "click"
       ],
       "category": "navigation_ui",
-      "bindingStrategy": "direct",
+      "bindingStrategy": "bounded_delegation",
       "nativeBindingModule": "src/events/match.events.js",
       "migrationStatus": "migrated",
       "wave": "2E.4",
@@ -204,7 +204,7 @@
         "click"
       ],
       "category": "match_score",
-      "bindingStrategy": "form_direct",
+      "bindingStrategy": "bounded_delegation",
       "nativeBindingModule": "src/events/match.events.js",
       "migrationStatus": "migrated",
       "wave": "2E.4",
@@ -218,9 +218,8 @@
       ],
       "category": "statistics",
       "bindingStrategy": "direct",
-      "nativeBindingModule": "src/events/score.events.js",
       "migrationStatus": "pending",
-      "wave": "2E.4",
+      "wave": "2E.5",
       "risk": "high"
     },
     "applyLanguage": {
@@ -555,7 +554,7 @@
         "click"
       ],
       "category": "match_score",
-      "bindingStrategy": "form_direct",
+      "bindingStrategy": "bounded_delegation",
       "nativeBindingModule": "src/events/match.events.js",
       "migrationStatus": "migrated",
       "wave": "2E.4",
@@ -568,7 +567,7 @@
         "click"
       ],
       "category": "match_score",
-      "bindingStrategy": "form_direct",
+      "bindingStrategy": "bounded_delegation",
       "nativeBindingModule": "src/events/match.events.js",
       "migrationStatus": "migrated",
       "wave": "2E.4",
@@ -581,7 +580,7 @@
         "click"
       ],
       "category": "miscellaneous",
-      "bindingStrategy": "direct",
+      "bindingStrategy": "bounded_delegation",
       "nativeBindingModule": "src/events/match.events.js",
       "migrationStatus": "migrated",
       "wave": "2E.4",
@@ -594,7 +593,7 @@
         "click"
       ],
       "category": "match_score",
-      "bindingStrategy": "form_direct",
+      "bindingStrategy": "bounded_delegation",
       "nativeBindingModule": "src/events/match.events.js",
       "migrationStatus": "migrated",
       "wave": "2E.4",
@@ -607,7 +606,7 @@
         "click"
       ],
       "category": "statistics",
-      "bindingStrategy": "direct",
+      "bindingStrategy": "bounded_delegation",
       "nativeBindingModule": "src/events/match.events.js",
       "migrationStatus": "migrated",
       "wave": "2E.4",
@@ -958,7 +957,7 @@
         "change"
       ],
       "category": "match_score",
-      "bindingStrategy": "form_direct",
+      "bindingStrategy": "direct_change",
       "nativeBindingModule": "src/events/match.events.js",
       "migrationStatus": "migrated",
       "wave": "2E.4",
@@ -971,7 +970,7 @@
         "click"
       ],
       "category": "player",
-      "bindingStrategy": "direct",
+      "bindingStrategy": "bounded_delegation",
       "nativeBindingModule": "src/events/match.events.js",
       "migrationStatus": "migrated",
       "wave": "2E.4",
@@ -984,7 +983,7 @@
         "click"
       ],
       "category": "miscellaneous",
-      "bindingStrategy": "direct",
+      "bindingStrategy": "bounded_delegation",
       "nativeBindingModule": "src/events/match.events.js",
       "migrationStatus": "migrated",
       "wave": "2E.4",
@@ -997,7 +996,7 @@
         "click"
       ],
       "category": "miscellaneous",
-      "bindingStrategy": "direct",
+      "bindingStrategy": "bounded_delegation",
       "nativeBindingModule": "src/events/match.events.js",
       "migrationStatus": "migrated",
       "wave": "2E.4",
@@ -1010,7 +1009,7 @@
         "click"
       ],
       "category": "navigation_ui",
-      "bindingStrategy": "direct",
+      "bindingStrategy": "bounded_delegation",
       "nativeBindingModule": "src/events/match.events.js",
       "migrationStatus": "migrated",
       "wave": "2E.4",
@@ -1023,7 +1022,7 @@
         "click"
       ],
       "category": "navigation_ui",
-      "bindingStrategy": "direct",
+      "bindingStrategy": "bounded_delegation",
       "nativeBindingModule": "src/events/match.events.js",
       "migrationStatus": "migrated",
       "wave": "2E.4",
@@ -1062,7 +1061,7 @@
         "click"
       ],
       "category": "miscellaneous",
-      "bindingStrategy": "direct",
+      "bindingStrategy": "bounded_delegation",
       "nativeBindingModule": "src/events/match.events.js",
       "migrationStatus": "migrated",
       "wave": "2E.4",
@@ -1140,7 +1139,7 @@
         "change"
       ],
       "category": "match_score",
-      "bindingStrategy": "form_direct",
+      "bindingStrategy": "direct_change",
       "nativeBindingModule": "src/events/match.events.js",
       "migrationStatus": "migrated",
       "wave": "2E.4",
@@ -1231,7 +1230,7 @@
         "click"
       ],
       "category": "admin",
-      "bindingStrategy": "auth_direct",
+      "bindingStrategy": "direct",
       "nativeBindingModule": "src/events/match.events.js",
       "migrationStatus": "migrated",
       "wave": "2E.4",
@@ -1244,7 +1243,7 @@
         "click"
       ],
       "category": "match_score",
-      "bindingStrategy": "form_direct",
+      "bindingStrategy": "bounded_delegation",
       "nativeBindingModule": "src/events/match.events.js",
       "migrationStatus": "migrated",
       "wave": "2E.4",

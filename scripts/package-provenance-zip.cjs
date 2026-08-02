@@ -4,7 +4,7 @@ const { execSync } = require('child_process');
 
 const rootDir = path.join(__dirname, '..');
 const provPath = path.join(rootDir, 'build-provenance.json');
-const zipOutputPath = 'C:\\Users\\ASUS\\Desktop\\PTX-Summer-Cup-2026-v2.7.0-WAVE2E3-REPOSITORY-AUDIT.zip';
+const zipOutputPath = 'C:\\Users\\ASUS\\Desktop\\PTX-Summer-Cup-2026-v2.7.0-WAVE2E4-REPOSITORY-AUDIT.zip';
 
 console.log('==================================================');
 console.log('       AUTOMATED PROVENANCE PACKAGING SCRIPT      ');
@@ -16,9 +16,9 @@ console.log(`Repository Git HEAD SHA: ${headSha}`);
 
 // 2. Read and update build-provenance.json in workspace
 const provData = JSON.parse(fs.readFileSync(provPath, 'utf8'));
-provData.version = "2.7.0-wave2e3";
+provData.version = "2.7.0-wave2e4";
 provData.artifact_tree_commit_sha = headSha;
-provData.wave = "2E.3";
+provData.wave = "2E.4";
 provData.buildTimestamp = new Date().toISOString();
 provData.provenanceVerified = true;
 
