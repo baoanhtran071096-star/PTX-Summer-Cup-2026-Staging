@@ -394,6 +394,17 @@ if (!fs.existsSync(provJsonPath)) {
     }
 }
 
+// 8c. REAL VALIDATION: Event Delegation Boundary Violations Check
+let delegationBoundaryViolations = 0;
+const playerEventsPath = path.join(rootDir, 'src', 'events', 'player.events.js');
+if (fs.existsSync(playerEventsPath)) {
+    const playerEventsSrc = fs.readFileSync(playerEventsPath, 'utf8');
+    const codeOnly = playerEventsSrc.replace(/\/\*[\s\S]*?\*\/|\/\/.*/g, '');
+    const docAddListenerMatches = (codeOnly.match(/document\.addEventListener/g) || []).length;
+    const docBodyMatches = (codeOnly.match(/document\.body/g) || []).length;
+    delegationBoundaryViolations = docAddListenerMatches + docBodyMatches;
+}
+
 // 9. EXECUTE GOLDEN FIXTURES & UI BEHAVIORAL SMOKE TESTS
 let fixtureGateStatus = 'PASSED (3 suites / 13 cases / 8 of 8 domain functions)';
 try {
@@ -432,8 +443,8 @@ console.log(`  - Total Native Migrated:           ${nativeMigrationCompleted.siz
 console.log(`  - Migrated Handlers Still Inline:  ${migratedHandlersStillInline}`);
 console.log(`  - Unresolved Handlers:             ${unresolvedHandlers}`);
 console.log(`  - Double-Bound Handlers:           ${doubleBoundHandlers}`);
-console.log(`  - Delegation Boundary Violations:    0`);
-console.log(`  - Recreated-Container Bindings:     0`);
+console.log(`  - Delegation Boundary Violations:    ${delegationBoundaryViolations}`);
+console.log(`  - Recreated-Container Bindings:     NOT_AUTOMATED (Verified via UI Smoke Gate Testing 6)`);
 console.log(`--------------------------------------------------`);
 console.log(`Duplicate Extracted Funcs:  ${duplicateExtractedFunctions}`);
 console.log(`Direct Storage API Calls:   ${directLocalStorageApiCalls} calls`);
@@ -463,6 +474,7 @@ const pass = missingAssets <= contract.allowedMissingAssets &&
              migratedHandlersStillInline === 0 &&
              unresolvedHandlers === 0 &&
              doubleBoundHandlers === 0 &&
+             delegationBoundaryViolations === 0 &&
              provenanceErrors === 0 &&
              !packageVersionMismatch;
 

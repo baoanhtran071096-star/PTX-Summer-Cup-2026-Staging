@@ -347,7 +347,7 @@
         "click"
       ],
       "category": "miscellaneous",
-      "bindingStrategy": "direct",
+      "bindingStrategy": "bounded_delegation",
       "nativeBindingModule": "src/events/player.events.js",
       "migrationStatus": "migrated",
       "wave": "2E.2",
@@ -360,7 +360,7 @@
         "change"
       ],
       "category": "miscellaneous",
-      "bindingStrategy": "direct",
+      "bindingStrategy": "direct_change",
       "nativeBindingModule": "src/events/player.events.js",
       "migrationStatus": "migrated",
       "wave": "2E.2",
@@ -386,7 +386,7 @@
         "click"
       ],
       "category": "miscellaneous",
-      "bindingStrategy": "direct",
+      "bindingStrategy": "bounded_delegation",
       "nativeBindingModule": "src/events/player.events.js",
       "migrationStatus": "migrated",
       "wave": "2E.2",
@@ -451,7 +451,7 @@
         "click"
       ],
       "category": "miscellaneous",
-      "bindingStrategy": "direct",
+      "bindingStrategy": "bounded_delegation",
       "nativeBindingModule": "src/events/player.events.js",
       "migrationStatus": "migrated",
       "wave": "2E.2",
@@ -880,7 +880,7 @@
         "click"
       ],
       "category": "navigation_ui",
-      "bindingStrategy": "direct",
+      "bindingStrategy": "bounded_delegation",
       "nativeBindingModule": "src/events/player.events.js",
       "migrationStatus": "migrated",
       "wave": "2E.2",
@@ -893,7 +893,7 @@
         "click"
       ],
       "category": "navigation_ui",
-      "bindingStrategy": "direct",
+      "bindingStrategy": "bounded_delegation",
       "nativeBindingModule": "src/events/player.events.js",
       "migrationStatus": "migrated",
       "wave": "2E.2",
@@ -906,7 +906,7 @@
         "click"
       ],
       "category": "navigation_ui",
-      "bindingStrategy": "direct",
+      "bindingStrategy": "bounded_delegation",
       "nativeBindingModule": "src/events/player.events.js",
       "migrationStatus": "migrated",
       "wave": "2E.2",
