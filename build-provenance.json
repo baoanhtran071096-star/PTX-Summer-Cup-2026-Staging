@@ -1,10 +1,10 @@
 {
   "project": "PTX Summer Cup 2026",
-  "version": "2.7.0-bridge-retired-rc1",
-  "wave": "BRIDGE_RETIREMENT_RC1",
-  "artifact_tree_commit_sha": "184fbd7509019549357fbde65e01817e9e91fc91",
-  "artifact_source_commit_sha": "184fbd7509019549357fbde65e01817e9e91fc91",
-  "provenance_commit_sha": "184fbd7509019549357fbde65e01817e9e91fc91",
-  "buildTimestamp": "2026-08-02T16:04:00.000Z",
+  "version": "3.0.0-native-events",
+  "wave": "FINAL_PRODUCTION_PROMOTION",
+  "artifact_tree_commit_sha": "71f8282555b9a0553fa0bd7c3b0b74f437dff615",
+  "artifact_source_commit_sha": "71f8282555b9a0553fa0bd7c3b0b74f437dff615",
+  "provenance_commit_sha": "71f8282555b9a0553fa0bd7c3b0b74f437dff615",
+  "buildTimestamp": "2026-08-02T16:10:00.000Z",
   "provenanceVerified": true
 }
