@@ -2746,59 +2746,7 @@
         // ============================================================
         const baseDate = new Date('2026-08-07');
 
-        function getPlayerTeam(playerName) {
-            const p = PLAYERS_DATA.find(p => p.name.toLowerCase() === playerName.toLowerCase() ||
-                p.name.toLowerCase().includes(playerName.toLowerCase()));
-            return p ? p.team : null;
-        }
-
-        function parseGoalDataWithTeam(resultStr, match) {
-            if (!resultStr) return [];
-            const goals = [];
-            const parts = resultStr.split('|');
-            if (parts.length > 1) {
-                const goalPart = parts[1].trim();
-                const goalItems = goalPart.split(',').map(s => s.trim());
-                goalItems.forEach(item => {
-                    const match2 = item.match(/(.+?)\s*(\d+)'/);
-                    if (match2) {
-                        const scorerName = match2[1].trim();
-                        const minute = parseInt(match2[2]);
-                        let team = getPlayerTeam(scorerName);
-                        if (!team) {
-                            const homePlayers = PLAYERS_DATA.filter(p => p.team === match.home).map(p => p.name
-                                .toLowerCase());
-                            const awayPlayers = PLAYERS_DATA.filter(p => p.team === match.away).map(p => p.name
-                                .toLowerCase());
-                            if (homePlayers.some(h => scorerName.toLowerCase().includes(h) || h.includes(
-                                    scorerName.toLowerCase()))) {
-                                team = match.home;
-                            } else if (awayPlayers.some(a => scorerName.toLowerCase().includes(a) || a
-                                    .includes(scorerName.toLowerCase()))) {
-                                team = match.away;
-                            }
-                        }
-                        goals.push({ scorer: scorerName, minute: minute, team: team || 'unknown' });
-                    }
-                });
-            }
-            return goals;
-        }
-
-        function getMatchResult(matchId) {
-            const key = 'ptx_result_' + matchId;
-            const data = localStorage.getItem(key);
-            if (!data) return null;
-            const parts = data.split('|');
-            const score = parts[0].trim();
-            const scoreParts = score.split('-');
-            if (scoreParts.length !== 2) return null;
-            return {
-                homeScore: parseInt(scoreParts[0]) || 0,
-                awayScore: parseInt(scoreParts[1]) || 0,
-                raw: data
-            };
-        }
+        // MATCH CALCULATION HELPERS (Delegated to src/domain/matches.js & src/domain/statistics.js)
 
         function renderMatchCard(match, suffix = '') {
             const id = match.id;
@@ -2991,57 +2939,7 @@
             return card;
         }
 
-        // ============================================================
-        // DASHBOARD
-        // ============================================================
-        function computeDashboardStats() {
-            let totalGoals = 0;
-            const totalMatches = MATCHES_CONFIG.length;
-            const totalPlayers = PLAYERS_DATA.length;
-            const totalTeams = Object.keys(TEAMS_DATA).length;
-            let totalYellow = 0;
-            let totalRed = 0;
-
-            MATCHES_CONFIG.forEach(m => {
-                const data = localStorage.getItem('ptx_result_' + m.id);
-                if (data) {
-                    const parts = data.split('|');
-                    const score = parts[0].trim();
-                    const scoreParts = score.split('-');
-                    if (scoreParts.length === 2) {
-                        totalGoals += (parseInt(scoreParts[0]) || 0) + (parseInt(scoreParts[1]) || 0);
-                    }
-                    if (parts.length > 1) {
-                        const goalPart = parts[1].trim();
-                        const goalItems = goalPart.split(',').map(s => s.trim());
-                        goalItems.forEach(item => {
-                            if (item.toLowerCase().includes('🟨')) totalYellow++;
-                            if (item.toLowerCase().includes('🟥')) totalRed++;
-                        });
-                    }
-                }
-            });
-
-            const storedGoals = localStorage.getItem('ptx_stat_goals');
-            const storedMatches = localStorage.getItem('ptx_stat_matches');
-            const storedYellow = localStorage.getItem('ptx_stat_yellow');
-            const storedRed = localStorage.getItem('ptx_stat_red');
-
-            const finalGoals = totalGoals > 0 ? totalGoals : (storedGoals ? parseInt(storedGoals) : 0);
-            const finalMatches = totalMatches > 0 ? totalMatches : (storedMatches ? parseInt(storedMatches) : MATCHES_CONFIG
-                .length);
-            const finalYellow = totalYellow > 0 ? totalYellow : (storedYellow ? parseInt(storedYellow) : 0);
-            const finalRed = totalRed > 0 ? totalRed : (storedRed ? parseInt(storedRed) : 0);
-
-            return {
-                goals: finalGoals,
-                matches: finalMatches,
-                players: totalPlayers,
-                teams: totalTeams,
-                yellow: finalYellow,
-                red: finalRed
-            };
-        }
+        // DASHBOARD STATS CALCULATION (Delegated to src/domain/statistics.js)
 
         function setElTextAndTarget(id, val) {
             const el = document.getElementById(id);
@@ -3052,7 +2950,18 @@
         }
 
         function updateDashboard() {
-            const stats = computeDashboardStats();
+            const storedResults = {};
+            MATCHES_CONFIG.forEach(m => {
+                const res = (window.getStorageItem || getStorageItem)('ptx_result_' + m.id);
+                if (res) storedResults[m.id] = res;
+            });
+            const fallbackStats = {
+                goals: parseInt((window.getStorageItem || getStorageItem)('ptx_stat_goals') || 0, 10),
+                matches: parseInt((window.getStorageItem || getStorageItem)('ptx_stat_matches') || 0, 10),
+                yellow: parseInt((window.getStorageItem || getStorageItem)('ptx_stat_yellow') || 0, 10),
+                red: parseInt((window.getStorageItem || getStorageItem)('ptx_stat_red') || 0, 10)
+            };
+            const stats = (window.computeDashboardStats || computeDashboardStats)(MATCHES_CONFIG, PLAYERS_DATA, TEAMS_DATA, storedResults, fallbackStats);
             setElTextAndTarget('stat-goals', stats.goals);
             setElTextAndTarget('stat-matches', stats.matches);
             setElTextAndTarget('stat-players', stats.players);
@@ -3093,63 +3002,22 @@
             }
         }
 
-        // ============================================================
-        // STANDINGS
-        // ============================================================
-        function calculateStandings() {
-            let p = { played: 0, wins: 0, draws: 0, losses: 0, goalsFor: 0, goalsAgainst: 0, gd: 0, pts: 0 };
-            let t = { ...p };
-            let x = { ...p };
-
-            function process(teamA, teamB, score) {
-                if (!score) return;
-                const parts = score.split('-');
-                if (parts.length !== 2) return;
-                const gA = parseInt(parts[0]),
-                    gB = parseInt(parts[1]);
-                if (isNaN(gA) || isNaN(gB)) return;
-                teamA.played++;
-                teamB.played++;
-                teamA.goalsFor += gA;
-                teamA.goalsAgainst += gB;
-                teamB.goalsFor += gB;
-                teamB.goalsAgainst += gA;
-                if (gA > gB) { teamA.wins++;
-                    teamA.pts += 3;
-                    teamB.losses++; } else if (gA < gB) { teamB.wins++;
-                    teamB.pts += 3;
-                    teamA.losses++; } else { teamA.draws++;
-                    teamA.pts++;
-                    teamB.draws++;
-                    teamB.pts++; }
-            }
-            const r1 = localStorage.getItem('ptx_result_1');
-            const r2 = localStorage.getItem('ptx_result_2');
-            const r3 = localStorage.getItem('ptx_result_3');
-            const s1 = r1 ? r1.split('|')[0].trim() : null;
-            const s2 = r2 ? r2.split('|')[0].trim() : null;
-            const s3 = r3 ? r3.split('|')[0].trim() : null;
-            process(p, t, s1);
-            process(p, x, s2);
-            process(x, t, s3);
-
-            p.gd = p.goalsFor - p.goalsAgainst;
-            t.gd = t.goalsFor - t.goalsAgainst;
-            x.gd = x.goalsFor - x.goalsAgainst;
-
-            const teams = [
-                { id: 'p', label: 'TEAM P', icon: '⚡', obj: p, color: '#1A5BB5' },
-                { id: 't', label: 'TEAM T', icon: '🔥', obj: t, color: '#D32F2F' },
-                { id: 'x', label: 'TEAM X', icon: '💎', obj: x, color: '#F5A623' }
-            ].sort((a, b) => b.obj.pts - a.obj.pts || b.obj.gd - a.obj.gd);
-
-            return teams;
-        }
+        // STANDINGS CALCULATION (Delegated to src/domain/standings.js)
 
         function renderStandings() {
             const container = document.getElementById('standingsPremium');
             if (!container) return;
-            const teams = calculateStandings();
+            const matchResults = {
+                '1': (window.getStorageItem || getStorageItem)('ptx_result_1'),
+                '2': (window.getStorageItem || getStorageItem)('ptx_result_2'),
+                '3': (window.getStorageItem || getStorageItem)('ptx_result_3')
+            };
+            const teamConfigs = [
+                { id: 'p', label: 'TEAM P', icon: '⚡', color: '#1A5BB5' },
+                { id: 't', label: 'TEAM T', icon: '🔥', color: '#D32F2F' },
+                { id: 'x', label: 'TEAM X', icon: '💎', color: '#F5A623' }
+            ];
+            const teams = (window.calculateStandings || calculateStandings)(matchResults, teamConfigs);
             const maxPts = Math.max(1, ...teams.map(t => t.obj.pts));
 
             container.innerHTML = '';

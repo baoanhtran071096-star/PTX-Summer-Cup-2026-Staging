@@ -10,6 +10,9 @@ import { normalizeAssetUrl, handleImageError, FALLBACK_PLAYER_SVG, FALLBACK_TEAM
 import { isStorageAvailable, getStorageItem, setStorageItem, removeStorageItem, getJSON, setJSON } from './infrastructure/storage.js';
 import { initPWAHelpers, installPTXPWAApp, dismissPWABanner } from './infrastructure/pwa.js';
 import { initLegacyBridge, registerLegacyHandler } from './legacy/bridge.js';
+import { calculateStandings, sortStandings } from './domain/standings.js';
+import { computeDashboardStats, getPlayerTeam } from './domain/statistics.js';
+import { filterMatchesByRound, parseGoalDataWithTeam, getMatchResult } from './domain/matches.js';
 
 // Export utilities & infrastructure helpers to window scope for runtime compatibility
 if (typeof window !== 'undefined') {
@@ -33,6 +36,15 @@ if (typeof window !== 'undefined') {
     window.removeStorageItem = removeStorageItem;
     window.getJSON = getJSON;
     window.setJSON = setJSON;
+
+    // Domain Pure Calculation Modules
+    window.calculateStandings = calculateStandings;
+    window.sortStandings = sortStandings;
+    window.computeDashboardStats = computeDashboardStats;
+    window.getPlayerTeam = getPlayerTeam;
+    window.filterMatchesByRound = filterMatchesByRound;
+    window.parseGoalDataWithTeam = parseGoalDataWithTeam;
+    window.getMatchResult = getMatchResult;
 
     // Register PWA Handlers into Legacy Bridge Registry
     registerLegacyHandler('installPTXPWAApp', installPTXPWAApp);

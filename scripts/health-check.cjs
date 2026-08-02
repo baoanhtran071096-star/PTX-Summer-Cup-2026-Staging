@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const { execSync } = require('child_process');
 
 const rootDir = path.join(__dirname, '..');
 const contractPath = path.join(rootDir, 'runtime-contract.json');
@@ -168,8 +169,13 @@ while ((match = idRegex.exec(html)) !== null) {
     }
 }
 
-// 4. DUPLICATION GATE: Check that functions exported in src/infrastructure/ are NOT re-declared in index.html
-const extractedFunctionsToCheck = ['installPTXPWAApp', 'dismissPWABanner', 'isStorageAvailable', 'getStorageItem', 'setStorageItem', 'removeStorageItem', 'getJSON', 'setJSON'];
+// 4. DUPLICATION GATE: Check that functions exported in src/infrastructure/ and src/domain/ are NOT re-declared in index.html
+const extractedFunctionsToCheck = [
+    'installPTXPWAApp', 'dismissPWABanner', 'isStorageAvailable', 'getStorageItem',
+    'setStorageItem', 'removeStorageItem', 'getJSON', 'setJSON',
+    'calculateStandings', 'sortStandings', 'computeDashboardStats', 'getPlayerTeam',
+    'filterMatchesByRound', 'parseGoalDataWithTeam', 'getMatchResult'
+];
 
 extractedFunctionsToCheck.forEach(fn => {
     const inlineDeclRegex = new RegExp(`function\\s+${fn}\\s*\\(`, 'g');
@@ -179,11 +185,11 @@ extractedFunctionsToCheck.forEach(fn => {
     }
 });
 
-// 5. DIRECT PERSISTENCE BYPASS COUNTER: Scan direct localStorage.getItem/setItem calls in index.html
-const directLocalStorageRegex = /localStorage\.(getItem|setItem|removeItem)\(/g;
-let directLocalStorageCalls = 0;
+// 5. DIRECT STORAGE API CALLS COUNTER: Scan direct localStorage.getItem/setItem/removeItem/key calls in index.html
+const directLocalStorageRegex = /localStorage\.(getItem|setItem|removeItem|key)\(/g;
+let directLocalStorageApiCalls = 0;
 while ((match = directLocalStorageRegex.exec(html)) !== null) {
-    directLocalStorageCalls++;
+    directLocalStorageApiCalls++;
 }
 
 // 6. REAL VALIDATION: PWA Manifest Check
@@ -237,6 +243,16 @@ if (contract.requiredDomAnchors && Array.isArray(contract.requiredDomAnchors)) {
     });
 }
 
+// 9. EXECUTE GOLDEN FIXTURE TESTS & DOMAIN PURITY GATE
+let fixtureGateStatus = 'PASSED (3 suites / 8 cases)';
+try {
+    execSync('node scripts/verify-domain-fixtures.cjs', { stdio: 'inherit', cwd: rootDir });
+} catch (err) {
+    fixtureGateStatus = 'FAILED';
+    console.error('❌ GOLDEN FIXTURES GATE FAILED!');
+    process.exit(1);
+}
+
 // Output Comprehensive Gate Report
 console.log(`Source Modules Scanned:     ${srcFiles.length + 3} files (index.html + manifest + sw + src/**/*)`);
 console.log(`Assets Scanned:             ${scannedAssets.size}`);
@@ -245,11 +261,12 @@ console.log(`Legacy Runtime Paths:       ${legacyPathsCount}`);
 console.log(`Unique Inline Handlers:     ${inlineHandlers.size}`);
 console.log(`Missing Handlers:           ${missingHandlers}`);
 console.log(`Duplicate Extracted Funcs:  ${duplicateExtractedFunctions}`);
-console.log(`Direct Storage Calls (Mon): ${directLocalStorageCalls} calls`);
+console.log(`Direct Storage API Calls:   ${directLocalStorageApiCalls} calls`);
 console.log(`Duplicate IDs:              ${duplicateIds}`);
 console.log(`Manifest Validation:        ${manifestErrors === 0 ? 'VALIDATED (0 errors)' : manifestErrors + ' errors'}`);
 console.log(`Service Worker Check:       ${swErrors === 0 ? 'VALIDATED (0 errors)' : swErrors + ' errors'}`);
 console.log(`Static DOM Anchors:         ${missingDomAnchors === 0 ? 'VALIDATED (0 missing)' : missingDomAnchors + ' missing'}`);
+console.log(`Golden Fixture Test Gate:   ${fixtureGateStatus}`);
 console.log('--------------------------------------------------');
 console.log(`ℹ️ NOTE: Runtime console errors & network 404s require [BROWSER GATE] verification.`);
 console.log('--------------------------------------------------');

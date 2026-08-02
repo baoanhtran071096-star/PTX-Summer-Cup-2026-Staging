@@ -1,0 +1,81 @@
+{
+  "suite": "Matches Suite",
+  "cases": [
+    {
+      "name": "Filter Matches By Round (Round 1)",
+      "input": {
+        "matches": [
+          {
+            "id": "1",
+            "round": 1,
+            "teamA": "p",
+            "teamB": "t"
+          },
+          {
+            "id": "2",
+            "round": 1,
+            "teamA": "p",
+            "teamB": "x"
+          },
+          {
+            "id": "3",
+            "round": 2,
+            "teamA": "x",
+            "teamB": "t"
+          }
+        ],
+        "round": 1
+      },
+      "expected": [
+        {
+          "id": "1",
+          "round": 1,
+          "teamA": "p",
+          "teamB": "t"
+        },
+        {
+          "id": "2",
+          "round": 1,
+          "teamA": "p",
+          "teamB": "x"
+        }
+      ]
+    },
+    {
+      "name": "Filter Matches By Non-existent Round (Round 99)",
+      "input": {
+        "matches": [
+          {
+            "id": "1",
+            "round": 1,
+            "teamA": "p",
+            "teamB": "t"
+          }
+        ],
+        "round": 99
+      },
+      "expected": []
+    },
+    {
+      "name": "Parse Goal Data String with Team Metadata",
+      "input": {
+        "resultStr": "3-1 | Goal: Nguyen Su (2), Bao Anh | Goal: Quoc Khanh",
+        "match": {
+          "teamA": "p",
+          "teamB": "t"
+        }
+      },
+      "expected": {
+        "scoreA": 3,
+        "scoreB": 1,
+        "teamAGoals": [
+          "Nguyen Su (2)",
+          "Bao Anh"
+        ],
+        "teamBGoals": [
+          "Quoc Khanh"
+        ]
+      }
+    }
+  ]
+}

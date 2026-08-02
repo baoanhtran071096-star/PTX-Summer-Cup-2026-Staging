@@ -1,0 +1,160 @@
+{
+  "suite": "Statistics Suite",
+  "cases": [
+    {
+      "name": "Dashboard Overview Stats",
+      "input": {
+        "matches": [
+          {
+            "id": "1",
+            "score": "3-1",
+            "played": true
+          },
+          {
+            "id": "2",
+            "score": "2-2",
+            "played": true
+          },
+          {
+            "id": "3",
+            "score": null,
+            "played": false
+          }
+        ],
+        "players": [
+          {
+            "id": "p1",
+            "name": "Nguyen Su",
+            "goals": 3,
+            "assists": 1,
+            "yellowCards": 0,
+            "redCards": 0,
+            "team": "p",
+            "position": "Tiền đạo",
+            "number": "10",
+            "mvp": 12
+          },
+          {
+            "id": "p2",
+            "name": "Bao Anh",
+            "goals": 1,
+            "assists": 2,
+            "yellowCards": 1,
+            "redCards": 0,
+            "team": "p",
+            "position": "Tiền vệ",
+            "number": "8",
+            "mvp": 8
+          },
+          {
+            "id": "p3",
+            "name": "Quoc Khanh",
+            "goals": 1,
+            "assists": 0,
+            "yellowCards": 0,
+            "redCards": 0,
+            "team": "t",
+            "position": "Tiền đạo",
+            "number": "9",
+            "mvp": 5
+          }
+        ],
+        "teams": {
+          "p": {
+            "name": "TEAM P"
+          },
+          "t": {
+            "name": "TEAM T"
+          },
+          "x": {
+            "name": "TEAM X"
+          }
+        }
+      },
+      "expected": {
+        "goals": 8,
+        "matches": 3,
+        "players": 3,
+        "teams": 3,
+        "yellow": 0,
+        "red": 0,
+        "totalMatchesPlayed": 2,
+        "totalGoals": 8,
+        "totalCards": 1,
+        "topMVP": {
+          "id": "p1",
+          "name": "Nguyen Su",
+          "goals": 3,
+          "assists": 1,
+          "yellowCards": 0,
+          "redCards": 0,
+          "team": "p",
+          "position": "Tiền đạo",
+          "number": "10",
+          "mvp": 12
+        },
+        "topScorer": {
+          "id": "p1",
+          "name": "Nguyen Su",
+          "goals": 3,
+          "assists": 1,
+          "yellowCards": 0,
+          "redCards": 0,
+          "team": "p",
+          "position": "Tiền đạo",
+          "number": "10",
+          "mvp": 12
+        }
+      }
+    },
+    {
+      "name": "Zero-Stat Edge Case Players",
+      "input": {
+        "matches": [],
+        "players": [
+          {
+            "id": "z1",
+            "name": "Bench Player",
+            "goals": 0,
+            "assists": 0,
+            "yellowCards": 0,
+            "redCards": 0,
+            "team": "x",
+            "position": "Hậu vệ",
+            "number": "99",
+            "mvp": 0
+          }
+        ],
+        "teams": {
+          "x": {
+            "name": "TEAM X"
+          }
+        }
+      },
+      "expected": {
+        "goals": 0,
+        "matches": 0,
+        "players": 1,
+        "teams": 1,
+        "yellow": 0,
+        "red": 0,
+        "totalMatchesPlayed": 0,
+        "totalGoals": 0,
+        "totalCards": 0,
+        "topMVP": {
+          "id": "z1",
+          "name": "Bench Player",
+          "goals": 0,
+          "assists": 0,
+          "yellowCards": 0,
+          "redCards": 0,
+          "team": "x",
+          "position": "Hậu vệ",
+          "number": "99",
+          "mvp": 0
+        },
+        "topScorer": null
+      }
+    }
+  ]
+}
