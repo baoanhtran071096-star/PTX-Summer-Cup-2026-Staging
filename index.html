@@ -2505,7 +2505,7 @@
                     el.placeholder = translations[lang][key];
                 }
             });
-            localStorage.setItem('lang', lang);
+            (window.setStorageItem || setStorageItem)('lang', lang);
             document.querySelectorAll('.lang-switch button').forEach(btn => {
                 const bLang = btn.getAttribute ? btn.getAttribute('data-lang') : (btn.dataset ? btn.dataset.lang : null);
                 btn.classList.toggle('active', bLang === lang);
@@ -2522,7 +2522,7 @@
             });
         });
 
-        const savedLang = localStorage.getItem('lang') || 'vi';
+        const savedLang = (window.getStorageItem || getStorageItem)('lang', 'vi');
         applyLanguage(savedLang);
 
         document.querySelectorAll('.lang-switch button').forEach(btn => {
@@ -2622,7 +2622,7 @@
                 }
             });
 
-            localStorage.setItem('currentPage', targetPage);
+            (window.setStorageItem || setStorageItem)('currentPage', targetPage);
 
             // 4. Page Specific Dynamic Renders
             if (targetPage === 'home') {
@@ -2678,7 +2678,7 @@
         });
 
         // Clean initial Home-First boot without forcing #home into URL
-        const initPage = normalizeRoute(localStorage.getItem('currentPage'));
+        const initPage = normalizeRoute((window.getStorageItem || getStorageItem)('currentPage', 'home'));
         navigate('home');
 
         // ============================================================
@@ -2688,7 +2688,7 @@
             const current = document.documentElement ? document.documentElement.getAttribute('data-theme') : 'dark';
             const newTheme = (current === 'dark') ? 'light' : 'dark';
             applyTheme(newTheme);
-            localStorage.setItem('theme', newTheme);
+            (window.setStorageItem || setStorageItem)('theme', newTheme);
         }
 
         function applyTheme(theme) {
@@ -2708,7 +2708,7 @@
             }
         }
 
-        const savedTheme = localStorage.getItem('theme') || 'dark';
+        const savedTheme = (window.getStorageItem || getStorageItem)('theme', 'dark');
         applyTheme(savedTheme);
 
         // ============================================================
@@ -7232,43 +7232,8 @@
 
         // ============================================================
         // ULTIMATE EDITION: PWA APP INSTALLATION
-        // ============================================================
-        let deferredPWAPrompt = null;
-
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPWAPrompt = e;
-            const banner = document.getElementById('pwaInstallBanner');
-            if (banner && !localStorage.getItem('pwa_dismissed')) {
-                banner.style.display = 'flex';
-            }
-        });
-
-        function installPTXPWAApp() {
-            if (deferredPWAPrompt) {
-                deferredPWAPrompt.prompt();
-                deferredPWAPrompt.userChoice.then((choiceResult) => {
-                    if (choiceResult.outcome === 'accepted') {
-                        showToast('🎉 Đã cài đặt App PTX Summer Cup 2026 thành công!', 'success');
-                    }
-                    deferredPWAPrompt = null;
-                    dismissPWABanner();
-                });
-            } else {
-                showToast('📲 Để cài App: Nhấn biểu tượng Mở rộng trình duyệt ➔ "Thêm vào Màn hình chính"!', 'info');
-            }
-        }
-
-        function dismissPWABanner() {
-            const banner = document.getElementById('pwaInstallBanner');
-            if (banner) banner.style.display = 'none';
-            localStorage.setItem('pwa_dismissed', '1');
-        }
-
         window.triggerVARReview = triggerVARReview;
         window.triggerTrophyRotate = triggerTrophyRotate;
-        window.installPTXPWAApp = installPTXPWAApp;
-        window.dismissPWABanner = dismissPWABanner;
 
         // ============================================================
         // REFEREE DIGITAL TOOLKIT FUNCTIONS (MATCH-SPECIFIC & TIMELINE)

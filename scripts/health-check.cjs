@@ -29,6 +29,7 @@ let duplicateIds = 0;
 let manifestErrors = 0;
 let swErrors = 0;
 let missingDomAnchors = 0;
+let duplicateExtractedFunctions = 0;
 
 // Reserved JS Keywords & Standard DOM Methods
 const jsKeywords = new Set([
@@ -66,7 +67,7 @@ srcFiles.forEach(file => {
     fullRuntimeGraph += '\n' + fs.readFileSync(file, 'utf8');
 });
 
-// 1. Scan Assets and Legacy Paths across FULL RUNTIME GRAPH (HTML, src/**/*.js, src/**/*.css, manifest.json, sw.js)
+// 1. Scan Assets and Legacy Paths across FULL RUNTIME GRAPH
 const assetPathRegex = /["'](public\/(?:images|media)\/[^"']+)["']/gi;
 const srcRegex = /(?:src|href|poster)\s*=\s*["']([^"']+)["']/gi;
 const bgUrlRegex = /url\s*\(\s*["']?([^"'\)]+)["']?\s*\)/gi;
@@ -167,7 +168,25 @@ while ((match = idRegex.exec(html)) !== null) {
     }
 }
 
-// 4. REAL VALIDATION: PWA Manifest Check
+// 4. DUPLICATION GATE: Check that functions exported in src/infrastructure/ are NOT re-declared in index.html
+const extractedFunctionsToCheck = ['installPTXPWAApp', 'dismissPWABanner', 'isStorageAvailable', 'getStorageItem', 'setStorageItem', 'removeStorageItem', 'getJSON', 'setJSON'];
+
+extractedFunctionsToCheck.forEach(fn => {
+    const inlineDeclRegex = new RegExp(`function\\s+${fn}\\s*\\(`, 'g');
+    if (inlineDeclRegex.test(html)) {
+        console.warn(`  ⚠️ Duplicate Extracted Function Found in index.html: ${fn}`);
+        duplicateExtractedFunctions++;
+    }
+});
+
+// 5. DIRECT PERSISTENCE BYPASS COUNTER: Scan direct localStorage.getItem/setItem calls in index.html
+const directLocalStorageRegex = /localStorage\.(getItem|setItem|removeItem)\(/g;
+let directLocalStorageCalls = 0;
+while ((match = directLocalStorageRegex.exec(html)) !== null) {
+    directLocalStorageCalls++;
+}
+
+// 6. REAL VALIDATION: PWA Manifest Check
 if (!fs.existsSync(manifestPath)) {
     console.warn(`  ⚠️ Manifest File Missing: manifest.json`);
     manifestErrors++;
@@ -193,7 +212,7 @@ if (!fs.existsSync(manifestPath)) {
     }
 }
 
-// 5. REAL VALIDATION: Service Worker Event Listener Check
+// 7. REAL VALIDATION: Service Worker Event Listener Check
 if (!fs.existsSync(swPath)) {
     console.warn(`  ⚠️ Service Worker File Missing: sw.js`);
     swErrors++;
@@ -208,7 +227,7 @@ if (!fs.existsSync(swPath)) {
     }
 }
 
-// 6. REAL VALIDATION: Static Contract Anchors Check
+// 8. REAL VALIDATION: Static Contract Anchors Check
 if (contract.requiredDomAnchors && Array.isArray(contract.requiredDomAnchors)) {
     contract.requiredDomAnchors.forEach(anchor => {
         if (!html.includes(`id="${anchor}"`) && !html.includes(`id='${anchor}'`)) {
@@ -219,16 +238,18 @@ if (contract.requiredDomAnchors && Array.isArray(contract.requiredDomAnchors)) {
 }
 
 // Output Comprehensive Gate Report
-console.log(`Source Modules Scanned:  ${srcFiles.length + 3} files (index.html + manifest + sw + src/**/*)`);
-console.log(`Assets Scanned:          ${scannedAssets.size}`);
-console.log(`Missing Assets:          ${missingAssets}`);
-console.log(`Legacy Runtime Paths:    ${legacyPathsCount}`);
-console.log(`Unique Inline Handlers:  ${inlineHandlers.size}`);
-console.log(`Missing Handlers:        ${missingHandlers}`);
-console.log(`Duplicate IDs:           ${duplicateIds}`);
-console.log(`Manifest Validation:     ${manifestErrors === 0 ? 'VALIDATED (0 errors)' : manifestErrors + ' errors'}`);
-console.log(`Service Worker Check:    ${swErrors === 0 ? 'VALIDATED (0 errors)' : swErrors + ' errors'}`);
-console.log(`Static DOM Anchors:      ${missingDomAnchors === 0 ? 'VALIDATED (0 missing)' : missingDomAnchors + ' missing'}`);
+console.log(`Source Modules Scanned:     ${srcFiles.length + 3} files (index.html + manifest + sw + src/**/*)`);
+console.log(`Assets Scanned:             ${scannedAssets.size}`);
+console.log(`Missing Assets:             ${missingAssets}`);
+console.log(`Legacy Runtime Paths:       ${legacyPathsCount}`);
+console.log(`Unique Inline Handlers:     ${inlineHandlers.size}`);
+console.log(`Missing Handlers:           ${missingHandlers}`);
+console.log(`Duplicate Extracted Funcs:  ${duplicateExtractedFunctions}`);
+console.log(`Direct Storage Calls (Mon): ${directLocalStorageCalls} calls`);
+console.log(`Duplicate IDs:              ${duplicateIds}`);
+console.log(`Manifest Validation:        ${manifestErrors === 0 ? 'VALIDATED (0 errors)' : manifestErrors + ' errors'}`);
+console.log(`Service Worker Check:       ${swErrors === 0 ? 'VALIDATED (0 errors)' : swErrors + ' errors'}`);
+console.log(`Static DOM Anchors:         ${missingDomAnchors === 0 ? 'VALIDATED (0 missing)' : missingDomAnchors + ' missing'}`);
 console.log('--------------------------------------------------');
 console.log(`ℹ️ NOTE: Runtime console errors & network 404s require [BROWSER GATE] verification.`);
 console.log('--------------------------------------------------');
@@ -237,6 +258,7 @@ const pass = missingAssets <= contract.allowedMissingAssets &&
              legacyPathsCount <= contract.allowedLegacyAssets &&
              missingHandlers <= contract.allowedMissingHandlers &&
              duplicateIds <= contract.allowedDuplicateIds &&
+             duplicateExtractedFunctions === 0 &&
              manifestErrors === 0 &&
              swErrors === 0 &&
              missingDomAnchors === 0;
