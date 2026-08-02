@@ -166,6 +166,7 @@ const nativeBindingsDiscovered = new Set();
 const nativeMigrationCompleted = new Set();
 let migratedHandlersStillInline = 0;
 let unresolvedHandlers = 0;
+let doubleBoundHandlers = 0;
 
 legacyAllowlistSet.forEach(handler => {
     // Strict Native Binding Check: Must be bound via case 'handler':, data-action="handler", or explicit listener
@@ -183,6 +184,12 @@ registryHandlers.forEach(handler => {
     const hasInline = inlineHandlersDiscovered.has(handler);
     const hasNative = nativeBindingsDiscovered.has(handler);
     const isMarkedMigrated = migrationRegistry.handlers[handler] && migrationRegistry.handlers[handler].migrationStatus === 'migrated';
+
+    // Dynamic Double-Binding Check: Handler has both legacy inline occurrences AND active native event bindings
+    if (hasInline && hasNative) {
+        console.warn(`  ⚠️ DOUBLE-BINDING FAIL: Handler '${handler}' has both legacy inline occurrences AND active native event bindings!`);
+        doubleBoundHandlers++;
+    }
 
     if (isMarkedMigrated) {
         if (hasInline) {
@@ -395,7 +402,7 @@ console.log(`  - Native Bindings Implemented:     ${nativeBindingsDiscovered.siz
 console.log(`  - Native Migration Completed:      ${nativeMigrationCompleted.size} / 31 (2E.1)`);
 console.log(`  - Migrated Handlers Still Inline:  ${migratedHandlersStillInline}`);
 console.log(`  - Unresolved Handlers:             ${unresolvedHandlers}`);
-console.log(`  - Double-Bound Handlers:            0`);
+console.log(`  - Double-Bound Handlers:            ${doubleBoundHandlers}`);
 console.log(`--------------------------------------------------`);
 console.log(`Duplicate Extracted Funcs:  ${duplicateExtractedFunctions}`);
 console.log(`Direct Storage API Calls:   ${directLocalStorageApiCalls} calls`);
@@ -423,6 +430,7 @@ const pass = missingAssets <= contract.allowedMissingAssets &&
              missingDomAnchors === 0 &&
              migratedHandlersStillInline === 0 &&
              unresolvedHandlers === 0 &&
+             doubleBoundHandlers === 0 &&
              !packageVersionMismatch;
 
 if (pass) {
