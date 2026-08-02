@@ -1,0 +1,187 @@
+{
+  "version": "2.6.3-wave2d2",
+  "timestamp": "2026-08-02T05:46:41.276Z",
+  "summary": {
+    "localStorageKeysCount": 14,
+    "sessionStorageKeysCount": 0,
+    "cookiesCount": 0,
+    "indexedDBStoresCount": 1,
+    "firebasePersistenceRefsCount": 1
+  },
+  "localStorageKeys": [
+    {
+      "key": "theme",
+      "type": "string",
+      "description": "UI Theme (light/dark)",
+      "readers": [
+        "toggleTheme",
+        "initTheme"
+      ],
+      "writers": [
+        "toggleTheme"
+      ]
+    },
+    {
+      "key": "lang",
+      "type": "string",
+      "description": "App Language (vi/en)",
+      "readers": [
+        "applyLanguage"
+      ],
+      "writers": [
+        "applyLanguage"
+      ]
+    },
+    {
+      "key": "currentPage",
+      "type": "string",
+      "description": "Active Navigation Tab",
+      "readers": [
+        "navigate"
+      ],
+      "writers": [
+        "navigate"
+      ]
+    },
+    {
+      "key": "ptx_admin_hash_v2",
+      "type": "string",
+      "description": "Hashed Admin Password",
+      "readers": [
+        "checkAdminAuth",
+        "verifyAdminPassword"
+      ],
+      "writers": [
+        "changeAdminPassword"
+      ]
+    },
+    {
+      "key": "ptx_admin_salt_v2",
+      "type": "string",
+      "description": "Crypto Salt for Password Hashing",
+      "readers": [
+        "getSalt"
+      ],
+      "writers": [
+        "getSalt"
+      ]
+    },
+    {
+      "key": "ptx_admin_auth",
+      "type": "string",
+      "description": "Admin Session Token",
+      "readers": [
+        "checkAdminAuth"
+      ],
+      "writers": [
+        "handleLogin",
+        "handleLogout"
+      ]
+    },
+    {
+      "key": "ptx_players_data",
+      "type": "JSON Array",
+      "description": "Official Player Roster & Stats",
+      "readers": [
+        "getOfficialPlayers",
+        "renderRoster"
+      ],
+      "writers": [
+        "savePlayerAdminDetail"
+      ]
+    },
+    {
+      "key": "ptx_seeded_flag",
+      "type": "string",
+      "description": "System Database Initial Seed Flag",
+      "readers": [
+        "initSystemData"
+      ],
+      "writers": [
+        "initSystemData"
+      ]
+    },
+    {
+      "key": "ptx_result_1",
+      "type": "JSON Object",
+      "description": "Match Round 1 Scores & Standings Data",
+      "readers": [
+        "calculateStandings"
+      ],
+      "writers": [
+        "updateStandingsAndResults"
+      ]
+    },
+    {
+      "key": "ptx_result_2",
+      "type": "JSON Object",
+      "description": "Match Round 2 Scores & Standings Data",
+      "readers": [
+        "calculateStandings"
+      ],
+      "writers": [
+        "updateStandingsAndResults"
+      ]
+    },
+    {
+      "key": "ptx_result_3",
+      "type": "JSON Object",
+      "description": "Match Round 3 Scores & Standings Data",
+      "readers": [
+        "calculateStandings"
+      ],
+      "writers": [
+        "updateStandingsAndResults"
+      ]
+    },
+    {
+      "key": "ptx_stat_goals",
+      "type": "number",
+      "description": "Tournament Total Goals Counter",
+      "readers": [
+        "renderTournamentStats"
+      ],
+      "writers": [
+        "addQuickGoal",
+        "updateStatsAdmin"
+      ]
+    },
+    {
+      "key": "ptx_user_predictions_list",
+      "type": "JSON Array",
+      "description": "Fan Match Score Predictions",
+      "readers": [
+        "renderFanPredictionsList"
+      ],
+      "writers": [
+        "submitFanPrediction",
+        "clearAllPredictionsList"
+      ]
+    },
+    {
+      "key": "pwa_dismissed",
+      "type": "string",
+      "description": "PWA Install Banner Dismissal Timestamp",
+      "readers": [
+        "initPWAPrompt"
+      ],
+      "writers": [
+        "dismissPWABanner"
+      ]
+    }
+  ],
+  "sessionStorageKeys": [],
+  "cookies": [],
+  "indexedDBStores": [
+    {
+      "storeName": "firebase-firestore",
+      "description": "Cloud Firestore Client Cache Store (Managed by Firebase SDK)"
+    }
+  ],
+  "firebasePersistenceRefs": [
+    {
+      "ref": "firestore.enablePersistence()",
+      "description": "Offline Firestore document caching in IndexedDB"
+    }
+  ]
+}
