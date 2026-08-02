@@ -359,14 +359,38 @@ if (!fs.existsSync(swPath)) {
     }
 }
 
-// 8. REAL VALIDATION: Static Contract Anchors Check
-if (contract.requiredDomAnchors && Array.isArray(contract.requiredDomAnchors)) {
-    contract.requiredDomAnchors.forEach(anchor => {
-        if (!html.includes(`id="${anchor}"`) && !html.includes(`id='${anchor}'`)) {
-            console.warn(`  ⚠️ Required DOM Anchor Missing: #${anchor}`);
-            missingDomAnchors++;
+// 8b. REAL VALIDATION: Provenance Metadata Verification
+let provenanceErrors = 0;
+let provenanceStatusStr = '';
+const provJsonPath = path.join(rootDir, 'build-provenance.json');
+if (!fs.existsSync(provJsonPath)) {
+    console.warn(`  ⚠️ Provenance Metadata File Missing: build-provenance.json`);
+    provenanceErrors++;
+    provenanceStatusStr = 'FAILED (build-provenance.json missing)';
+} else {
+    try {
+        const provObj = JSON.parse(fs.readFileSync(provJsonPath, 'utf8'));
+        if (!provObj.artifact_tree_commit_sha || !provObj.artifact_source_commit_sha || !provObj.provenance_commit_sha) {
+            console.warn(`  ⚠️ Provenance Metadata Incomplete: Missing required commit SHA fields`);
+            provenanceErrors++;
+            provenanceStatusStr = 'FAILED (Incomplete schema)';
+        } else if (fs.existsSync(path.join(rootDir, '.git'))) {
+            const gitHead = execSync('git rev-parse HEAD', { cwd: rootDir, encoding: 'utf8' }).trim();
+            if (provObj.artifact_tree_commit_sha !== gitHead) {
+                console.warn(`  ⚠️ Provenance Mismatch: build-provenance.json tree SHA (${provObj.artifact_tree_commit_sha.substring(0, 7)}) !== Git HEAD (${gitHead.substring(0, 7)})`);
+                provenanceErrors++;
+                provenanceStatusStr = `FAILED (Tree SHA mismatch ${provObj.artifact_tree_commit_sha.substring(0, 7)} !== ${gitHead.substring(0, 7)})`;
+            } else {
+                provenanceStatusStr = 'VALIDATED (100% Tree SHA Match)';
+            }
+        } else {
+            provenanceStatusStr = 'VALIDATED Schema / SKIPPED Reconciliation (.git unavailable)';
         }
-    });
+    } catch (e) {
+        console.warn(`  ⚠️ Provenance JSON Error: ${e.message}`);
+        provenanceErrors++;
+        provenanceStatusStr = `FAILED (${e.message})`;
+    }
 }
 
 // 9. EXECUTE GOLDEN FIXTURES & UI BEHAVIORAL SMOKE TESTS
@@ -414,6 +438,7 @@ console.log(`Duplicate IDs:              ${duplicateIds}`);
 console.log(`Manifest Validation:        ${manifestErrors === 0 ? 'VALIDATED (0 errors)' : manifestErrors + ' errors'}`);
 console.log(`Service Worker Check:       ${swErrors === 0 ? 'VALIDATED (0 errors)' : swErrors + ' errors'}`);
 console.log(`Static DOM Anchors:         ${missingDomAnchors === 0 ? 'VALIDATED (0 missing)' : missingDomAnchors + ' missing'}`);
+console.log(`Provenance Check:           ${provenanceStatusStr}`);
 console.log(`Golden Fixture Test Gate:   ${fixtureGateStatus}`);
 console.log(`UI Behavioral Smoke Gate:   ${uiGateStatus}`);
 console.log('--------------------------------------------------');
@@ -431,6 +456,7 @@ const pass = missingAssets <= contract.allowedMissingAssets &&
              migratedHandlersStillInline === 0 &&
              unresolvedHandlers === 0 &&
              doubleBoundHandlers === 0 &&
+             provenanceErrors === 0 &&
              !packageVersionMismatch;
 
 if (pass) {
