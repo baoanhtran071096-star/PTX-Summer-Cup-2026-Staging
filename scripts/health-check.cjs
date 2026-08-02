@@ -202,14 +202,44 @@ while ((match = directLocalStorageRegex.exec(html)) !== null) {
     directLocalStorageApiCalls++;
 }
 
-// 6. MONOLITH JS LINE COUNTER: Count remaining inline JavaScript script block lines in index.html
-let monolithJsLineCount = 0;
-const scriptBlockRegex = /<script\b[^>]*>([\s\S]*?)<\/script>/gi;
-let scriptMatch;
-while ((scriptMatch = scriptBlockRegex.exec(html)) !== null) {
-    if (!scriptMatch[0].includes('type="module"') && !scriptMatch[0].includes('src=')) {
-        monolithJsLineCount += scriptMatch[1].split('\n').length;
+// 6. MONOLITH JS METRICS: Accurately count all inline <script> blocks in index.html
+let inlineScriptBlocks = 0;
+let inlineJsPhysicalLines = 0;
+let inlineJsNonEmptyLines = 0;
+let inlineJsBytes = 0;
+
+const scriptParts = html.split(/<\/script>/i);
+scriptParts.forEach(part => {
+    const scriptOpenIdx = part.lastIndexOf('<script');
+    if (scriptOpenIdx !== -1) {
+        const tagAndContent = part.substring(scriptOpenIdx);
+        const tagCloseIdx = tagAndContent.indexOf('>');
+        if (tagCloseIdx !== -1) {
+            const openingTag = tagAndContent.substring(0, tagCloseIdx + 1);
+            const scriptContent = tagAndContent.substring(tagCloseIdx + 1);
+
+            if (!openingTag.includes('src=')) {
+                inlineScriptBlocks++;
+                const lines = scriptContent.split('\n');
+                inlineJsPhysicalLines += lines.length;
+                inlineJsNonEmptyLines += lines.filter(line => line.trim().length > 0).length;
+                inlineJsBytes += Buffer.byteLength(scriptContent, 'utf8');
+            }
+        }
     }
+});
+
+// 7. PACKAGE VERSION SYNCHRONIZATION GATE
+const packageJsonPath = path.join(rootDir, 'package.json');
+const packageLockPath = path.join(rootDir, 'package-lock.json');
+const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
+const packageLock = JSON.parse(fs.readFileSync(packageLockPath, 'utf8'));
+
+let packageVersionMismatch = false;
+const lockRootVer = packageLock.packages && packageLock.packages[''] ? packageLock.packages[''].version : packageLock.version;
+if (packageJson.version !== packageLock.version || lockRootVer !== packageJson.version) {
+    console.warn(`  ⚠️ Package Version Mismatch: package.json (${packageJson.version}) vs package-lock.json (${packageLock.version})`);
+    packageVersionMismatch = true;
 }
 
 // 6. REAL VALIDATION: PWA Manifest Check
@@ -284,6 +314,7 @@ try {
 
 // Output Comprehensive Gate Report
 console.log(`Source Modules Scanned:     ${srcFiles.length + 3} files (index.html + manifest + sw + src/**/*)`);
+console.log(`Package Version Check:      ${!packageVersionMismatch ? `VALIDATED (package.json v${packageJson.version} === package-lock.json v${packageLock.version})` : 'MISMATCH ERROR'}`);
 console.log(`Assets Scanned:             ${scannedAssets.size}`);
 console.log(`Missing Assets:             ${missingAssets}`);
 console.log(`Legacy Runtime Paths:       ${legacyPathsCount}`);
@@ -291,7 +322,10 @@ console.log(`Unique Inline Handlers:     ${inlineHandlers.size}`);
 console.log(`Missing Handlers:           ${missingHandlers}`);
 console.log(`Duplicate Extracted Funcs:  ${duplicateExtractedFunctions}`);
 console.log(`Direct Storage API Calls:   ${directLocalStorageApiCalls} calls`);
-console.log(`Monolith JS Lines Remaining: ${monolithJsLineCount} lines`);
+console.log(`Inline Script Blocks:       ${inlineScriptBlocks} blocks`);
+console.log(`Inline JS Physical Lines:   ${inlineJsPhysicalLines} lines`);
+console.log(`Inline JS Non-empty Lines:  ${inlineJsNonEmptyLines} lines`);
+console.log(`Inline JS Size (Bytes):     ${inlineJsBytes} bytes (~${(inlineJsBytes / 1024).toFixed(1)} KB)`);
 console.log(`Duplicate IDs:              ${duplicateIds}`);
 console.log(`Manifest Validation:        ${manifestErrors === 0 ? 'VALIDATED (0 errors)' : manifestErrors + ' errors'}`);
 console.log(`Service Worker Check:       ${swErrors === 0 ? 'VALIDATED (0 errors)' : swErrors + ' errors'}`);
@@ -309,7 +343,8 @@ const pass = missingAssets <= contract.allowedMissingAssets &&
              duplicateExtractedFunctions === 0 &&
              manifestErrors === 0 &&
              swErrors === 0 &&
-             missingDomAnchors === 0;
+             missingDomAnchors === 0 &&
+             !packageVersionMismatch;
 
 if (pass) {
     console.log('✅ RESULT: PASS (Exit code 0)\n');
