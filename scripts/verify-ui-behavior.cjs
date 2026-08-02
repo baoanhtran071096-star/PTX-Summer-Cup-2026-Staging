@@ -31,11 +31,26 @@ class MockElement {
         this.children = [];
         this.innerHTML = '';
         this.value = '';
+        this.attributes = {};
+    }
+
+    setAttribute(attr, val) {
+        this.attributes[attr] = val;
     }
 
     appendChild(child) {
         this.children.push(child);
     }
+
+    querySelectorAll(selector) {
+        return [];
+    }
+
+    getAttribute(attr) {
+        return null;
+    }
+
+    addEventListener(event, fn) {}
 }
 
 const domElements = {};
@@ -50,10 +65,17 @@ global.document = {
     createElement: (tag) => {
         return new MockElement('created_' + Math.random(), tag);
     },
+    querySelectorAll: (selector) => {
+        return [];
+    },
+    querySelector: (selector) => {
+        return new MockElement('query_' + Math.random());
+    },
     body: new MockElement('body')
 };
 
 global.window = global;
+global.window.scrollTo = () => {};
 
 // Callback Spies
 const spies = {
@@ -61,7 +83,12 @@ const spies = {
     renderCompareView: 0,
     onLiveStreamMatchChange: 0,
     drawInfographicCanvas: 0,
-    updateTicketName: []
+    updateTicketName: [],
+    renderAllMatches: 0,
+    render5v5Pitch: 0,
+    populateAdminPlayerSelect: 0,
+    renderPlayerCards: 0,
+    renderGalleryPage: 0
 };
 
 global.window.generateAIPressRelease = (type) => { spies.generateAIPressRelease.push(type); };
@@ -69,6 +96,11 @@ global.window.renderCompareView = () => { spies.renderCompareView++; };
 global.window.onLiveStreamMatchChange = () => { spies.onLiveStreamMatchChange++; };
 global.window.drawInfographicCanvas = () => { spies.drawInfographicCanvas++; };
 global.window.updateTicketName = (val) => { spies.updateTicketName.push(val); };
+global.window.renderAllMatches = () => { spies.renderAllMatches++; };
+global.window.render5v5Pitch = () => { spies.render5v5Pitch++; };
+global.window.populateAdminPlayerSelect = () => { spies.populateAdminPlayerSelect++; };
+global.window.renderPlayerCards = () => { spies.renderPlayerCards++; };
+global.window.renderGalleryPage = () => { spies.renderGalleryPage++; };
 
 async function runUiTests() {
     console.log('Testing 1: src/ui/toast.js (showToast)...');
@@ -102,7 +134,8 @@ async function runUiTests() {
         { name: 'Infographic Pure Primitive', show: pureModalsModule.showInfographicModal, hide: pureModalsModule.hideInfographicModal, id: 'infographicModal', type: 'style', openVal: 'flex', closeVal: 'none' },
         { name: 'LiveStream Hub Pure Primitive', show: pureModalsModule.showLiveStreamHubModal, hide: pureModalsModule.hideLiveStreamHubModal, id: 'liveStreamHubModal', type: 'style', openVal: 'flex', closeVal: 'none' },
         { name: 'AI Press Release Pure Primitive', show: pureModalsModule.showAiPressReleaseModal, hide: pureModalsModule.hideAiPressReleaseModal, id: 'aiPressReleaseModal', type: 'style', openVal: 'flex', closeVal: 'none' },
-        { name: 'Stadium DJ Pure Primitive', show: pureModalsModule.showStadiumDJModal, hide: pureModalsModule.hideStadiumDJModal, id: 'stadiumDjModal', type: 'style', openVal: 'flex', closeVal: 'none' }
+        { name: 'Stadium DJ Pure Primitive', show: pureModalsModule.showStadiumDJModal, hide: pureModalsModule.hideStadiumDJModal, id: 'stadiumDjModal', type: 'style', openVal: 'flex', closeVal: 'none' },
+        { name: 'Tactical Visualizer Pure Primitive', show: pureModalsModule.showTacticalVisualizerModal, hide: pureModalsModule.hideTacticalVisualizerModal, id: 'tacticalVisualizerModal', type: 'style', openVal: 'flex', closeVal: 'none' }
     ];
 
     pureCases.forEach(tc => {
@@ -134,8 +167,58 @@ async function runUiTests() {
         passedUiTests++;
     });
 
-    console.log('\nTesting 3: src/adapters/ui.adapters.js (UI Orchestration & Callback Spies)...');
+    console.log('\nTesting 3: src/adapters/ui.adapters.js (Navigation, Filters & Modal Orchestration)...');
     const uiAdapters = await import('../src/adapters/ui.adapters.js');
+
+    // Test Navigation Adapter Callback Spy
+    uiAdapters.navigateAdapter('schedule');
+    if (spies.renderAllMatches > 0) {
+        console.log('  ✅ [PASS] navigateAdapter - Triggered renderAllMatches() on schedule route');
+        passedUiTests++;
+    } else {
+        console.error('  ❌ [FAIL] navigateAdapter - Failed to trigger renderAllMatches');
+        failedUiTests++;
+    }
+
+    // Test Team SubTab Adapter Callback Spy
+    uiAdapters.switchTeamSubTabAdapter('pitch');
+    if (spies.render5v5Pitch > 0) {
+        console.log('  ✅ [PASS] switchTeamSubTabAdapter - Triggered render5v5Pitch() on pitch tab switch');
+        passedUiTests++;
+    } else {
+        console.error('  ❌ [FAIL] switchTeamSubTabAdapter - Failed to trigger render5v5Pitch');
+        failedUiTests++;
+    }
+
+    // Test Admin Tab Adapter Callback Spy
+    uiAdapters.switchAdminTabAdapter(2);
+    if (spies.populateAdminPlayerSelect > 0) {
+        console.log('  ✅ [PASS] switchAdminTabAdapter - Triggered populateAdminPlayerSelect() on tab 2');
+        passedUiTests++;
+    } else {
+        console.error('  ❌ [FAIL] switchAdminTabAdapter - Failed to trigger populateAdminPlayerSelect');
+        failedUiTests++;
+    }
+
+    // Test FIFA Team Filter Adapter Callback Spy
+    uiAdapters.filterFifaByTeamAdapter('p', new MockElement('btnP'));
+    if (spies.renderPlayerCards > 0 && global.window.currentFifaTeamFilter === 'p') {
+        console.log('  ✅ [PASS] filterFifaByTeamAdapter - Updated team filter "p" & triggered renderPlayerCards()');
+        passedUiTests++;
+    } else {
+        console.error('  ❌ [FAIL] filterFifaByTeamAdapter - Failed to trigger renderPlayerCards');
+        failedUiTests++;
+    }
+
+    // Test Gallery Filter Adapter Callback Spy
+    uiAdapters.filterGalleryPageAdapter('team', new MockElement('btnTeam'));
+    if (spies.renderGalleryPage > 0 && global.window.galleryCurrentFilter === 'team') {
+        console.log('  ✅ [PASS] filterGalleryPageAdapter - Updated gallery filter "team" & triggered renderGalleryPage()');
+        passedUiTests++;
+    } else {
+        console.error('  ❌ [FAIL] filterGalleryPageAdapter - Failed to trigger renderGalleryPage');
+        failedUiTests++;
+    }
 
     // Test AI Press Release Adapter Callback Spy
     uiAdapters.openAiPressReleaseModalAdapter();

@@ -182,7 +182,9 @@ const extractedFunctionsToCheck = [
     'showToast', 'openLogin', 'closeLogin', 'openAiGrowthModal', 'closeAiGrowthModal',
     'openVipTicketModal', 'closeVipTicketModal', 'openComparePlayersModal', 'closeComparePlayersModal',
     'openInfographicModal', 'closeInfographicModal', 'openLiveStreamHubModal', 'closeLiveStreamHubModal',
-    'openAiPressReleaseModal', 'closeAiPressReleaseModal', 'openStadiumDJModal', 'closeStadiumDJModal'
+    'openAiPressReleaseModal', 'closeAiPressReleaseModal', 'openStadiumDJModal', 'closeStadiumDJModal',
+    'navigate', 'switchTeamSubTab', 'switchAdminTab', 'filterFifaByTeam', 'filterGalleryPage',
+    'openTacticalVisualizerModal', 'closeTacticalVisualizerModal'
 ];
 
 extractedFunctionsToCheck.forEach(fn => {
@@ -198,6 +200,16 @@ const directLocalStorageRegex = /localStorage\.(getItem|setItem|removeItem|key)\
 let directLocalStorageApiCalls = 0;
 while ((match = directLocalStorageRegex.exec(html)) !== null) {
     directLocalStorageApiCalls++;
+}
+
+// 6. MONOLITH JS LINE COUNTER: Count remaining inline JavaScript script block lines in index.html
+let monolithJsLineCount = 0;
+const scriptBlockRegex = /<script\b[^>]*>([\s\S]*?)<\/script>/gi;
+let scriptMatch;
+while ((scriptMatch = scriptBlockRegex.exec(html)) !== null) {
+    if (!scriptMatch[0].includes('type="module"') && !scriptMatch[0].includes('src=')) {
+        monolithJsLineCount += scriptMatch[1].split('\n').length;
+    }
 }
 
 // 6. REAL VALIDATION: PWA Manifest Check
@@ -279,6 +291,7 @@ console.log(`Unique Inline Handlers:     ${inlineHandlers.size}`);
 console.log(`Missing Handlers:           ${missingHandlers}`);
 console.log(`Duplicate Extracted Funcs:  ${duplicateExtractedFunctions}`);
 console.log(`Direct Storage API Calls:   ${directLocalStorageApiCalls} calls`);
+console.log(`Monolith JS Lines Remaining: ${monolithJsLineCount} lines`);
 console.log(`Duplicate IDs:              ${duplicateIds}`);
 console.log(`Manifest Validation:        ${manifestErrors === 0 ? 'VALIDATED (0 errors)' : manifestErrors + ' errors'}`);
 console.log(`Service Worker Check:       ${swErrors === 0 ? 'VALIDATED (0 errors)' : swErrors + ' errors'}`);

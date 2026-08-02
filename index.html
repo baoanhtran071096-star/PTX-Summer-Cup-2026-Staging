@@ -2565,71 +2565,7 @@
             return 'home';
         }
 
-        function navigate(pageId) {
-            const targetPage = normalizeRoute(pageId);
-            let targetEl = document.getElementById('page-' + targetPage);
-
-            if (!targetEl) {
-                targetEl = document.getElementById('page-home');
-            }
-
-            // Transactional Mutation: Never remove .active if targetEl is missing
-            if (!targetEl) {
-                console.error('[Router Error] Critical: page-home missing from DOM');
-                return;
-            }
-
-            // 1. Update UI active states transactionally
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            targetEl.classList.add('active');
-
-            // 2. Update page metadata
-            const data = pageConfig[targetPage] || pageConfig['home'];
-            if (data) {
-                document.title = data.title;
-                const descMeta = document.querySelector('meta[name="description"]');
-                if (descMeta) descMeta.setAttribute('content', data.desc);
-            }
-
-            // 3. Update navigation link active state
-            document.querySelectorAll('.nav-links a, .bottom-nav .nav-item').forEach(link => {
-                link.classList.remove('active');
-                const href = link.getAttribute('href');
-                if (href && (href === '#' + targetPage || href === '#/ ' + targetPage)) {
-                    link.classList.add('active');
-                }
-            });
-
-            (window.setStorageItem || setStorageItem)('currentPage', targetPage);
-
-            // 4. Page Specific Dynamic Renders
-            if (targetPage === 'home') {
-                try { renderAllMatches(); } catch(e){}
-                try { renderStandings(); } catch(e){}
-                try { updateDashboard(); } catch(e){}
-            } else if (targetPage === 'schedule') {
-                try { renderAllMatches(); } catch(e){}
-            } else if (targetPage === 'standings') {
-                try { renderStandingsPageTable(); } catch(e){}
-            } else if (targetPage === 'teams' || targetPage === 'players') {
-                try { renderTeamStats(); } catch(e){}
-                try { renderPlayerCards(); } catch(e){}
-            } else if (targetPage === 'gallery') {
-                try { renderGalleryPage(); } catch(e){}
-            } else if (targetPage === 'hall-of-fame') {
-                try { renderHallOfFame(); } catch(e){}
-            } else if (targetPage === 'admin') {
-                try { if (typeof loadAdminData === 'function') loadAdminData(); } catch(e){}
-            }
-
-            if (typeof revealActivePage === 'function') revealActivePage();
-            setTimeout(initReveal, 150);
-
-            if (targetPage !== 'home') {
-                const liveBar = document.getElementById('stickyLiveBar');
-                if (liveBar) liveBar.classList.remove('active');
-            }
-        }
+        // ROUTING (Delegated to src/adapters/ui.adapters.js & src/ui/navigation.js)
 
         window.addEventListener('hashchange', function() {
             const rawHash = window.location.hash.substring(1);
@@ -3239,25 +3175,7 @@
             x: [17, 18, 19, 20, 21]
         };
 
-        function switchTeamSubTab(mode) {
-            const rosterView = document.getElementById('teamsPageRostersView');
-            const pitchView = document.getElementById('teamsPagePitchView');
-            const btnRoster = document.getElementById('btnTeamTabRoster');
-            const btnPitch = document.getElementById('btnTeamTabPitch');
-
-            if (mode === 'roster') {
-                if (rosterView) rosterView.style.display = 'grid';
-                if (pitchView) pitchView.style.display = 'none';
-                if (btnRoster) btnRoster.classList.add('active');
-                if (btnPitch) btnPitch.classList.remove('active');
-            } else {
-                if (rosterView) rosterView.style.display = 'none';
-                if (pitchView) pitchView.style.display = 'flex';
-                if (btnPitch) btnPitch.classList.add('active');
-                if (btnRoster) btnRoster.classList.remove('active');
-                render5v5Pitch();
-            }
-        }
+        // Team SubTab Switcher (Delegated to src/adapters/ui.adapters.js & src/ui/filters.js)
 
         function selectPitchTeam(teamId) {
             pitchSelectedTeam = teamId;
@@ -3705,43 +3623,7 @@
             { code: '4-0-0', name: 'Bức Tường Thép', icon: '🏰', style: 'Ultra Parking The Bus', desc: '1 GK • 4 DF tử thủ' }
         ];
 
-        function openTacticalVisualizerModal() {
-            const modal = document.getElementById('tacticalVisualizerModal');
-            const container = document.getElementById('tacticalGridContainer');
-            if (!modal || !container) return;
-
-            container.innerHTML = '';
-            TACTICAL_FORMATIONS_LIST.forEach(item => {
-                const isActive = pitchFormation === item.code;
-                const card = document.createElement('div');
-                card.style.cssText = `background:${isActive ? 'rgba(59,130,246,0.18)' : 'rgba(255,255,255,0.04)'};border:2px solid ${isActive ? '#3b82f6' : 'rgba(255,255,255,0.1)'};border-radius:16px;padding:16px;cursor:pointer;transition:all 0.25s ease;position:relative;`;
-                card.innerHTML = `
-                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
-                        <span style="font-size:22px;">${item.icon}</span>
-                        <span style="font-size:11px;font-weight:900;background:${isActive ? '#3b82f6' : 'rgba(255,255,255,0.1)'};color:#fff;padding:2px 8px;border-radius:8px;">${item.code}</span>
-                    </div>
-                    <div style="font-size:15px;font-weight:900;color:#fff;margin-bottom:4px;">${item.name}</div>
-                    <div style="font-size:11px;color:#60a5fa;font-weight:700;margin-bottom:8px;">⚡ ${item.style}</div>
-                    <div style="font-size:11px;color:#94a3b8;">${item.desc}</div>
-                    ${isActive ? '<div style="margin-top:10px;text-align:center;font-size:11px;font-weight:900;color:#4ade80;">✓ ĐANG ÁP DỤNG TRÊN SÂN 3D</div>' : ''}
-                `;
-                card.addEventListener('click', () => {
-                    changePitchFormation(item.code);
-                    closeTacticalVisualizerModal();
-                });
-                container.appendChild(card);
-            });
-
-            modal.style.display = 'flex';
-        }
-
-        function closeTacticalVisualizerModal() {
-            const modal = document.getElementById('tacticalVisualizerModal');
-            if (modal) modal.style.display = 'none';
-        }
-
-        window.openTacticalVisualizerModal = openTacticalVisualizerModal;
-        window.closeTacticalVisualizerModal = closeTacticalVisualizerModal;
+        // VISUAL TACTICAL FORMATIONS (Delegated to src/adapters/ui.adapters.js & src/ui/modals.js)
 
         // 1. XUẤT VÉ VÀNG VIP 3D (3D GOLDEN VIP TICKET) (Delegated to src/ui/modals.js)
 
@@ -3972,19 +3854,7 @@
         }
         window.submitSponsorContact = submitSponsorContact;
 
-        // ============================================================
-        // FIFA CARDS FILTER & 3D HOLOGRAM TILT (TRANG CẦU THỦ)
-        // ============================================================
-        let currentFifaTeamFilter = 'all';
-
-        function filterFifaByTeam(teamId, btn) {
-            currentFifaTeamFilter = teamId;
-            document.querySelectorAll('.fifa-team-btn').forEach(b => {
-                b.classList.remove('active');
-            });
-            if (btn) btn.classList.add('active');
-            renderPlayerCards();
-        }
+        // FIFA CARDS FILTER (Delegated to src/adapters/ui.adapters.js & src/ui/filters.js)
 
         function initFifa3DTilt() {
             document.querySelectorAll('.player-card-fifa').forEach(card => {
@@ -4723,14 +4593,7 @@
             { cat: 'fan', label: 'Banner PTX Summer Cup', img: encodeURI('public/images/branding/banner_ptx_summer_cup.jpg'), tag: 'Sự kiện' },
         ];
 
-        let galleryCurrentFilter = 'all';
-
-        function filterGalleryPage(cat, btn) {
-            galleryCurrentFilter = cat;
-            document.querySelectorAll('.gallery-filter-btn').forEach(b => b.classList.remove('active'));
-            if (btn) btn.classList.add('active');
-            renderGalleryPage();
-        }
+        // GALLERY FILTER (Delegated to src/adapters/ui.adapters.js & src/ui/filters.js)
 
         function renderGalleryPage() {
             const container = document.getElementById('galleryPageGrid');
@@ -5126,30 +4989,7 @@
             showToast('🔗 Đã tạo & đồng bộ Link giới thiệu cá nhân!', 'success');
         }
 
-        // ============================================================
-        // ADMIN TAB SWITCHER & STATE MANAGEMENT
-        // ============================================================
-        function switchAdminTab(index) {
-            for (let i = 1; i <= 4; i++) {
-                const tabContent = document.getElementById('adminTabContent' + i);
-                const tabBtn = document.getElementById('tabBtnAdmin' + i);
-                if (tabContent) tabContent.style.display = i === index ? 'block' : 'none';
-                if (tabBtn) {
-                    if (i === index) {
-                        tabBtn.style.background = '#3b82f6';
-                        tabBtn.style.color = '#fff';
-                        tabBtn.style.borderColor = '#3b82f6';
-                        tabBtn.style.fontWeight = '800';
-                    } else {
-                        tabBtn.style.background = 'rgba(255,255,255,0.05)';
-                        tabBtn.style.color = '#cbd5e1';
-                        tabBtn.style.borderColor = '#334155';
-                        tabBtn.style.fontWeight = '700';
-                    }
-                }
-            }
-            if (index === 2) populateAdminPlayerSelect();
-        }
+        // ADMIN TAB SWITCHER (Delegated to src/adapters/ui.adapters.js & src/ui/filters.js)
 
         function setZeroMatchesState() {
             localStorage.removeItem('ptx_result_1');

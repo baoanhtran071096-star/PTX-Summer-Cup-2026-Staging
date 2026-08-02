@@ -91,3 +91,14 @@ export function hideStadiumDJModal() {
     const modal = document.getElementById('stadiumDjModal');
     if (modal) modal.style.display = 'none';
 }
+
+// 9. Tactical Visualizer Modal Primitives
+export function showTacticalVisualizerModal() {
+    const modal = document.getElementById('tacticalVisualizerModal');
+    if (modal) modal.style.display = 'flex';
+}
+
+export function hideTacticalVisualizerModal() {
+    const modal = document.getElementById('tacticalVisualizerModal');
+    if (modal) modal.style.display = 'none';
+}

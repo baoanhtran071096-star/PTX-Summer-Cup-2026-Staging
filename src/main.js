@@ -22,7 +22,15 @@ import {
 } from './adapters/domain.adapters.js';
 
 import { showToast } from './ui/toast.js';
+import { navigate } from './ui/navigation.js';
 import {
+    navigateAdapter,
+    switchTeamSubTabAdapter,
+    switchAdminTabAdapter,
+    filterFifaByTeamAdapter,
+    filterGalleryPageAdapter,
+    openTacticalVisualizerModalAdapter,
+    closeTacticalVisualizerModalAdapter,
     openLoginAdapter, closeLoginAdapter,
     openAiGrowthModalAdapter, closeAiGrowthModalAdapter,
     openVipTicketModalAdapter, closeVipTicketModalAdapter,
@@ -58,6 +66,13 @@ if (typeof window !== 'undefined') {
 
     // UI Modules & Adapters
     window.showToast = showToast;
+    window.navigate = navigateAdapter;
+    window.switchTeamSubTab = switchTeamSubTabAdapter;
+    window.switchAdminTab = switchAdminTabAdapter;
+    window.filterFifaByTeam = filterFifaByTeamAdapter;
+    window.filterGalleryPage = filterGalleryPageAdapter;
+    window.openTacticalVisualizerModal = openTacticalVisualizerModalAdapter;
+    window.closeTacticalVisualizerModal = closeTacticalVisualizerModalAdapter;
     window.openLogin = openLoginAdapter;
     window.closeLogin = closeLoginAdapter;
     window.openAiGrowthModal = openAiGrowthModalAdapter;
@@ -89,6 +104,13 @@ if (typeof window !== 'undefined') {
     registerLegacyHandler('installPTXPWAApp', installPTXPWAApp);
     registerLegacyHandler('dismissPWABanner', dismissPWABanner);
     registerLegacyHandler('showToast', showToast);
+    registerLegacyHandler('navigate', navigateAdapter);
+    registerLegacyHandler('switchTeamSubTab', switchTeamSubTabAdapter);
+    registerLegacyHandler('switchAdminTab', switchAdminTabAdapter);
+    registerLegacyHandler('filterFifaByTeam', filterFifaByTeamAdapter);
+    registerLegacyHandler('filterGalleryPage', filterGalleryPageAdapter);
+    registerLegacyHandler('openTacticalVisualizerModal', openTacticalVisualizerModalAdapter);
+    registerLegacyHandler('closeTacticalVisualizerModal', closeTacticalVisualizerModalAdapter);
     registerLegacyHandler('openLogin', openLoginAdapter);
     registerLegacyHandler('closeLogin', closeLoginAdapter);
     registerLegacyHandler('openAiGrowthModal', openAiGrowthModalAdapter);
