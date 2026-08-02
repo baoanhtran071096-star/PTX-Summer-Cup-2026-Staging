@@ -10,13 +10,13 @@
   "lang": "vi",
   "icons": [
     {
-      "src": "thư viện/ảnh logo - baner/Logo PTX.png",
+      "src": "public/images/branding/logo_ptx.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "thư viện/ảnh logo - baner/Logo PTX.png",
+      "src": "public/images/branding/logo_ptx.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
@@ -25,7 +25,7 @@
   "categories": ["sports", "entertainment"],
   "screenshots": [
     {
-      "src": "thư viện/ảnh logo - baner/banner PTX Summer Cup.jpg",
+      "src": "public/images/branding/banner_ptx_summer_cup.jpg",
       "sizes": "1280x720",
       "type": "image/jpeg"
     }

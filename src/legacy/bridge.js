@@ -1,5 +1,5 @@
 // ============================================================
-// PHASE 2D.1 — LEGACY HANDLER ALLOWLIST BRIDGE (FAIL-LOUD LAZY RESOLVER)
+// PHASE 2D.1 — LEGACY HANDLER ALLOWLIST BRIDGE (CLEAN REGISTRY PATTERN)
 // ============================================================
 
 export const LEGACY_HANDLERS_ALLOWLIST = [
@@ -35,33 +35,39 @@ export const LEGACY_HANDLERS_ALLOWLIST = [
 export function initLegacyBridge() {
     if (typeof window === 'undefined') return;
 
-    const legacyAPI = {};
+    window.__ptx_legacy_registry = window.__ptx_legacy_registry || {};
 
     LEGACY_HANDLERS_ALLOWLIST.forEach(fn => {
-        // Dynamic Proxy Resolver: Lazy evaluation at invocation time (handles body script execution timing)
-        // FAIL LOUD: Throws explicit Error if handler implementation is missing at runtime (NO silent no-op fallbacks!)
-        Object.defineProperty(legacyAPI, fn, {
-            configurable: true,
-            enumerable: true,
-            get() {
-                // If a real implementation exists on window (outside bridge), return it
-                if (window.__realHandlers && typeof window.__realHandlers[fn] === 'function') {
-                    return window.__realHandlers[fn];
-                }
-                
-                return function(...args) {
-                    // Check if function was declared later by body script
-                    const realFn = window[`__fn_impl_${fn}`] || window[fn];
-                    if (typeof realFn === 'function' && realFn !== legacyAPI[fn]) {
-                        return realFn.apply(this, args);
-                    }
-                    // FAIL LOUD: Throw explicit runtime error instead of manufacturing a fake handler
-                    throw new Error(`[LegacyBridge CRITICAL FAIL] Required handler '${fn}' is invoked but missing implementation!`);
-                };
+        // If a real handler function was already assigned on window (e.g. by classic script), capture it into registry
+        if (typeof window[fn] === 'function' && !window[fn].isBridgeProxy) {
+            window.__ptx_legacy_registry[fn] = window[fn];
+        }
+
+        const bridgeProxy = function(...args) {
+            // 1. Check explicit registry
+            const registeredFn = window.__ptx_legacy_registry[fn];
+            if (typeof registeredFn === 'function') {
+                return registeredFn.apply(this, args);
             }
-        });
+            // 2. Check window fallback if set under __impl_ name
+            const explicitImpl = window[`__impl_${fn}`];
+            if (typeof explicitImpl === 'function') {
+                return explicitImpl.apply(this, args);
+            }
+            // FAIL LOUD: Throw explicit runtime error (NO silent fallbacks!)
+            throw new Error(`[LegacyBridge CRITICAL FAIL] Required handler '${fn}' is invoked but missing implementation!`);
+        };
+
+        bridgeProxy.isBridgeProxy = true;
+        window[fn] = bridgeProxy;
     });
 
-    Object.assign(window, legacyAPI);
-    console.log(`[LegacyBridge] Initialized lazy fail-loud bridge for ${LEGACY_HANDLERS_ALLOWLIST.length} handlers.`);
+    console.log(`[LegacyBridge] Clean registry bridge initialized for ${LEGACY_HANDLERS_ALLOWLIST.length} handlers.`);
+}
+
+export function registerLegacyHandler(name, fn) {
+    if (typeof window !== 'undefined' && typeof fn === 'function') {
+        window.__ptx_legacy_registry = window.__ptx_legacy_registry || {};
+        window.__ptx_legacy_registry[name] = fn;
+    }
 }

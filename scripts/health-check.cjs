@@ -41,29 +41,32 @@ const jsKeywords = new Set([
     'removeEventListener', 'focus', 'blur', 'preventDefault', 'stopPropagation', 'reload'
 ]);
 
-// Helper to recursively collect all JS files in src/
-function getAllJsFiles(dir, fileList = []) {
+// Helper to recursively collect all source files in src/
+function getAllSourceFiles(dir, fileList = []) {
     if (!fs.existsSync(dir)) return fileList;
     const files = fs.readdirSync(dir);
     files.forEach(file => {
         const filePath = path.join(dir, file);
         if (fs.statSync(filePath).isDirectory()) {
-            getAllJsFiles(filePath, fileList);
-        } else if (file.endsWith('.js') || file.endsWith('.cjs')) {
+            getAllSourceFiles(filePath, fileList);
+        } else if (file.endsWith('.js') || file.endsWith('.cjs') || file.endsWith('.css')) {
             fileList.push(filePath);
         }
     });
     return fileList;
 }
 
-const srcJsFiles = getAllJsFiles(srcDir);
-let fullCodeBase = html;
+const srcFiles = getAllSourceFiles(srcDir);
+const manifestContentStr = fs.existsSync(manifestPath) ? fs.readFileSync(manifestPath, 'utf8') : '';
+const swContentStr = fs.existsSync(swPath) ? fs.readFileSync(swPath, 'utf8') : '';
 
-srcJsFiles.forEach(file => {
-    fullCodeBase += '\n' + fs.readFileSync(file, 'utf8');
+let fullRuntimeGraph = html + '\n' + manifestContentStr + '\n' + swContentStr;
+
+srcFiles.forEach(file => {
+    fullRuntimeGraph += '\n' + fs.readFileSync(file, 'utf8');
 });
 
-// 1. Scan Assets in HTML & JS Source Graph
+// 1. Scan Assets and Legacy Paths across FULL RUNTIME GRAPH (HTML, src/**/*.js, src/**/*.css, manifest.json, sw.js)
 const assetPathRegex = /["'](public\/(?:images|media)\/[^"']+)["']/gi;
 const srcRegex = /(?:src|href|poster)\s*=\s*["']([^"']+)["']/gi;
 const bgUrlRegex = /url\s*\(\s*["']?([^"'\)]+)["']?\s*\)/gi;
@@ -71,35 +74,43 @@ const bgUrlRegex = /url\s*\(\s*["']?([^"'\)]+)["']?\s*\)/gi;
 const scannedAssets = new Set();
 let match;
 
-while ((match = assetPathRegex.exec(fullCodeBase)) !== null) {
+while ((match = assetPathRegex.exec(fullRuntimeGraph)) !== null) {
     scannedAssets.add(match[1]);
 }
-while ((match = srcRegex.exec(fullCodeBase)) !== null) {
+while ((match = srcRegex.exec(fullRuntimeGraph)) !== null) {
     const val = match[1];
     if (!val.startsWith('http://') && !val.startsWith('https://') && !val.startsWith('data:') && !val.startsWith('#') && !val.startsWith('mailto:') && !val.startsWith('tel:')) {
-        scannedAssets.add(val);
+        if (!val.includes('request.') && !val.includes('event.') && !val.includes('location.') && !val.includes('${') && !val.includes('url')) {
+            scannedAssets.add(val);
+        }
     }
 }
-while ((match = bgUrlRegex.exec(fullCodeBase)) !== null) {
+while ((match = bgUrlRegex.exec(fullRuntimeGraph)) !== null) {
     const val = match[1];
     if (!val.startsWith('http://') && !val.startsWith('https://') && !val.startsWith('data:') && !val.startsWith('#')) {
         scannedAssets.add(val);
     }
 }
 
-scannedAssets.forEach(ref => {
-    if (ref.includes('thư viện/') || ref.includes('th%C6%B0') || ref.includes('thu vi')) {
-        console.warn(`  ⚠️ Legacy Path Detected: ${ref}`);
-        legacyPathsCount++;
-    }
+// Global Legacy Path Scanner across full runtime graph
+const legacyStringRegex = /(?:thư viện\/|th%C6%B0|thu vi)/gi;
+let legacyMatch;
+const legacyMatchesFound = new Set();
 
+while ((legacyMatch = legacyStringRegex.exec(fullRuntimeGraph)) !== null) {
+    legacyMatchesFound.add(legacyMatch[0]);
+}
+
+legacyPathsCount = legacyMatchesFound.size;
+
+scannedAssets.forEach(ref => {
     let cleanRef = ref.split('?')[0].split('#')[0];
     try { cleanRef = decodeURIComponent(cleanRef); } catch(e) {}
 
     const resolvedPath = assetMap[ref] || assetMap[cleanRef] || cleanRef;
     const fullPath = path.join(rootDir, resolvedPath);
 
-    if (!fs.existsSync(fullPath) && !ref.includes('${') && !['image/png', 'blob', 'url'].includes(ref) && !ref.endsWith('.css') && !ref.endsWith('.js')) {
+    if (!fs.existsSync(fullPath) && !['image/png', 'blob', 'url'].includes(ref) && !ref.endsWith('.css') && !ref.endsWith('.js') && !ref.includes('event') && !ref.includes('request')) {
         console.warn(`  ⚠️ Asset Not Found on Disk: ${ref} -> ${resolvedPath}`);
         missingAssets++;
     }
@@ -126,13 +137,13 @@ const funcAssignRegex = /(?:window\.)?([a-zA-Z0-9_$]+)\s*=\s*(?:function|\([^)]*
 const exportFuncRegex = /export\s+function\s+([a-zA-Z0-9_$]+)\s*\(/g;
 const definedFuncs = new Set();
 
-while ((match = funcDeclRegex.exec(fullCodeBase)) !== null) {
+while ((match = funcDeclRegex.exec(fullRuntimeGraph)) !== null) {
     definedFuncs.add(match[1]);
 }
-while ((match = funcAssignRegex.exec(fullCodeBase)) !== null) {
+while ((match = funcAssignRegex.exec(fullRuntimeGraph)) !== null) {
     definedFuncs.add(match[1]);
 }
-while ((match = exportFuncRegex.exec(fullCodeBase)) !== null) {
+while ((match = exportFuncRegex.exec(fullRuntimeGraph)) !== null) {
     definedFuncs.add(match[1]);
 }
 
@@ -162,7 +173,7 @@ if (!fs.existsSync(manifestPath)) {
     manifestErrors++;
 } else {
     try {
-        const manifestContent = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+        const manifestContent = JSON.parse(manifestContentStr);
         if (!manifestContent.name || !manifestContent.short_name) {
             console.warn(`  ⚠️ Manifest Missing Required Fields (name/short_name)`);
             manifestErrors++;
@@ -182,19 +193,22 @@ if (!fs.existsSync(manifestPath)) {
     }
 }
 
-// 5. REAL VALIDATION: Service Worker Check
+// 5. REAL VALIDATION: Service Worker Event Listener Check
 if (!fs.existsSync(swPath)) {
     console.warn(`  ⚠️ Service Worker File Missing: sw.js`);
     swErrors++;
 } else {
-    const swContent = fs.readFileSync(swPath, 'utf8');
-    if (!swContent.includes('install') || !swContent.includes('fetch')) {
-        console.warn(`  ⚠️ Service Worker Missing Event Listeners (install/fetch)`);
+    if (!swContentStr.includes("addEventListener('install'") && !swContentStr.includes('addEventListener("install"') && !swContentStr.includes('.addEventListener(\'install\'')) {
+        console.warn(`  ⚠️ Service Worker Missing Event Listener: addEventListener('install')`);
+        swErrors++;
+    }
+    if (!swContentStr.includes("addEventListener('fetch'") && !swContentStr.includes('addEventListener("fetch"') && !swContentStr.includes('.addEventListener(\'fetch\'')) {
+        console.warn(`  ⚠️ Service Worker Missing Event Listener: addEventListener('fetch')`);
         swErrors++;
     }
 }
 
-// 6. REAL VALIDATION: Static Contract Anchors & Route Anchors Check
+// 6. REAL VALIDATION: Static Contract Anchors Check
 if (contract.requiredDomAnchors && Array.isArray(contract.requiredDomAnchors)) {
     contract.requiredDomAnchors.forEach(anchor => {
         if (!html.includes(`id="${anchor}"`) && !html.includes(`id='${anchor}'`)) {
@@ -205,10 +219,10 @@ if (contract.requiredDomAnchors && Array.isArray(contract.requiredDomAnchors)) {
 }
 
 // Output Comprehensive Gate Report
-console.log(`Source Modules Scanned:  ${srcJsFiles.length + 1} files (index.html + src/**/*.js)`);
+console.log(`Source Modules Scanned:  ${srcFiles.length + 3} files (index.html + manifest + sw + src/**/*)`);
 console.log(`Assets Scanned:          ${scannedAssets.size}`);
 console.log(`Missing Assets:          ${missingAssets}`);
-console.log(`Legacy Paths:            ${legacyPathsCount}`);
+console.log(`Legacy Runtime Paths:    ${legacyPathsCount}`);
 console.log(`Unique Inline Handlers:  ${inlineHandlers.size}`);
 console.log(`Missing Handlers:        ${missingHandlers}`);
 console.log(`Duplicate IDs:           ${duplicateIds}`);

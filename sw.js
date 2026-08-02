@@ -1,19 +1,19 @@
 // ============================================================
-// PTX Summer Cup 2026 — Service Worker v1.0
+// PTX Summer Cup 2026 — Service Worker v2.6.3
 // Provides offline capability and faster loads
 // ============================================================
 
-const CACHE_NAME = 'ptx-cup-2026-v2.4.6';
+const CACHE_NAME = 'ptx-cup-2026-v2.6.3';
 const STATIC_ASSETS = [
     './',
     './index.html',
     './manifest.json',
-    './thư viện/logo biểu tượng 3 đội/Biểu tượng đội P (Phoenix).jpg',
-    './thư viện/logo biểu tượng 3 đội/Biểu tượng đội T (Tiger).jpg',
-    './thư viện/logo biểu tượng 3 đội/Biểu tượng đội X (Xiphias Gladius).jpg',
-    './thư viện/ảnh logo - baner/Logo PTX.png',
-    './thư viện/ảnh logo - baner/Logo Công Đoàn.jpg',
-    './thư viện/ảnh logo - baner/banner PTX Summer Cup.jpg',
+    './public/images/teams/bieu_tuong_doi_p__phoenix_.jpg',
+    './public/images/teams/bieu_tuong_doi_t__tiger_.jpg',
+    './public/images/teams/bieu_tuong_doi_x__xiphias_gladius_.jpg',
+    './public/images/branding/logo_ptx.png',
+    './public/images/branding/logo_cong_doan.jpg',
+    './public/images/branding/banner_ptx_summer_cup.jpg'
 ];
 
 // Install — cache core assets
@@ -25,7 +25,6 @@ self.addEventListener('install', (event) => {
             });
         })
     );
-    // // // self.skipWaiting(); (Atomic SW Upgrade) (Atomic SW Upgrade) (Atomic SW Upgrade)
 });
 
 // Activate — clean up old caches
@@ -37,7 +36,6 @@ self.addEventListener('activate', (event) => {
             );
         })
     );
-    // // // self.clients.claim(); (Atomic SW Upgrade) (Atomic SW Upgrade) (Atomic SW Upgrade)
 });
 
 // Fetch — Network-first for HTML, Cache-first for images/media
