@@ -118,16 +118,28 @@ scannedAssets.forEach(ref => {
     }
 });
 
-// 2. Scan Inline Event Handlers and verify defined functions across FULL MODULE GRAPH
+// 2. Scan Runtime Inline Event Handlers (index.html + src/**/*.js templates) and verify allowlist parity
+const bridgeJsPath = path.join(rootDir, 'src', 'legacy', 'bridge.js');
+const bridgeJsContent = fs.readFileSync(bridgeJsPath, 'utf8');
+const allowlistMatch = bridgeJsContent.match(/export const LEGACY_HANDLERS_ALLOWLIST = \[([\s\S]*?)\];/);
+const legacyAllowlistSet = new Set();
+if (allowlistMatch) {
+    const listStr = allowlistMatch[1];
+    const items = listStr.match(/['"]([a-zA-Z0-9_$]+)['"]/g);
+    if (items) {
+        items.forEach(item => legacyAllowlistSet.add(item.replace(/['"]/g, '')));
+    }
+}
+
 const inlineEventRegex = /on(click|change|submit|input|keydown|keyup|onload|onerror)\s*=\s*["']([^"']+)["']/gi;
 const inlineHandlers = new Set();
 
-while ((match = inlineEventRegex.exec(html)) !== null) {
+while ((match = inlineEventRegex.exec(fullRuntimeGraph)) !== null) {
     const code = match[2].trim();
     const funcMatches = code.matchAll(/([a-zA-Z0-9_$]+)\s*\(/g);
     for (const fm of funcMatches) {
         const funcName = fm[1];
-        if (!jsKeywords.has(funcName)) {
+        if (legacyAllowlistSet.has(funcName)) {
             inlineHandlers.add(funcName);
         }
     }
@@ -318,7 +330,7 @@ console.log(`Package Version Check:      ${!packageVersionMismatch ? `VALIDATED 
 console.log(`Assets Scanned:             ${scannedAssets.size}`);
 console.log(`Missing Assets:             ${missingAssets}`);
 console.log(`Legacy Runtime Paths:       ${legacyPathsCount}`);
-console.log(`Unique Inline Handlers:     ${inlineHandlers.size}`);
+console.log(`Unique Runtime Inline Handlers: ${inlineHandlers.size}`);
 console.log(`Missing Handlers:           ${missingHandlers}`);
 console.log(`Duplicate Extracted Funcs:  ${duplicateExtractedFunctions}`);
 console.log(`Direct Storage API Calls:   ${directLocalStorageApiCalls} calls`);
