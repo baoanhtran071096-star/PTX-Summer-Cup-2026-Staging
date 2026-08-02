@@ -398,7 +398,10 @@ if (!fs.existsSync(provJsonPath)) {
             provenanceStatusStr = 'FAILED (Incomplete schema)';
         } else if (fs.existsSync(path.join(rootDir, '.git'))) {
             const gitHead = execSync('git rev-parse HEAD', { cwd: rootDir, encoding: 'utf8' }).trim();
-            const parentHead = execSync('git rev-parse HEAD~1 2>/dev/null || echo ""', { cwd: rootDir, encoding: 'utf8' }).trim();
+            let parentHead = '';
+            try {
+                parentHead = execSync('git rev-parse HEAD~1', { cwd: rootDir, encoding: 'utf8' }).trim();
+            } catch (e) {}
             const isMatch = provObj.artifact_tree_commit_sha === gitHead || provObj.artifact_tree_commit_sha === parentHead || provObj.artifact_source_commit_sha === gitHead || provObj.artifact_source_commit_sha === parentHead;
             if (!isMatch) {
                 console.warn(`  ⚠️ Provenance Mismatch: build-provenance.json tree SHA (${provObj.artifact_tree_commit_sha.substring(0, 7)}) does not match Git HEAD (${gitHead.substring(0, 7)}) or parent (${parentHead.substring(0, 7)})`);
@@ -473,6 +476,27 @@ if (!uiResults.testing11Metrics || !uiResults.testing12Metrics) {
 const m11 = uiResults.testing11Metrics;
 const m12 = uiResults.testing12Metrics;
 
+const testing12Pass = (
+    m12.candidateHandlers === '19 / 19' &&
+    m12.inlineOccurrences === 0 &&
+    m12.nativeOwners === '19 / 19' &&
+    m12.adapterPaths === '19 / 19' &&
+    m12.canonicalPaths === '19 / 19' &&
+    m12.duplicateOwners === 0 &&
+    m12.doubleDispatches === 0 &&
+    m12.unauthorizedExecutions === 0 &&
+    m12.exportMutationViolations === 0 &&
+    m12.destructiveBoundaryViolations === 0 &&
+    m12.registryStrategyDrift === 0 &&
+    m12.totalNativeMigrated === '103 / 103' &&
+    m12.legacyBridgeRetirementReady === true &&
+    currentInlineOccurrences === 0
+);
+
+if (!testing12Pass) {
+    console.warn(`  ⚠️ Testing 12 Failure: One or more Wave 2E.5 invariants failed certification gate.`);
+}
+
 // Output Comprehensive Gate Report
 console.log(`Source Modules Scanned:     ${srcFiles.length + 3} files (index.html + manifest + sw + src/**/*)`);
 console.log(`Package Version Check:      ${!packageVersionMismatch ? `VALIDATED (package.json v${packageJson.version} === package-lock.json v${packageLock.version})` : 'MISMATCH ERROR'}`);
@@ -543,7 +567,8 @@ const pass = missingAssets <= contract.allowedMissingAssets &&
              doubleBoundHandlers === 0 &&
              delegationBoundaryViolations === 0 &&
              provenanceErrors === 0 &&
-             !packageVersionMismatch;
+             !packageVersionMismatch &&
+             testing12Pass;
 
 if (pass) {
     console.log('✅ RESULT: PASS (Exit code 0)\n');
