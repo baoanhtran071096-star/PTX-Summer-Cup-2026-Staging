@@ -558,6 +558,8 @@ async function runUiTests() {
     global.window.refreshAll = () => { refreshAllCallCount++; };
     global.window.showToast = () => { toastCallCount++; };
     global.window.launchConfetti = () => {};
+    global.window.alert = () => {};
+    global.alert = () => {};
 
     // Domain data needed by real canonical commands
     global.window.MATCHES_CONFIG = [
@@ -587,65 +589,35 @@ async function runUiTests() {
         quickGoalFromFloat: 0
     };
 
-    // Attach REAL canonical function implementations (wrapped with realCommandExecutions counters)
-    global.window.setZeroMatchesState = function() {
-        realCommandExecutions.setZeroMatchesState++;
-        global.window.localStorage.removeItem('ptx_result_1');
-        global.window.localStorage.removeItem('ptx_result_2');
-        global.window.localStorage.removeItem('ptx_result_3');
-        global.window.localStorage.setItem('ptx_stat_goals', '0');
-        global.window.localStorage.setItem('ptx_stat_matches', '0');
-        global.document.getElementById('admin-result1').value = '';
-        global.document.getElementById('admin-result2').value = '';
-        global.document.getElementById('admin-result3').value = '';
-        global.document.getElementById('admin-goals').value = '0';
-        global.document.getElementById('admin-matches').value = '0';
-        global.window.refreshAll();
-        global.window.showToast('0-0', 'success');
+    // Dynamically extract authentic canonical write function implementations directly from index.html
+    const extractCanonicalFn = (fnName) => {
+        const startIdx = html.indexOf(`function ${fnName}`);
+        if (startIdx === -1) return null;
+        const braceStart = html.indexOf('{', startIdx);
+        if (braceStart === -1) return null;
+        let depth = 0;
+        let i = braceStart;
+        for (; i < html.length; i++) {
+            if (html[i] === '{') depth++;
+            else if (html[i] === '}') {
+                depth--;
+                if (depth === 0) break;
+            }
+        }
+        return html.substring(startIdx, i + 1);
     };
 
-    global.window.setDemoScoresState = function() {
-        realCommandExecutions.setDemoScoresState++;
-        global.window.localStorage.setItem('ptx_result_1', "2-1 | Hiền 12', Huy 23'");
-        global.window.localStorage.setItem('ptx_result_2', "1-1 | Nam 30', Lân 44'");
-        global.window.localStorage.setItem('ptx_result_3', "0-0");
-        global.window.localStorage.setItem('ptx_stat_goals', '5');
-        global.window.localStorage.setItem('ptx_stat_matches', '3');
-        global.document.getElementById('admin-result1').value = "2-1 | Hiền 12', Huy 23'";
-        global.document.getElementById('admin-result2').value = "1-1 | Nam 30', Lân 44'";
-        global.document.getElementById('admin-result3').value = "0-0";
-        global.document.getElementById('admin-goals').value = '5';
-        global.document.getElementById('admin-matches').value = '3';
-        global.window.refreshAll();
-        global.window.showToast('Demo', 'success');
-    };
-
-    global.window.updateStandingsAndResults = function() {
-        realCommandExecutions.updateStandingsAndResults++;
-        const r1 = global.document.getElementById('admin-result1').value;
-        const r2 = global.document.getElementById('admin-result2').value;
-        const r3 = global.document.getElementById('admin-result3').value;
-        if (r1) global.window.localStorage.setItem('ptx_result_1', r1); else global.window.localStorage.removeItem('ptx_result_1');
-        if (r2) global.window.localStorage.setItem('ptx_result_2', r2); else global.window.localStorage.removeItem('ptx_result_2');
-        if (r3) global.window.localStorage.setItem('ptx_result_3', r3); else global.window.localStorage.removeItem('ptx_result_3');
-        global.window.refreshAll();
-        global.window.showToast('Updated', 'success');
-    };
-
-    global.window.addQuickGoal = function() {
-        realCommandExecutions.addQuickGoal++;
-        const matchId = global.document.getElementById('qg-match').value;
-        const player = global.document.getElementById('qg-player').value.trim();
-        const min = global.document.getElementById('qg-minute').value;
-        if (!player || !min) return;
-        const input = global.document.getElementById('admin-result' + matchId);
-        input.value = `1-0 | ${player} ${min}'`;
-        global.window.updateStandingsAndResults();
-    };
-
-    global.window.quickGoalFromFloat = function() {
-        realCommandExecutions.quickGoalFromFloat++;
-    };
+    ['setZeroMatchesState', 'setDemoScoresState', 'updateStandingsAndResults', 'addQuickGoal', 'quickGoalFromFloat'].forEach(fnName => {
+        const fnCode = extractCanonicalFn(fnName);
+        if (fnCode) {
+            eval(`global.window.${fnName} = ${fnCode}`);
+            const originalFn = global.window[fnName];
+            global.window[fnName] = function(...args) {
+                realCommandExecutions[fnName]++;
+                return originalFn.apply(this, args);
+            };
+        }
+    });
 
     // Non-storage controls spies
     const nonStorageSpies = {
