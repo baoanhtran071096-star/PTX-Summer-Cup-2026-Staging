@@ -119,7 +119,7 @@ export function validateAndImportPtxData(input) {
 
     // Authoritative Inventoried Persistence Keys from config/persistence-inventory.json
     const PERMITTED_EXACT_KEYS = new Set([
-        'theme', 'lang', 'currentPage', 'ptx_players_data', 'ptx_seeded_flag',
+        'theme', 'lang', 'currentPage', 'ptx_players_data', 'ptx_seeded_flag', 'ptx_seed_version',
         'ptx_stat_goals', 'ptx_stat_matches', 'ptx_user_predictions_list',
         'pwa_dismissed', 'ptx_slogan', 'ptx_msg', 'ptx_date', 'ptx_location',
         'ptx_user_prediction'
@@ -236,4 +236,84 @@ export function cleanupAdminSessionListeners() {
     window.removeEventListener('keydown', handleUserActivity);
     window.removeEventListener('touchstart', handleUserActivity);
 }
+
+// ============================================================
+// FRESH VISITOR OFFICIAL PRE-KICKOFF DATA BOOTSTRAP
+// ============================================================
+const OFFICIAL_PRE_KICKOFF_SEED = {
+    players: [
+        { id: 1, name: "Anh Trương", team: "p", position: "FW", avatar: "https://i.postimg.cc/VLrMX52J/Anh-Truong.jpg", goals: 0, assists: 0, mvp: 0 },
+        { id: 2, name: "Phan Hiền", team: "p", position: "MF", avatar: "https://i.postimg.cc/sDkWmsR9/Phan-Hien.jpg", goals: 0, assists: 0, mvp: 0 },
+        { id: 3, name: "Thanh Long", team: "p", position: "DF", avatar: "https://i.postimg.cc/X7R5L402/Thanh-Long.jpg", goals: 0, assists: 0, mvp: 0 },
+        { id: 4, name: "Thanh Trúc", team: "p", position: "GK", avatar: "https://i.postimg.cc/Dy9G6nKD/Thanh-Truc.jpg", goals: 0, assists: 0, mvp: 0 },
+        { id: 5, name: "Mậu Quốc", team: "p", position: "DF", avatar: "https://i.postimg.cc/wTCN2gdm/Mau-Quoc.jpg", goals: 0, assists: 0, mvp: 0 },
+        { id: 6, name: "Quang Minh", team: "p", position: "FW", avatar: "https://i.postimg.cc/5NhzgbM7/Quang-Minh.jpg", goals: 0, assists: 0, mvp: 0 },
+        { id: 7, name: "Khánh Hưng", team: "p", position: "MF", avatar: "https://i.postimg.cc/BQrFp4Gj/Khanh-Hung.jpg", goals: 0, assists: 0, mvp: 0 },
+        { id: 8, name: "Mạnh Tuấn", team: "p", position: "DF", avatar: "https://i.postimg.cc/Dy9G6nK4/Manh-Tuan.jpg", goals: 0, assists: 0, mvp: 0 },
+        { id: 9, name: "Minh Thế", team: "t", position: "DF", avatar: "https://i.postimg.cc/VLxtgmcM/Minh-The.jpg", goals: 0, assists: 0, mvp: 0 },
+        { id: 10, name: "Tường Khánh", team: "t", position: "GK", avatar: "https://i.postimg.cc/YCQWyZpX/Tuong-Khanh.jpg", goals: 0, assists: 0, mvp: 0 },
+        { id: 11, name: "Hoàng Nam", team: "t", position: "MF", avatar: "https://i.postimg.cc/WbBZ8TPD/Hoang-Nam.jpg", goals: 0, assists: 0, mvp: 0 },
+        { id: 12, name: "Đăng Quân", team: "t", position: "FW", avatar: "https://i.postimg.cc/zXbWT34L/Dang-Quan.jpg", goals: 0, assists: 0, mvp: 0 },
+        { id: 13, name: "Thanh Tú", team: "t", position: "FW", avatar: "https://i.postimg.cc/wjDmbZ6w/Thanh-Tu.jpg", goals: 0, assists: 0, mvp: 0 },
+        { id: 14, name: "Chí Đại", team: "t", position: "MF", avatar: "https://i.postimg.cc/Nf9TRLZ2/Chi-Dai.jpg", goals: 0, assists: 0, mvp: 0 },
+        { id: 15, name: "Quang Toàn", team: "t", position: "DF", avatar: "https://i.postimg.cc/SNB9dkpg/Quang-Toan.jpg", goals: 0, assists: 0, mvp: 0 },
+        { id: 16, name: "Phát Tài", team: "t", position: "DF", avatar: "https://i.postimg.cc/7YFz9wyV/Phat-Tai.jpg", goals: 0, assists: 0, mvp: 0 },
+        { id: 17, name: "Đình Huy", team: "x", position: "GK", avatar: "https://i.postimg.cc/J4fXxMWD/Dinh-Huy.jpg", goals: 0, assists: 0, mvp: 0 },
+        { id: 18, name: "Xuân Sử", team: "x", position: "DF", avatar: "https://i.postimg.cc/L6cPD2Mj/Nguyen-Su.jpg", goals: 0, assists: 0, mvp: 0 },
+        { id: 19, name: "Văn Lân", team: "x", position: "FW", avatar: "https://i.postimg.cc/VkXCHpYH/Van-Lan.jpg", goals: 0, assists: 0, mvp: 0 },
+        { id: 20, name: "Thiên Phú", team: "x", position: "DF", avatar: "https://i.postimg.cc/Z56dD2TV/Thien-Phu.jpg", goals: 0, assists: 0, mvp: 0 },
+        { id: 21, name: "Bảo Anh", team: "x", position: "MF", avatar: "https://i.postimg.cc/L6YfjhGY/Bao-Anh.jpg", goals: 0, assists: 0, mvp: 0 },
+        { id: 22, name: "Phương Toàn", team: "x", position: "MF", avatar: "https://i.postimg.cc/dtbC6wKn/Phuong-Toan.jpg", goals: 0, assists: 0, mvp: 0 },
+        { id: 23, name: "Minh Hiếu", team: "x", position: "FW", avatar: "https://i.postimg.cc/7YFz9wyz/Minh-Hieu.jpg", goals: 0, assists: 0, mvp: 0 },
+        { id: 24, name: "Thành Thái", team: "x", position: "MF", avatar: "https://i.postimg.cc/PrgDyTkF/Thanh-Thai.jpg", goals: 0, assists: 0, mvp: 0 }
+    ],
+    localStorage: {
+        ptx_stat_goals: "0",
+        ptx_stat_matches: "0",
+        ptx_stat_players: "24",
+        ptx_stat_yellow: "0",
+        ptx_stat_red: "0",
+        ptx_slogan: "Làm hết sức – Chơi hết mình",
+        ptx_msg: "Giải bóng đá truyền thống do Công đoàn PTX Group Việt Nam tổ chức",
+        ptx_date: "07/08/2026",
+        ptx_location: "152 Hoàng Hoa Thám, Bảy Hiền, Hồ Chí Minh, Việt Nam",
+        hof_2025: "TEAM P (PHOENIX) | Chưa đủ dữ liệu (Cập nhật sau) | Chưa đủ dữ liệu (Cập nhật sau) | Chưa đủ dữ liệu (Cập nhật sau) | Chưa đủ dữ liệu (Cập nhật sau)",
+        gallery_2025: "https://i.postimg.cc/J4BFgJp7/CD.jpg"
+    }
+};
+
+export function ensureOfficialPreKickoffSeed(customSeed = null) {
+    if (!isStorageAvailable()) return false;
+
+    const existingPlayers = getStorageItem('ptx_players_data', null);
+    const existingSeedVersion = getStorageItem('ptx_seed_version', null);
+
+    if (existingPlayers && existingSeedVersion === '3.0.2') {
+        return false;
+    }
+
+    const seed = customSeed || OFFICIAL_PRE_KICKOFF_SEED;
+    if (!seed || !seed.players || !Array.isArray(seed.players)) {
+        console.error('[Storage Bootstrap] Seed payload unavailable or malformed.');
+        return false;
+    }
+
+    const result = validateAndImportPtxData({
+        exportVersion: '3.0.2',
+        localStorage: {
+            ptx_players_data: JSON.stringify(seed.players),
+            ptx_seed_version: '3.0.2',
+            ...(seed.localStorage || {})
+        }
+    });
+
+    if (result.success) {
+        console.log('[Storage Bootstrap] Fresh visitor official pre-kickoff state initialized successfully.');
+        return true;
+    } else {
+        console.error('[Storage Bootstrap] Failed to initialize official seed:', result);
+        return false;
+    }
+}
+
 

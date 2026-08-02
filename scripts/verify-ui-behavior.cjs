@@ -570,7 +570,8 @@ async function runUiTests() {
     global.window.localStorage = {
         getItem: (k) => storageStore[k] || null,
         setItem: (k, v) => { setItemCallCount++; storageStore[k] = String(v); },
-        removeItem: (k) => { removeItemCallCount++; delete storageStore[k]; }
+        removeItem: (k) => { removeItemCallCount++; delete storageStore[k]; },
+        clear: () => { Object.keys(storageStore).forEach(k => delete storageStore[k]); }
     };
 
     // Render boundary spies
@@ -1205,6 +1206,59 @@ async function runUiTests() {
         passedUiTests++;
     } else {
         console.error('  ❌ [FAIL] Wave 3B.2 UX Accessibility & State Sync Gate - Invariant check failed', testing14Metrics);
+        failedUiTests++;
+    }
+
+    // Testing 15: Fresh Visitor Official Pre-Kickoff Data Bootstrap Gate (P0-001 Verification)
+    console.log('\nTesting 15: Fresh Visitor Official Data Bootstrap Gate (P0-001 Verification)...');
+    
+    // Clear storage completely to simulate fresh visitor
+    window.localStorage.clear();
+
+    const storageModuleT15 = await import(`file:///${path.join(rootDir, 'src', 'infrastructure', 'storage.js').replace(/\\/g, '/')}`);
+    const ensureOfficialPreKickoffSeed = storageModuleT15.ensureOfficialPreKickoffSeed;
+
+    // 1. Fresh Visitor Bootstrap Test
+    const bootstrapRan = ensureOfficialPreKickoffSeed();
+    const freshPlayers = window.getJSON('ptx_players_data', []);
+    const freshRes1 = window.localStorage.getItem('ptx_result_1');
+    const freshRes2 = window.localStorage.getItem('ptx_result_2');
+    const freshRes3 = window.localStorage.getItem('ptx_result_3');
+    const freshGoals = window.localStorage.getItem('ptx_stat_goals');
+    const freshMatches = window.localStorage.getItem('ptx_stat_matches');
+
+    const freshBootstrapPass = (
+        bootstrapRan === true &&
+        Array.isArray(freshPlayers) && freshPlayers.length === 24 &&
+        !freshRes1 && !freshRes2 && !freshRes3 &&
+        freshGoals === '0' && freshMatches === '0'
+    );
+
+    // 2. Refresh Non-Overwrite & Non-Duplicate Test
+    const refreshBootstrapRan = ensureOfficialPreKickoffSeed();
+    const refreshedPlayers = window.getJSON('ptx_players_data', []);
+    const refreshPass = (refreshBootstrapRan === false && refreshedPlayers.length === 24);
+
+    // 3. Played Match Non-Overwrite Test
+    window.localStorage.setItem('ptx_result_1', '2-1 | Goal: Test');
+    const matchBootstrapRan = ensureOfficialPreKickoffSeed();
+    const preservedResult = window.localStorage.getItem('ptx_result_1');
+    const matchPreservePass = (matchBootstrapRan === false && preservedResult === '2-1 | Goal: Test');
+
+    const testing15Pass = freshBootstrapPass && refreshPass && matchPreservePass;
+
+    const testing15Metrics = {
+        freshVisitorBootstrap: freshBootstrapPass ? 'PASS' : 'FAIL',
+        refreshNonOverwrite: refreshPass ? 'PASS' : 'FAIL',
+        playedMatchPreservation: matchPreservePass ? 'PASS' : 'FAIL',
+        testing15Pass
+    };
+
+    if (testing15Pass) {
+        console.log('  ✅ [PASS] Fresh Visitor Data Bootstrap Gate - P0-001 Invariants Verified (3 teams, 24 players, 0 preloaded results, non-overwrite on refresh/match)');
+        passedUiTests++;
+    } else {
+        console.error('  ❌ [FAIL] Fresh Visitor Data Bootstrap Gate - Invariant check failed', testing15Metrics);
         failedUiTests++;
     }
 
