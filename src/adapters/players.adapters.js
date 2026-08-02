@@ -43,3 +43,21 @@ export function openPlayerModalByIdAdapter(id) {
         window.openPlayerModal(player);
     }
 }
+
+export function selectPitchTeamAdapter(teamId) {
+    if (typeof window !== 'undefined' && typeof window.selectPitchTeam === 'function') {
+        window.selectPitchTeam(teamId);
+    }
+}
+
+export function autoOptimize5v5SquadAdapter() {
+    if (typeof window !== 'undefined' && typeof window.autoOptimize5v5Squad === 'function') {
+        window.autoOptimize5v5Squad();
+    }
+}
+
+export function openSubstitutionModalByIdAdapter(id) {
+    if (typeof window !== 'undefined' && typeof window.openSubstitutionModalById === 'function') {
+        window.openSubstitutionModalById(id);
+    }
+}

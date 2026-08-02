@@ -413,6 +413,40 @@ async function runUiTests() {
         failedUiTests++;
     }
 
+    // Testing 6: Wave 2E.2 Bounded Delegation & Re-render Survival Test
+    console.log('\nTesting 6: Wave 2E.2 Bounded Delegation & Re-render Survival...');
+    let openPlayerCalledWith = null;
+    const testPlayers = [
+        { id: 1, name: 'Anh Trương', team: 'p', number: 10, position: 'FW', goals: 3, assists: 1, mvp: 1, avatar: 'avatar1.jpg' }
+    ];
+    global.window.openPlayerModal = (player) => { openPlayerCalledWith = player; };
+    global.window.PLAYERS_DATA = testPlayers;
+
+    const testRosterContainer = global.document.createElement('div');
+    testRosterContainer.id = 'teamsPageRostersView';
+
+    // Render 1
+    playersModule.renderTeamRostersGrid(testRosterContainer, testPlayers, mockTeamsData, { 'p': [1] }, () => '');
+    const pCol1 = testRosterContainer.children && testRosterContainer.children[0];
+    const hasDataActionRender1 = pCol1 && pCol1.innerHTML.includes('data-action="open-player"') && pCol1.innerHTML.includes('data-player-id="1"');
+
+    // Re-render 2 (Simulate DOM re-render lifecycle)
+    playersModule.renderTeamRostersGrid(testRosterContainer, testPlayers, mockTeamsData, { 'p': [1] }, () => '');
+    const pCol2 = testRosterContainer.children && testRosterContainer.children[0];
+    const hasDataActionRender2 = pCol2 && pCol2.innerHTML.includes('data-action="open-player"') && pCol2.innerHTML.includes('data-player-id="1"');
+
+    // Test adapter invocation
+    const playersAdapterModule = await import('../src/adapters/players.adapters.js');
+    playersAdapterModule.openPlayerModalByIdAdapter(1);
+
+    if (hasDataActionRender1 && hasDataActionRender2 && openPlayerCalledWith && openPlayerCalledWith.id === 1) {
+        console.log('  ✅ [PASS] Bounded Delegation Re-render Survival - Declarative contract rendered & adapter invoked cleanly across re-renders');
+        passedUiTests++;
+    } else {
+        console.error('  ❌ [FAIL] Bounded Delegation Re-render Survival - Listener failed after container re-render');
+        failedUiTests++;
+    }
+
     console.log('\n--------------------------------------------------');
     console.log(`UI Behavioral Smoke Tests Passed: ${passedUiTests}`);
     console.log(`UI Behavioral Smoke Tests Failed: ${failedUiTests}`);

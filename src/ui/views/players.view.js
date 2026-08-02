@@ -28,7 +28,7 @@ export function renderTeamRostersGrid(container, playersData = [], teamsData = {
             const isStarter = starters.includes(p.id);
 
             return `
-                <div class="player-roster-item" onclick="openPlayerModalById(${p.id})" style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:${isStarter ? 'rgba(34,197,94,0.06)' : 'rgba(255,255,255,0.03)'};border:1px solid ${isStarter ? 'rgba(34,197,94,0.3)' : 'rgba(255,255,255,0.08)'};border-radius:10px;cursor:pointer;transition:all 0.2s ease;">
+                <div class="player-roster-item" data-action="open-player" data-player-id="${p.id}" style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:${isStarter ? 'rgba(34,197,94,0.06)' : 'rgba(255,255,255,0.03)'};border:1px solid ${isStarter ? 'rgba(34,197,94,0.3)' : 'rgba(255,255,255,0.08)'};border-radius:10px;cursor:pointer;transition:all 0.2s ease;">
                     <div style="display:flex;align-items:center;gap:12px;">
                         <img src="${p.avatar}" alt="${p.name}" style="width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid ${team.color};box-shadow:0 2px 8px rgba(0,0,0,0.4);">
                         <div>

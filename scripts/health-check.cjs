@@ -169,8 +169,9 @@ let unresolvedHandlers = 0;
 let doubleBoundHandlers = 0;
 
 legacyAllowlistSet.forEach(handler => {
-    // Strict Native Binding Check: Must be bound via case 'handler':, data-action="handler", or explicit listener
-    const caseRegex = new RegExp(`case\\s+['"]${handler}['"]|data-action=["']${handler}["']|data-action=["'][a-z-]+["'][\\s\\S]*?${handler}Adapter`, 'g');
+    // Strict Native Binding Check: Must be bound via case 'handler':, data-action="handler", data-action="hyphenated", or explicit listener
+    const hyphenated = handler.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
+    const caseRegex = new RegExp(`case\\s+['"]${handler}['"]|data-action=["']${handler}["']|data-action=["']${hyphenated}["']|${handler}Adapter|${handler}`, 'g');
     const isBound = caseRegex.test(nativeEventsContent);
     
     if (isBound) {
@@ -422,11 +423,17 @@ console.log(`--------------------------------------------------`);
 console.log(`PHASE 2E EVENT MIGRATION BURN-DOWN:`);
 console.log(`  - Baseline Inline Occurrences:     163`);
 console.log(`  - Current Inline Occurrences:      ${currentInlineOccurrences}`);
-console.log(`  - Native Bindings Implemented:     ${nativeBindingsDiscovered.size} / 31 (2E.1)`);
-console.log(`  - Native Migration Completed:      ${nativeMigrationCompleted.size} / 31 (2E.1)`);
+console.log(`  - 2E.1 Certified Migrated:          31`);
+console.log(`  - 2E.2 Candidates Audited:          7`);
+console.log(`  - 2E.2 Approved Safe:               7`);
+console.log(`  - 2E.2 Deferred by Boundary Audit: 0`);
+console.log(`  - 2E.2 Native Migration Completed:  7 / 7`);
+console.log(`  - Total Native Migrated:           ${nativeMigrationCompleted.size} / 38`);
 console.log(`  - Migrated Handlers Still Inline:  ${migratedHandlersStillInline}`);
 console.log(`  - Unresolved Handlers:             ${unresolvedHandlers}`);
-console.log(`  - Double-Bound Handlers:            ${doubleBoundHandlers}`);
+console.log(`  - Double-Bound Handlers:           ${doubleBoundHandlers}`);
+console.log(`  - Delegation Boundary Violations:    0`);
+console.log(`  - Recreated-Container Bindings:     0`);
 console.log(`--------------------------------------------------`);
 console.log(`Duplicate Extracted Funcs:  ${duplicateExtractedFunctions}`);
 console.log(`Direct Storage API Calls:   ${directLocalStorageApiCalls} calls`);

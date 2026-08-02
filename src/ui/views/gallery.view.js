@@ -17,7 +17,7 @@ export function renderGalleryGrid(container, galleryItems = [], currentFilter = 
         div.className = 'gallery-page-item reveal';
         div.style.transitionDelay = (idx % 4) * 0.07 + 's';
         div.innerHTML = `
-            <img src="${item.img}" alt="${item.label}" loading="lazy" onclick="openLightbox(this.src)">
+            <img src="${item.img}" alt="${item.label}" loading="lazy" data-action="open-lightbox">
             <div class="gallery-tag">${item.tag}</div>
             <div class="gallery-caption">${item.label}</div>
         `;

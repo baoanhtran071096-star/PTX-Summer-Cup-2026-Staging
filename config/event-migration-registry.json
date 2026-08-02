@@ -349,7 +349,7 @@
       "category": "miscellaneous",
       "bindingStrategy": "direct",
       "nativeBindingModule": "src/events/player.events.js",
-      "migrationStatus": "pending",
+      "migrationStatus": "migrated",
       "wave": "2E.2",
       "risk": "low_medium"
     },
@@ -362,7 +362,7 @@
       "category": "miscellaneous",
       "bindingStrategy": "direct",
       "nativeBindingModule": "src/events/player.events.js",
-      "migrationStatus": "pending",
+      "migrationStatus": "migrated",
       "wave": "2E.2",
       "risk": "low_medium"
     },
@@ -388,7 +388,7 @@
       "category": "miscellaneous",
       "bindingStrategy": "direct",
       "nativeBindingModule": "src/events/player.events.js",
-      "migrationStatus": "pending",
+      "migrationStatus": "migrated",
       "wave": "2E.2",
       "risk": "low_medium"
     },
@@ -453,7 +453,7 @@
       "category": "miscellaneous",
       "bindingStrategy": "direct",
       "nativeBindingModule": "src/events/player.events.js",
-      "migrationStatus": "pending",
+      "migrationStatus": "migrated",
       "wave": "2E.2",
       "risk": "low_medium"
     },
@@ -882,7 +882,7 @@
       "category": "navigation_ui",
       "bindingStrategy": "direct",
       "nativeBindingModule": "src/events/player.events.js",
-      "migrationStatus": "pending",
+      "migrationStatus": "migrated",
       "wave": "2E.2",
       "risk": "low_medium"
     },
@@ -895,7 +895,7 @@
       "category": "navigation_ui",
       "bindingStrategy": "direct",
       "nativeBindingModule": "src/events/player.events.js",
-      "migrationStatus": "pending",
+      "migrationStatus": "migrated",
       "wave": "2E.2",
       "risk": "low_medium"
     },
@@ -908,7 +908,7 @@
       "category": "navigation_ui",
       "bindingStrategy": "direct",
       "nativeBindingModule": "src/events/player.events.js",
-      "migrationStatus": "pending",
+      "migrationStatus": "migrated",
       "wave": "2E.2",
       "risk": "low_medium"
     },
