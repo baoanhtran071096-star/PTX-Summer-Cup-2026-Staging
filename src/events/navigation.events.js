@@ -50,7 +50,7 @@ export function initNavigationEvents() {
         }
 
         // 4. FIFA Team Filter
-        const fifaFilterBtn = e.target.closest('[data-action="filter-fifa-team"]');
+        const fifaFilterBtn = e.target.closest('[data-action="filterFifaByTeam"], [data-action="filter-fifa-team"]');
         if (fifaFilterBtn) {
             e.preventDefault();
             const team = fifaFilterBtn.getAttribute('data-team');
@@ -61,7 +61,7 @@ export function initNavigationEvents() {
         }
 
         // 5. Gallery Category Filter
-        const galleryFilterBtn = e.target.closest('[data-action="filter-gallery-page"]');
+        const galleryFilterBtn = e.target.closest('[data-action="filterGalleryPage"], [data-action="filter-gallery-page"]');
         if (galleryFilterBtn) {
             e.preventDefault();
             const cat = galleryFilterBtn.getAttribute('data-category');
@@ -72,7 +72,7 @@ export function initNavigationEvents() {
         }
 
         // 6. Match Round Filter
-        const roundFilterBtn = e.target.closest('[data-action="filter-match-round"]');
+        const roundFilterBtn = e.target.closest('[data-action="filterMatchRound"], [data-action="filter-match-round"]');
         if (roundFilterBtn) {
             e.preventDefault();
             const roundStr = roundFilterBtn.getAttribute('data-round');

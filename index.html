@@ -112,8 +112,8 @@
             </div>
         </div>
         <div style="display:flex;align-items:center;gap:8px;">
-            <button onclick="installPTXPWAApp()" style="background:linear-gradient(135deg,#f97316,#ef4444);color:#fff;border:none;padding:8px 16px;border-radius:20px;font-size:11px;font-weight:900;cursor:pointer;font-family:var(--font-title);">CÀI NGAY</button>
-            <button onclick="dismissPWABanner()" style="background:none;border:none;color:#64748b;font-size:16px;cursor:pointer;">✕</button>
+            <button data-action="installPTXPWAApp" style="background:linear-gradient(135deg,#f97316,#ef4444);color:#fff;border:none;padding:8px 16px;border-radius:20px;font-size:11px;font-weight:900;cursor:pointer;font-family:var(--font-title);">CÀI NGAY</button>
+            <button data-action="dismissPWABanner" style="background:none;border:none;color:#64748b;font-size:16px;cursor:pointer;">✕</button>
         </div>
     </div>
 
@@ -179,17 +179,17 @@
                 <li><a href="#contact" data-i18n="contact_nav">Liên hệ</a></li>
 
                 <li>
-                    <a href="#fan-prediction" onclick="navigate('fan-prediction'); return false;" class="nav-link" style="color:#f97316;font-weight:900;background:rgba(249,115,22,0.15);padding:5px 12px !important;border-radius:12px;border:1px solid rgba(249,115,22,0.4);" data-i18n="nav_prediction">
+                    <a href="#fan-prediction" data-action="navigate" data-route="fan-prediction" class="nav-link" style="color:#f97316;font-weight:900;background:rgba(249,115,22,0.15);padding:5px 12px !important;border-radius:12px;border:1px solid rgba(249,115,22,0.4);" data-i18n="nav_prediction">
                         🎯 DỰ ĐOÁN
                     </a>
                 </li>
                 <li>
-                    <a href="#" onclick="openLiveStreamHubModal(); return false;" class="nav-link" style="color:#ef4444;font-weight:900;background:rgba(239,68,68,0.15);padding:5px 12px !important;border-radius:12px;border:1px solid rgba(239,68,68,0.4);">
+                    <a href="#" data-action="openLiveStreamHubModal" class="nav-link" style="color:#ef4444;font-weight:900;background:rgba(239,68,68,0.15);padding:5px 12px !important;border-radius:12px;border:1px solid rgba(239,68,68,0.4);">
                         <span style="display:inline-block;width:8px;height:8px;background:#ef4444;border-radius:50%;margin-right:4px;"></span>📺 LIVESTREAM
                     </a>
                 </li>
                 <li>
-                    <a href="#" onclick="openVipTicketModal(); return false;" class="nav-link" style="color:#fbbf24;font-weight:900;background:rgba(251,191,36,0.15);padding:5px 12px !important;border-radius:12px;border:1px solid rgba(251,191,36,0.4);">
+                    <a href="#" data-action="openVipTicketModal" class="nav-link" style="color:#fbbf24;font-weight:900;background:rgba(251,191,36,0.15);padding:5px 12px !important;border-radius:12px;border:1px solid rgba(251,191,36,0.4);">
                         🎟️ VÉ VÀNG VIP
                     </a>
                 </li>
@@ -205,10 +205,10 @@
                             <div style="font-size:11px; font-weight:900; color:#fbbf24; text-transform:uppercase; letter-spacing:1px; margin-bottom:4px; border-bottom:1px solid rgba(251,191,36,0.2); padding-bottom:4px; font-family:var(--font-title);">
                                 🏆 TÍNH NĂNG & TIỆN ÍCH CĐV
                             </div>
-                            <a href="#" onclick="openVipTicketModal(); return false;" style="color:#fde047; font-weight:700;">
+                            <a href="#" data-action="openVipTicketModal" style="color:#fde047; font-weight:700;">
                                 <span>🎟️ Xuất Vé Vàng VIP 3D</span>
                             </a>
-                            <a href="#" onclick="openComparePlayersModal(); return false;" style="color:#c084fc; font-weight:700;">
+                            <a href="#" data-action="openComparePlayersModal" style="color:#c084fc; font-weight:700;">
                                 <span>⚔️ So Sánh Cầu Thủ FIFA</span>
                             </a>
                             <a href="#sponsor" style="color:#fbbf24; font-weight:900; background:rgba(251,191,36,0.15);">
@@ -236,22 +236,22 @@
                             <a href="#admin" id="navAdminLink" onclick="checkAdminNavClick(event)" style="color:#fdba74; font-weight:700; background:rgba(253,186,116,0.08);">
                                 <span>🔐 Ban Tổ Chức / Quản trị</span> <span style="font-size:9px; background:#f97316; color:#fff; padding:1px 6px; border-radius:6px; font-weight:900;">ADMIN</span>
                             </a>
-                            <a href="#" onclick="openLiveStreamHubModal(); return false;" style="color:#ef4444; font-weight:700; background:rgba(239,68,68,0.08);">
+                            <a href="#" data-action="openLiveStreamHubModal" style="color:#ef4444; font-weight:700; background:rgba(239,68,68,0.08);">
                                 <span>📺 Live Stream 4K</span> <span style="font-size:9px; background:#ef4444; color:#fff; padding:1px 6px; border-radius:6px; font-weight:900;">🔴 LIVE</span>
                             </a>
-                            <a href="#" onclick="openAiPressReleaseModal(); return false;" style="color:#60a5fa; font-weight:700;">
+                            <a href="#" data-action="openAiPressReleaseModal" style="color:#60a5fa; font-weight:700;">
                                 <span>📰 AI Viết Báo Chí PR</span> <span style="font-size:9px; background:#3b82f6; color:#fff; padding:1px 6px; border-radius:6px; font-weight:900;">🤖 AI</span>
                             </a>
                             <a href="#" onclick="triggerVARReview('GOAL'); return false;" style="color:#f43f5e; font-weight:700; background:rgba(244,63,94,0.08);">
                                 <span>🖥️ Mô phỏng VAR Check 3D</span> <span style="font-size:9px; background:#f43f5e; color:#fff; padding:1px 6px; border-radius:6px; font-weight:900;">NEW</span>
                             </a>
-                            <a href="#" onclick="openStadiumDJModal(); return false;" style="color:#ec4899;">
+                            <a href="#" data-action="openStadiumDJModal" style="color:#ec4899;">
                                 <span>🎵 Stadium DJ Soundboard</span>
                             </a>
                             <a href="#" id="audioToggleBtn" onclick="togglePTXAudio(); return false;" style="color:#38bdf8;">
                                 <span>🔊 Hiệu ứng Âm thanh</span>
                             </a>
-                            <a href="#" onclick="openInfographicModal(); return false;" style="color:#fbbf24;">
+                            <a href="#" data-action="openInfographicModal" style="color:#fbbf24;">
                                 <span>📸 Xuất Poster HD</span>
                             </a>
                             <a href="#" onclick="exportOfficialMatchReport(); return false;" style="color:#34d399;">
@@ -269,7 +269,7 @@
                     <button class="active" data-lang="vi" onclick="applyLanguage('vi')">VI</button>
                     <button data-lang="en" onclick="applyLanguage('en')">EN</button>
                 </div>
-                <button class="theme-toggle" onclick="toggleTheme()">
+                <button class="theme-toggle" data-action="toggleTheme">
                     <span id="themeIcon">🌙</span> <span id="themeLabel">Dark</span>
                 </button>
             </div>
@@ -417,10 +417,10 @@
             <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;margin-bottom:20px;">
                 <!-- Round Tabs -->
                 <div style="display:flex;gap:8px;flex-wrap:wrap;" id="matchRoundTabBox">
-                    <button class="match-round-tab active" onclick="filterMatchRound('all', this)" style="background:#3b82f6;color:#fff;border:none;padding:8px 16px;border-radius:20px;font-size:12px;font-weight:800;cursor:pointer;">🏆 Tất cả trận</button>
-                    <button class="match-round-tab" onclick="filterMatchRound(1, this)" style="background:rgba(255,255,255,0.06);color:#94a3b8;border:1px solid rgba(255,255,255,0.1);padding:8px 16px;border-radius:20px;font-size:12px;font-weight:800;cursor:pointer;">⚽ Trận 1 (Mở Màn)</button>
-                    <button class="match-round-tab" onclick="filterMatchRound(2, this)" style="background:rgba(255,255,255,0.06);color:#94a3b8;border:1px solid rgba(255,255,255,0.1);padding:8px 16px;border-radius:20px;font-size:12px;font-weight:800;cursor:pointer;">⚽ Trận 2 (Bán kết)</button>
-                    <button class="match-round-tab" onclick="filterMatchRound(3, this)" style="background:rgba(255,255,255,0.06);color:#94a3b8;border:1px solid rgba(255,255,255,0.1);padding:8px 16px;border-radius:20px;font-size:12px;font-weight:800;cursor:pointer;">🔥 Trận 3 (Chung kết)</button>
+                    <button class="match-round-tab active" data-action="filter-match-round" data-round="all" style="background:#3b82f6;color:#fff;border:none;padding:8px 16px;border-radius:20px;font-size:12px;font-weight:800;cursor:pointer;">🏆 Tất cả trận</button>
+                    <button class="match-round-tab" data-action="filter-match-round" data-round="1" style="background:rgba(255,255,255,0.06);color:#94a3b8;border:1px solid rgba(255,255,255,0.1);padding:8px 16px;border-radius:20px;font-size:12px;font-weight:800;cursor:pointer;">⚽ Trận 1 (Mở Màn)</button>
+                    <button class="match-round-tab" data-action="filter-match-round" data-round="2" style="background:rgba(255,255,255,0.06);color:#94a3b8;border:1px solid rgba(255,255,255,0.1);padding:8px 16px;border-radius:20px;font-size:12px;font-weight:800;cursor:pointer;">⚽ Trận 2 (Bán kết)</button>
+                    <button class="match-round-tab" data-action="filter-match-round" data-round="3" style="background:rgba(255,255,255,0.06);color:#94a3b8;border:1px solid rgba(255,255,255,0.1);padding:8px 16px;border-radius:20px;font-size:12px;font-weight:800;cursor:pointer;">🔥 Trận 3 (Chung kết)</button>
                 </div>
 
                 <!-- Filter By Team Select -->
@@ -1112,10 +1112,10 @@
         <div class="container section-gap">
             <!-- Team View Sub-Tabs: 1. Khung Đội hình 3 Đội | 2. Khung 5v5 FIFA Pitch -->
             <div style="display:flex;justify-content:center;gap:12px;margin-bottom:32px;flex-wrap:wrap;">
-                <button id="btnTeamTabRoster" class="subtab-btn active" onclick="switchTeamSubTab('roster')">
+                <button id="btnTeamTabRoster" class="subtab-btn active" data-action="switch-team-tab" data-tab="roster">
                     📋 1. DANH SÁCH 3 ĐỘI HÌNH (8 CẦU THỦ/ĐỘI)
                 </button>
-                <button id="btnTeamTabPitch" class="subtab-btn" onclick="switchTeamSubTab('pitch')">
+                <button id="btnTeamTabPitch" class="subtab-btn" data-action="switch-team-tab" data-tab="pitch">
                     🏟️ 2. ĐỘI HÌNH RA SÂN 5V5 FIFA (SÂN TÁC THUẬT)
                 </button>
             </div>
@@ -1159,7 +1159,7 @@
                         </div>
 
                         <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:center;">
-                            <button onclick="openTacticalVisualizerModal()" style="background:rgba(59,130,246,0.25);color:#60a5fa;border:1.5px solid #3b82f6;padding:8px 14px;border-radius:12px;font-size:12px;font-weight:900;cursor:pointer;display:flex;align-items:center;gap:6px;transition:all 0.2s;" onmouseover="this.style.background='#3b82f6';this.style.color='#fff';" onmouseout="this.style.background='rgba(59,130,246,0.25)';this.style.color='#60a5fa';">
+                            <button data-action="openTacticalVisualizerModal" style="background:rgba(59,130,246,0.25);color:#60a5fa;border:1.5px solid #3b82f6;padding:8px 14px;border-radius:12px;font-size:12px;font-weight:900;cursor:pointer;display:flex;align-items:center;gap:6px;transition:all 0.2s;" onmouseover="this.style.background='#3b82f6';this.style.color='#fff';" onmouseout="this.style.background='rgba(59,130,246,0.25)';this.style.color='#60a5fa';">
                                 🎨 BẢNG CHỌN SƠ ĐỒ TRỰC QUAN
                             </button>
                             <button onclick="autoOptimize5v5Squad()" style="background:linear-gradient(135deg,#7c3aed,#c084fc);color:#fff;border:none;padding:8px 16px;border-radius:14px;font-size:12px;font-weight:900;cursor:pointer;box-shadow:0 4px 14px rgba(124,58,237,0.4);display:flex;align-items:center;gap:6px;">
@@ -1213,12 +1213,12 @@
             <div style="display:flex;justify-content:center;align-items:center;gap:12px;margin-bottom:32px;flex-wrap:wrap;padding:16px 20px;border-radius:24px;background:var(--bg-card);border:1px solid var(--border-color);">
                 <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
                     <span style="color:var(--text-muted);font-size:13px;font-weight:700;margin-right:4px;">Đội bóng:</span>
-                    <button class="fifa-team-btn active" onclick="filterFifaByTeam('all',this)">Tất cả Đội (24)</button>
-                    <button class="fifa-team-btn" onclick="filterFifaByTeam('p',this)">🦅 Team P (8)</button>
-                    <button class="fifa-team-btn" onclick="filterFifaByTeam('t',this)">🐯 Team T (8)</button>
-                    <button class="fifa-team-btn" onclick="filterFifaByTeam('x',this)">🐟 Team X (8)</button>
+                    <button class="fifa-team-btn active" data-action="filterFifaByTeam" data-team="all">Tất cả Đội (24)</button>
+                    <button class="fifa-team-btn" data-action="filterFifaByTeam" data-team="p">🦅 Team P (8)</button>
+                    <button class="fifa-team-btn" data-action="filterFifaByTeam" data-team="t">🐯 Team T (8)</button>
+                    <button class="fifa-team-btn" data-action="filterFifaByTeam" data-team="x">🐟 Team X (8)</button>
                 </div>
-                <button onclick="openComparePlayersModal(); return false;" style="background:linear-gradient(135deg,#7c3aed,#c084fc);color:#fff;border:none;padding:9px 20px;border-radius:20px;font-size:12px;font-weight:900;cursor:pointer;box-shadow:0 4px 15px rgba(124,58,237,0.4);font-family:var(--font-title);letter-spacing:0.5px;">⚔️ SO SÁNH 2 CẦU THỦ (HEAD TO HEAD)</button>
+                <button data-action="openComparePlayersModal" style="background:linear-gradient(135deg,#7c3aed,#c084fc);color:#fff;border:none;padding:9px 20px;border-radius:20px;font-size:12px;font-weight:900;cursor:pointer;box-shadow:0 4px 15px rgba(124,58,237,0.4);font-family:var(--font-title);letter-spacing:0.5px;">⚔️ SO SÁNH 2 CẦU THỦ (HEAD TO HEAD)</button>
             </div>
 
             <!-- FIFA Cards Grid Container -->
@@ -1230,7 +1230,7 @@
         <!-- ===== PLAYER COMPARISON MODAL ===== -->
         <div id="playerCompareModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(15,23,42,0.9);backdrop-filter:blur(12px);z-index:9999;align-items:center;justify-content:center;padding:20px;">
             <div style="background:linear-gradient(145deg,#0f172a,#1e293b);border:2px solid #7c3aed;border-radius:24px;width:100%;max-width:850px;max-height:90vh;overflow-y:auto;padding:24px;color:#fff;box-shadow:0 25px 60px rgba(0,0,0,0.8);position:relative;">
-                <button onclick="closePlayerCompareModal()" style="position:absolute;top:16px;right:16px;background:none;border:none;color:#94a3b8;font-size:24px;cursor:pointer;">✕</button>
+                <button data-action="closePlayerCompareModal" style="position:absolute;top:16px;right:16px;background:none;border:none;color:#94a3b8;font-size:24px;cursor:pointer;">✕</button>
                 <div style="text-align:center;margin-bottom:20px;">
                     <span style="background:rgba(124,58,237,0.25);color:#c084fc;border:1px solid rgba(192,132,252,0.4);font-size:11px;font-weight:900;padding:4px 14px;border-radius:20px;text-transform:uppercase;letter-spacing:1px;">⚔️ FIFA HEAD TO HEAD STATS</span>
                     <h2 style="font-size:24px;font-weight:900;color:#f8fafc;font-family:var(--font-title);margin:6px 0 0;">SO SÁNH ĐỐI ĐẦU 2 CẦU THỦ</h2>
@@ -1262,10 +1262,10 @@
         <div class="container section-gap">
             <!-- Gallery Filter Tabs -->
             <div style="display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-bottom:28px;">
-                <button class="gallery-filter-btn active" onclick="filterGalleryPage('all',this)">🖼️ Tất cả</button>
-                <button class="gallery-filter-btn" onclick="filterGalleryPage('team',this)">👥 Đội bóng</button>
-                <button class="gallery-filter-btn" onclick="filterGalleryPage('ceremony',this)">🏆 Lễ khai mạc</button>
-                <button class="gallery-filter-btn" onclick="filterGalleryPage('fan',this)">📣 Cổ động viên</button>
+                <button class="gallery-filter-btn active" data-action="filterGalleryPage" data-category="all">🖼️ Tất cả</button>
+                <button class="gallery-filter-btn" data-action="filterGalleryPage" data-category="team">👥 Đội bóng</button>
+                <button class="gallery-filter-btn" data-action="filterGalleryPage" data-category="ceremony">🏆 Lễ khai mạc</button>
+                <button class="gallery-filter-btn" data-action="filterGalleryPage" data-category="fan">📣 Cổ động viên</button>
             </div>
             <!-- Gallery Grid -->
             <div id="galleryPageGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;"></div>
@@ -1524,7 +1524,7 @@
                 <div style="font-size:56px;margin-bottom:16px;">🔒</div>
                 <h3 style="font-family:var(--font-title);font-size:26px;color:#fff;margin-bottom:8px;">BẢO MẬT QUẢN TRỊ BẮT BUỘC</h3>
                 <p style="color:#94a3b8;font-size:14px;margin-bottom:24px;">Bạn chưa đăng nhập hoặc phiên làm việc đã hết hạn. Vui lòng xác thực mật khẩu để truy cập Trung tâm Quản trị FIFA.</p>
-                <button onclick="openLogin()" style="background:linear-gradient(135deg, #ea580c 0%, #c2410c 100%);color:#fff;border:none;padding:14px 36px;border-radius:30px;font-weight:800;font-size:15px;cursor:pointer;box-shadow:0 8px 25px rgba(234,88,12,0.5);">
+                <button data-action="openLogin" style="background:linear-gradient(135deg, #ea580c 0%, #c2410c 100%);color:#fff;border:none;padding:14px 36px;border-radius:30px;font-weight:800;font-size:15px;cursor:pointer;box-shadow:0 8px 25px rgba(234,88,12,0.5);">
                     🔐 ĐĂNG NHẬP QUẢN TRỊ VIÊN
                 </button>
             </div>
@@ -1555,16 +1555,16 @@
 
                 <!-- Admin Navigation Tabs -->
                 <div style="display:flex;gap:10px;margin-bottom:24px;flex-wrap:wrap;">
-                    <button id="tabBtnAdmin1" onclick="switchAdminTab(1)" style="padding:12px 22px;border-radius:14px;border:1px solid #3b82f6;background:#3b82f6;color:#fff;font-weight:800;font-size:13px;cursor:pointer;">
+                    <button id="tabBtnAdmin1" data-action="switch-admin-tab" data-tab-index="1" style="padding:12px 22px;border-radius:14px;border:1px solid #3b82f6;background:#3b82f6;color:#fff;font-weight:800;font-size:13px;cursor:pointer;">
                         ⚽ 1. TRẬN ĐẤU & KẾT QUẢ LIVE
                     </button>
-                    <button id="tabBtnAdmin2" onclick="switchAdminTab(2)" style="padding:12px 22px;border-radius:14px;border:1px solid #334155;background:rgba(255,255,255,0.05);color:#cbd5e1;font-weight:700;font-size:13px;cursor:pointer;">
+                    <button id="tabBtnAdmin2" data-action="switch-admin-tab" data-tab-index="2" style="padding:12px 22px;border-radius:14px;border:1px solid #334155;background:rgba(255,255,255,0.05);color:#cbd5e1;font-weight:700;font-size:13px;cursor:pointer;">
                         👤 2. THỐNG KÊ CẦU THỦ
                     </button>
-                    <button id="tabBtnAdmin3" onclick="switchAdminTab(3)" style="padding:12px 22px;border-radius:14px;border:1px solid #334155;background:rgba(255,255,255,0.05);color:#cbd5e1;font-weight:700;font-size:13px;cursor:pointer;">
+                    <button id="tabBtnAdmin3" data-action="switch-admin-tab" data-tab-index="3" style="padding:12px 22px;border-radius:14px;border:1px solid #334155;background:rgba(255,255,255,0.05);color:#cbd5e1;font-weight:700;font-size:13px;cursor:pointer;">
                         🏆 3. NỘI DUNG & HALL OF FAME
                     </button>
-                    <button id="tabBtnAdmin4" onclick="switchAdminTab(4)" style="padding:12px 22px;border-radius:14px;border:1px solid #334155;background:rgba(255,255,255,0.05);color:#cbd5e1;font-weight:700;font-size:13px;cursor:pointer;">
+                    <button id="tabBtnAdmin4" data-action="switch-admin-tab" data-tab-index="4" style="padding:12px 22px;border-radius:14px;border:1px solid #334155;background:rgba(255,255,255,0.05);color:#cbd5e1;font-weight:700;font-size:13px;cursor:pointer;">
                         🔒 4. BẢO MẬT HỆ THỐNG
                     </button>
                 </div>
@@ -1706,7 +1706,7 @@
                         <div class="admin-card">
                             <h4 style="color:#c084fc;margin-bottom:12px;font-size:15px;">🚀 Sao Lưu & AI Growth Hub</h4>
                             <button onclick="exportPtxMigrationData()" style="background:#7c3aed;margin-bottom:10px;">📥 Export JSON File (ptx_migration_data.json)</button>
-                            <button onclick="openAiGrowthModal()" style="background:#ea580c;">🤖 Mở AI & Growth Dashboard</button>
+                            <button data-action="openAiGrowthModal" style="background:#ea580c;">🤖 Mở AI & Growth Dashboard</button>
                         </div>
                     </div>
                 </div>
@@ -1726,12 +1726,12 @@
     </footer>
 
     <!-- ===== LOGIN MODAL ===== -->
-    <div id="loginModal"><div class="login-box"><span class="close-modal" onclick="closeLogin()">×</span><h3 data-i18n="login_title">🔐 Quản trị viên</h3><input type="text" id="userInput" placeholder="Tên đăng nhập" data-i18n="login_user"><input type="password" id="passInput" placeholder="Mật khẩu" data-i18n="login_pass"><button onclick="handleLogin()" data-i18n="login_btn">Đăng nhập</button><div class="error" id="loginError" data-i18n="login_error">Sai tên đăng nhập hoặc mật khẩu!</div></div></div>
+    <div id="loginModal"><div class="login-box"><span class="close-modal" data-action="closeLogin">×</span><h3 data-i18n="login_title">🔐 Quản trị viên</h3><input type="text" id="userInput" placeholder="Tên đăng nhập" data-i18n="login_user"><input type="password" id="passInput" placeholder="Mật khẩu" data-i18n="login_pass"><button onclick="handleLogin()" data-i18n="login_btn">Đăng nhập</button><div class="error" id="loginError" data-i18n="login_error">Sai tên đăng nhập hoặc mật khẩu!</div></div></div>
 
     <!-- ===== AI & GROWTH DASHBOARD MODAL ===== -->
     <div id="aiGrowthModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);backdrop-filter:blur(8px);z-index:2000;align-items:center;justify-content:center;padding:20px;">
         <div style="background:#0f172a;border:1px solid #334155;border-radius:24px;max-width:650px;width:100%;max-height:90vh;overflow-y:auto;padding:30px;color:#fff;position:relative;box-shadow:0 25px 50px -12px rgba(0,0,0,0.5);">
-            <span style="position:absolute;top:20px;right:25px;font-size:28px;cursor:pointer;color:#94a3b8;" onclick="closeAiGrowthModal()">×</span>
+            <span style="position:absolute;top:20px;right:25px;font-size:28px;cursor:pointer;color:#94a3b8;" data-action="closeAiGrowthModal">×</span>
             <div style="display:inline-block;background:rgba(124,58,237,0.2);color:#c084fc;border:1px solid rgba(192,132,252,0.4);font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">PHASE 6: AI & GROWTH HUB</div>
             <h2 style="font-size:24px;font-weight:800;color:#f97316;margin-bottom:8px;font-family:var(--font-title);">🤖 HỆ SINH THÁI AI & GROWTH DASHBOARD</h2>
             <p style="font-size:13px;color:#94a3b8;margin-bottom:20px;">Trải nghiệm các tính năng AI Match Predictor, Minigame Vô địch & Referral System trực tiếp!</p>
@@ -1765,12 +1765,12 @@
     </div>
 
     <!-- ===== PLAYER MODAL ===== -->
-    <div id="playerModal"><div class="player-modal-content"><button class="close-modal-btn" onclick="closePlayerModal()">×</button><img class="modal-avatar" id="modalAvatar" src="" alt=""><div class="modal-name" id="modalName"></div><div class="modal-team" id="modalTeam"></div><div class="modal-pos" id="modalPos"></div><div class="modal-stats-grid"><div class="stat-item"><div class="num" id="modalGoals">0</div><div class="lbl" data-i18n="modal_goals">⚽ Bàn thắng</div></div><div class="stat-item"><div class="num" id="modalAssists">0</div><div class="lbl" data-i18n="modal_assists">🎯 Kiến tạo</div></div><div class="stat-item"><div class="num" id="modalMVP">0</div><div class="lbl" data-i18n="modal_mvp">⭐ MVP</div></div></div></div></div>
+    <div id="playerModal"><div class="player-modal-content"><button class="close-modal-btn" data-action="closePlayerModal">×</button><img class="modal-avatar" id="modalAvatar" src="" alt=""><div class="modal-name" id="modalName"></div><div class="modal-team" id="modalTeam"></div><div class="modal-pos" id="modalPos"></div><div class="modal-stats-grid"><div class="stat-item"><div class="num" id="modalGoals">0</div><div class="lbl" data-i18n="modal_goals">⚽ Bàn thắng</div></div><div class="stat-item"><div class="num" id="modalAssists">0</div><div class="lbl" data-i18n="modal_assists">🎯 Kiến tạo</div></div><div class="stat-item"><div class="num" id="modalMVP">0</div><div class="lbl" data-i18n="modal_mvp">⭐ MVP</div></div></div></div></div>
 
     <!-- ===== TACTICAL SUBSTITUTION SELECTOR MODAL ===== -->
     <div id="substitutionModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(15,23,42,0.92);backdrop-filter:blur(16px);z-index:99999;align-items:center;justify-content:center;padding:20px;">
         <div style="background:linear-gradient(145deg,#0f172a,#1e293b);border:2px solid #3b82f6;border-radius:24px;width:100%;max-width:550px;padding:24px;color:#fff;box-shadow:0 25px 60px rgba(0,0,0,0.9);position:relative;">
-            <button onclick="closeSubstitutionModal()" style="position:absolute;top:16px;right:16px;background:none;border:none;color:#94a3b8;font-size:24px;cursor:pointer;">✕</button>
+            <button data-action="closeSubstitutionModal" style="position:absolute;top:16px;right:16px;background:none;border:none;color:#94a3b8;font-size:24px;cursor:pointer;">✕</button>
             <div style="text-align:center;margin-bottom:18px;">
                 <span style="background:rgba(59,130,246,0.25);color:#60a5fa;border:1px solid rgba(96,165,250,0.4);font-size:11px;font-weight:900;padding:4px 14px;border-radius:20px;text-transform:uppercase;letter-spacing:1px;">🔄 THAY NGƯỜI CHIẾN THUẬT 5V5</span>
                 <h3 style="font-size:20px;font-weight:900;color:#f8fafc;font-family:var(--font-title);margin:8px 0 0;" id="subModalHeading">CẦU THỦ VÀO SÂN</h3>
@@ -1786,7 +1786,7 @@
     <!-- ===== VISUAL TACTICAL FORMATIONS SELECTOR MODAL ===== -->
     <div id="tacticalVisualizerModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(15,23,42,0.92);backdrop-filter:blur(16px);z-index:99999;align-items:center;justify-content:center;padding:20px;">
         <div style="background:linear-gradient(145deg,#0f172a,#1e293b);border:2px solid #3b82f6;border-radius:24px;width:100%;max-width:900px;max-height:85vh;overflow-y:auto;padding:24px;color:#fff;box-shadow:0 25px 60px rgba(0,0,0,0.9);position:relative;">
-            <button onclick="closeTacticalVisualizerModal()" style="position:absolute;top:16px;right:16px;background:none;border:none;color:#94a3b8;font-size:24px;cursor:pointer;">✕</button>
+            <button data-action="closeTacticalVisualizerModal" style="position:absolute;top:16px;right:16px;background:none;border:none;color:#94a3b8;font-size:24px;cursor:pointer;">✕</button>
             <div style="text-align:center;margin-bottom:20px;">
                 <span style="background:rgba(59,130,246,0.25);color:#60a5fa;border:1px solid rgba(96,165,250,0.4);font-size:11px;font-weight:900;padding:4px 14px;border-radius:20px;text-transform:uppercase;letter-spacing:1px;">📋 12 TÙY CHỌN SƠ ĐỒ CHIẾN THUẬT 5V5</span>
                 <h2 style="font-size:22px;font-weight:900;color:#f8fafc;font-family:var(--font-title);margin:8px 0 0;">BẢNG CHỌN SƠ ĐỒ THỊ GIÁC TRỰC QUAN</h2>
@@ -1799,7 +1799,7 @@
     <!-- ===== 1. XUẤT VÉ VÀNG VIP 3D MODAL ===== -->
     <div id="vipTicketModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(15,23,42,0.92);backdrop-filter:blur(16px);z-index:99999;align-items:center;justify-content:center;padding:20px;">
         <div style="background:linear-gradient(145deg,#0f172a,#1e293b);border:2px solid #fbbf24;border-radius:24px;width:100%;max-width:650px;padding:24px;color:#fff;box-shadow:0 25px 60px rgba(251,191,36,0.25);position:relative;">
-            <button onclick="closeVipTicketModal()" style="position:absolute;top:16px;right:16px;background:none;border:none;color:#94a3b8;font-size:24px;cursor:pointer;">✕</button>
+            <button data-action="closeVipTicketModal" style="position:absolute;top:16px;right:16px;background:none;border:none;color:#94a3b8;font-size:24px;cursor:pointer;">✕</button>
             <div style="text-align:center;margin-bottom:16px;">
                 <span style="background:rgba(251,191,36,0.2);color:#fbbf24;border:1px solid rgba(251,191,36,0.4);font-size:11px;font-weight:900;padding:4px 14px;border-radius:20px;text-transform:uppercase;letter-spacing:1px;">🎫 EXCLUSIVE OFFICIAL PASS</span>
                 <h2 style="font-size:22px;font-weight:900;color:#f8fafc;font-family:var(--font-title);margin:6px 0 0;">THẺ VÉ VÀNG VIP 3D DÀNH CHO CĐV & CẦU THỦ</h2>
@@ -1852,7 +1852,7 @@
     <!-- ===== 2. SO SÁNH CẦU THỦ FIFA HEAD-TO-HEAD MODAL ===== -->
     <div id="comparePlayersModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(15,23,42,0.92);backdrop-filter:blur(16px);z-index:99999;align-items:center;justify-content:center;padding:20px;">
         <div style="background:linear-gradient(145deg,#0f172a,#1e293b);border:2px solid #3b82f6;border-radius:24px;width:100%;max-width:850px;max-height:85vh;overflow-y:auto;padding:24px;color:#fff;box-shadow:0 25px 60px rgba(0,0,0,0.9);position:relative;">
-            <button onclick="closeComparePlayersModal()" style="position:absolute;top:16px;right:16px;background:none;border:none;color:#94a3b8;font-size:24px;cursor:pointer;">✕</button>
+            <button data-action="closeComparePlayersModal" style="position:absolute;top:16px;right:16px;background:none;border:none;color:#94a3b8;font-size:24px;cursor:pointer;">✕</button>
             <div style="text-align:center;margin-bottom:20px;">
                 <span style="background:rgba(59,130,246,0.25);color:#60a5fa;border:1px solid rgba(96,165,250,0.4);font-size:11px;font-weight:900;padding:4px 14px;border-radius:20px;text-transform:uppercase;letter-spacing:1px;">⚔️ FIFA HEAD-TO-HEAD COMPARISON</span>
                 <h2 style="font-size:22px;font-weight:900;color:#f8fafc;font-family:var(--font-title);margin:6px 0 0;">SO SÁNH CHỈ SỐ 2 CẦU THỦ FIFA 3D</h2>
@@ -3488,7 +3488,7 @@
                         <div style="font-size:18px;font-weight:900;color:#fff;font-family:var(--font-title);">${p1.name}</div>
                         <div style="font-size:12px;color:${t1.color};font-weight:800;">[${p1.position}] #${p1.number} • ${t1.name}</div>
                         <div style="margin-top:8px;font-size:24px;font-weight:900;color:#fbbf24;font-family:var(--font-logo);">OVR ${r1}</div>
-                        <button onclick="openVipTicketModal('${p1.name}'); return false;" style="margin-top:10px;background:rgba(251,191,36,0.2);color:#fbbf24;border:1px solid #fbbf24;padding:6px 12px;border-radius:10px;font-size:11px;font-weight:800;cursor:pointer;width:100%;">🎟️ Xuất Vé VIP ${p1.name}</button>
+                        <button data-action="openVipTicketModal" data-ticket-name="${p1.name}" style="margin-top:10px;background:rgba(251,191,36,0.2);color:#fbbf24;border:1px solid #fbbf24;padding:6px 12px;border-radius:10px;font-size:11px;font-weight:800;cursor:pointer;width:100%;">🎟️ Xuất Vé VIP ${p1.name}</button>
                     </div>
 
                     <!-- Player 2 Card -->
@@ -3497,7 +3497,7 @@
                         <div style="font-size:18px;font-weight:900;color:#fff;font-family:var(--font-title);">${p2.name}</div>
                         <div style="font-size:12px;color:${t2.color};font-weight:800;">[${p2.position}] #${p2.number} • ${t2.name}</div>
                         <div style="margin-top:8px;font-size:24px;font-weight:900;color:#fbbf24;font-family:var(--font-logo);">OVR ${r2}</div>
-                        <button onclick="openVipTicketModal('${p2.name}'); return false;" style="margin-top:10px;background:rgba(251,191,36,0.2);color:#fbbf24;border:1px solid #fbbf24;padding:6px 12px;border-radius:10px;font-size:11px;font-weight:800;cursor:pointer;width:100%;">🎟️ Xuất Vé VIP ${p2.name}</button>
+                        <button data-action="openVipTicketModal" data-ticket-name="${p2.name}" style="margin-top:10px;background:rgba(251,191,36,0.2);color:#fbbf24;border:1px solid #fbbf24;padding:6px 12px;border-radius:10px;font-size:11px;font-weight:800;cursor:pointer;width:100%;">🎟️ Xuất Vé VIP ${p2.name}</button>
                     </div>
                 </div>
 
@@ -4804,7 +4804,7 @@
     <!-- ==================== INFOGRAPHIC EXPORTER MODAL ==================== -->
     <div id="infographicModal" class="modal-overlay" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);z-index:99999;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(10px);">
         <div style="background:#0f172a;border:2px solid var(--ptx-orange);border-radius:24px;width:100%;max-width:920px;padding:24px;box-shadow:0 25px 60px rgba(0,0,0,0.8);position:relative;max-height:90vh;overflow-y:auto;text-align:center;">
-            <button onclick="closeInfographicModal()" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,0.1);color:#fff;border:none;width:36px;height:36px;border-radius:50%;font-size:18px;cursor:pointer;">✕</button>
+            <button data-action="closeInfographicModal" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,0.1);color:#fff;border:none;width:36px;height:36px;border-radius:50%;font-size:18px;cursor:pointer;">✕</button>
             <div style="font-size:22px;font-weight:900;color:var(--ptx-orange);font-family:var(--font-title);margin-bottom:6px;">📸 XUẤT ẢNH INFOGRAPHIC TRUYỀN THÔNG</div>
             <div style="font-size:12px;color:#94a3b8;margin-bottom:20px;">Poster kết quả & thông tin giải đấu định dạng HD (1200x675) dành cho Facebook / Zalo</div>
 
@@ -4826,7 +4826,7 @@
     <!-- ==================== REFEREE DIGITAL TOOLKIT MODAL ==================== -->
     <div id="refereeToolkitModal" class="modal-overlay" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);z-index:99999;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(10px);">
         <div style="background:#0f172a;border:2px solid #10b981;border-radius:24px;width:100%;max-width:680px;padding:24px;box-shadow:0 25px 60px rgba(16,185,129,0.3);position:relative;max-height:90vh;overflow-y:auto;text-align:center;color:#fff;">
-            <button onclick="closeRefereeToolkit()" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,0.1);color:#fff;border:none;width:36px;height:36px;border-radius:50%;font-size:18px;cursor:pointer;">✕</button>
+            <button data-action="closeRefereeToolkit" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,0.1);color:#fff;border:none;width:36px;height:36px;border-radius:50%;font-size:18px;cursor:pointer;">✕</button>
             <div style="font-size:22px;font-weight:900;color:#10b981;font-family:var(--font-title);margin-bottom:4px;">🏁 SỔ TAY & CÔNG CỤ TRỌNG TÀI SÂN 5v5</div>
             <div style="font-size:12px;color:#94a3b8;margin-bottom:14px;">Bộ công cụ giơ thẻ, đếm lỗi tổng hợp & còi điều hành trận đấu</div>
 
@@ -4969,7 +4969,7 @@
     <!-- ==================== STADIUM DJ SOUNDBOARD MODAL ==================== -->
     <div id="stadiumDjModal" class="modal-overlay" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);z-index:99999;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(10px);">
         <div style="background:#0f172a;border:2px solid #ec4899;border-radius:24px;width:100%;max-width:620px;padding:24px;box-shadow:0 25px 60px rgba(236,72,153,0.3);position:relative;max-height:90vh;overflow-y:auto;text-align:center;color:#fff;">
-            <button onclick="closeStadiumDJModal()" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,0.1);color:#fff;border:none;width:36px;height:36px;border-radius:50%;font-size:18px;cursor:pointer;">✕</button>
+            <button data-action="closeStadiumDJModal" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,0.1);color:#fff;border:none;width:36px;height:36px;border-radius:50%;font-size:18px;cursor:pointer;">✕</button>
             <div style="font-size:22px;font-weight:900;color:#ec4899;font-family:var(--font-title);margin-bottom:4px;">🎵 BÀN ĐIỀU KHIỂN DJ SÂN VẬN ĐỘNG</div>
             <div style="font-size:12px;color:#94a3b8;margin-bottom:20px;">Phát hiệu ứng âm thanh cổ vũ, nhịp trống & nhạc ra sân rộn ràng tại sân bóng</div>
 
@@ -5000,7 +5000,7 @@
     <!-- ==================== LIVE STREAM BROADCAST HUB MODAL ==================== -->
     <div id="liveStreamHubModal" class="modal-overlay" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.9);z-index:99999;align-items:center;justify-content:center;padding:15px;backdrop-filter:blur(12px);">
         <div style="background:#0b1329;border:2px solid #ef4444;border-radius:24px;width:100%;max-width:900px;padding:20px;box-shadow:0 25px 60px rgba(239,68,68,0.4);position:relative;max-height:92vh;overflow-y:auto;color:#fff;">
-            <button onclick="closeLiveStreamHubModal()" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,0.1);color:#fff;border:none;width:36px;height:36px;border-radius:50%;font-size:18px;cursor:pointer;">✕</button>
+            <button data-action="closeLiveStreamHubModal" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,0.1);color:#fff;border:none;width:36px;height:36px;border-radius:50%;font-size:18px;cursor:pointer;">✕</button>
 
             <!-- Header -->
             <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:14px;border-bottom:1px solid #1e293b;padding-bottom:10px;">
@@ -5064,7 +5064,7 @@
     <!-- ==================== AI PRESS RELEASE MODAL ==================== -->
     <div id="aiPressReleaseModal" class="modal-overlay" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);z-index:99999;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(10px);">
         <div style="background:#0f172a;border:2px solid #3b82f6;border-radius:24px;width:100%;max-width:700px;padding:24px;box-shadow:0 25px 60px rgba(59,130,246,0.3);position:relative;max-height:90vh;overflow-y:auto;color:#fff;text-align:left;">
-            <button onclick="closeAiPressReleaseModal()" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,0.1);color:#fff;border:none;width:36px;height:36px;border-radius:50%;font-size:18px;cursor:pointer;">✕</button>
+            <button data-action="closeAiPressReleaseModal" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,0.1);color:#fff;border:none;width:36px;height:36px;border-radius:50%;font-size:18px;cursor:pointer;">✕</button>
             <div style="font-size:22px;font-weight:900;color:#60a5fa;font-family:var(--font-title);margin-bottom:4px;text-align:center;">📰 TRÌNH TẠO BÀI VIẾT BÁO CHÍ TRUYỀN THÔNG AI</div>
             <div style="font-size:12px;color:#94a3b8;margin-bottom:20px;text-align:center;">Tự động tổng hợp điểm tin bài viết sắc bén đăng Facebook / Zalo / Bảng tin PTX Group</div>
 

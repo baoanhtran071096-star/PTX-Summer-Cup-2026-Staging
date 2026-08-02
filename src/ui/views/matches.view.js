@@ -169,10 +169,10 @@ export function renderMatchCard(match, teamsData = {}, resultsData = {}, parseGo
 
     const actionsHtml = `
         <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;justify-content:center;">
-            <button onclick="openAiGrowthModal(); return false;" style="flex:1;min-width:110px;background:rgba(59,130,246,0.15);color:#60a5fa;border:1px solid rgba(59,130,246,0.4);padding:6px 10px;border-radius:10px;font-size:11px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:4px;">
+            <button data-action="openAiGrowthModal" style="flex:1;min-width:110px;background:rgba(59,130,246,0.15);color:#60a5fa;border:1px solid rgba(59,130,246,0.4);padding:6px 10px;border-radius:10px;font-size:11px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:4px;">
                 🎯 Dự đoán tỷ số
             </button>
-            <button onclick="openLiveStreamHubModal(); return false;" style="flex:1;min-width:110px;background:rgba(239,68,68,0.15);color:#fca5a5;border:1px solid rgba(239,68,68,0.4);padding:6px 10px;border-radius:10px;font-size:11px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:4px;">
+            <button data-action="openLiveStreamHubModal" style="flex:1;min-width:110px;background:rgba(239,68,68,0.15);color:#fca5a5;border:1px solid rgba(239,68,68,0.4);padding:6px 10px;border-radius:10px;font-size:11px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:4px;">
                 📺 Livestream 4K
             </button>
         </div>
