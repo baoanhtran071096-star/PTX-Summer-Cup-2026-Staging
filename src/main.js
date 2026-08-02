@@ -44,6 +44,8 @@ import {
     openAiPressReleaseModalAdapter, closeAiPressReleaseModalAdapter,
     openStadiumDJModalAdapter, closeStadiumDJModalAdapter
 } from './adapters/ui.adapters.js';
+import { registerOpenedModal, unregisterClosedModal, closeTopmostModal, getModalStackDepth, getKeyboardOwnerCount } from './ui/modals.js';
+import { readPredictionState, syncPredictionSelectionState } from './adapters/prediction.adapters.js';
 import { initEvents } from './events/index.js';
 
 // Export utilities & infrastructure helpers to window scope for runtime compatibility
@@ -71,6 +73,13 @@ if (typeof window !== 'undefined') {
     window.validateAndImportPtxData = validateAndImportPtxData;
     window.initAdminSessionTimeout = initAdminSessionTimeout;
     window.cleanupAdminSessionListeners = cleanupAdminSessionListeners;
+    window.registerOpenedModal = registerOpenedModal;
+    window.unregisterClosedModal = unregisterClosedModal;
+    window.closeTopmostModal = closeTopmostModal;
+    window.getModalStackDepth = getModalStackDepth;
+    window.getKeyboardOwnerCount = getKeyboardOwnerCount;
+    window.readPredictionState = readPredictionState;
+    window.syncPredictionSelectionState = syncPredictionSelectionState;
 
     // UI Modules & View Adapters
     window.showToast = showToast;

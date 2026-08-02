@@ -457,14 +457,35 @@ try {
     process.exit(1);
 }
 
-if (!uiResults.testing11Metrics || !uiResults.testing12Metrics || !uiResults.testing13Metrics) {
-    console.error('❌ FAIL-CLOSED: Machine-readable test results incomplete (missing testing11Metrics, testing12Metrics, or testing13Metrics)');
+if (!uiResults.testing11Metrics || !uiResults.testing12Metrics || !uiResults.testing13Metrics || !uiResults.testing14Metrics) {
+    console.error('❌ FAIL-CLOSED: Machine-readable test results incomplete (missing testing11Metrics, testing12Metrics, testing13Metrics, or testing14Metrics)');
     process.exit(1);
 }
 
 const m11 = uiResults.testing11Metrics;
 const m12 = uiResults.testing12Metrics;
 const m13 = uiResults.testing13Metrics;
+const m14 = uiResults.testing14Metrics;
+
+const testing14Pass = (
+    m14.product001EscapeTopmostOnly === 'PASS' &&
+    m14.product001NestedFocusRestoration === 'PASS' &&
+    m14.product001TabFocusTrap === 'PASS' &&
+    m14.product001ShiftTabFocusTrap === 'PASS' &&
+    m14.product001ZeroFocusableFallback === 'PASS' &&
+    m14.product001NonDismissibleProtection === 'PASS' &&
+    m14.product001DuplicateKeyboardOwners === 0 &&
+    m14.product005ImmediateSelectionSync === 'PASS' &&
+    m14.product005PreviousSelectionCleared === 'PASS' &&
+    m14.product005ReopenStateRestoration === 'PASS' &&
+    m14.product005MultiSurfaceParity === 'PASS' &&
+    m14.product005StorageUiDivergence === 0 &&
+    m14.testing14Pass === true
+);
+
+if (!testing14Pass) {
+    console.warn(`  ⚠️ Testing 14 Failure: Wave 3B.2 UX Accessibility & State Sync gate failed.`);
+}
 
 const testing13Pass = (
     m13.product002ValidImport === 'PASS' &&
@@ -585,7 +606,8 @@ const pass = missingAssets <= contract.allowedMissingAssets &&
              provenanceErrors === 0 &&
              !packageVersionMismatch &&
              testing12Pass &&
-             testing13Pass;
+             testing13Pass &&
+             testing14Pass;
 
 if (pass) {
     console.log('✅ RESULT: PASS (Exit code 0)\n');

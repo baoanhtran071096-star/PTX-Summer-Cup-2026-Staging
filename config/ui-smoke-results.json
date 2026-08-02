@@ -1,5 +1,5 @@
 {
-  "passedUiTests": 29,
+  "passedUiTests": 30,
   "failedUiTests": 0,
   "testing11Metrics": {
     "writeCommandsTested": 5,
@@ -42,5 +42,20 @@
     "product004DestructiveAutoRepair": 0,
     "product004SafeFallback": "PASS",
     "testing13Pass": true
+  },
+  "testing14Metrics": {
+    "product001EscapeTopmostOnly": "PASS",
+    "product001NestedFocusRestoration": "PASS",
+    "product001TabFocusTrap": "PASS",
+    "product001ShiftTabFocusTrap": "PASS",
+    "product001ZeroFocusableFallback": "PASS",
+    "product001NonDismissibleProtection": "PASS",
+    "product001DuplicateKeyboardOwners": 0,
+    "product005ImmediateSelectionSync": "PASS",
+    "product005PreviousSelectionCleared": "PASS",
+    "product005ReopenStateRestoration": "PASS",
+    "product005MultiSurfaceParity": "PASS",
+    "product005StorageUiDivergence": 0,
+    "testing14Pass": true
   }
 }

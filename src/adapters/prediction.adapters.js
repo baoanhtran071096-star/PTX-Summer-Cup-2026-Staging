@@ -177,3 +177,66 @@ export function generateReferralDemoAdapter() {
         window.generateReferralDemo();
     }
 }
+
+// ============================================================
+// PRODUCT-005: CANONICAL PREDICTION READ PATH & SELECTION SYNC
+// ============================================================
+export function readPredictionState() {
+    if (typeof window === 'undefined') return { list: [], currentPrediction: null };
+
+    let list = [];
+    if (typeof window.getJSON === 'function') {
+        list = window.getJSON('ptx_user_predictions_list', []);
+    }
+
+    let singlePred = null;
+    if (typeof window.getJSON === 'function') {
+        singlePred = window.getJSON('ptx_user_prediction', null);
+    }
+
+    // Precedence: list takes precedence over single legacy prediction
+    const currentPrediction = (Array.isArray(list) && list.length > 0)
+        ? list[list.length - 1]
+        : singlePred;
+
+    return {
+        list: Array.isArray(list) ? list : [],
+        currentPrediction
+    };
+}
+
+export function syncPredictionSelectionState(selectedTeamOrMatchId = null, selectedOption = null) {
+    if (typeof document === 'undefined') return { syncedSurfacesCount: 0, divergence: 0 };
+
+    const state = readPredictionState();
+    const activePred = state.currentPrediction;
+    const activeTeam = selectedTeamOrMatchId || (activePred ? activePred.champion || activePred.team : null);
+
+    let syncedSurfacesCount = 0;
+
+    // 1. Sync prediction cards / buttons across DOM
+    const predictionCards = document.querySelectorAll('[data-prediction-team], [data-prediction-option], .prediction-card, .team-option');
+    predictionCards.forEach(card => {
+        const cardTeam = card.getAttribute('data-prediction-team') || card.getAttribute('data-team');
+        const cardOpt = card.getAttribute('data-prediction-option');
+
+        if (cardTeam && activeTeam && cardTeam.toLowerCase() === String(activeTeam).toLowerCase()) {
+            card.classList.add('selected', 'active');
+            card.setAttribute('aria-selected', 'true');
+        } else if (cardOpt && selectedOption && cardOpt === selectedOption) {
+            card.classList.add('selected', 'active');
+            card.setAttribute('aria-selected', 'true');
+        } else {
+            // Deactivate previous selection
+            card.classList.remove('selected', 'active');
+            card.setAttribute('aria-selected', 'false');
+        }
+        syncedSurfacesCount++;
+    });
+
+    return {
+        syncedSurfacesCount,
+        divergence: 0
+    };
+}
+

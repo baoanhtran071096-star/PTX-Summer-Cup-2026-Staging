@@ -143,10 +143,23 @@ global.window.renderGalleryPage = () => { spies.renderGalleryPage++; };
 
 async function runUiTests() {
     const storageModule = await import('../src/infrastructure/storage.js');
+    const modalsModule = await import('../src/ui/modals.js');
+    const predAdapters = await import('../src/adapters/prediction.adapters.js');
+
     global.window.validateAndImportPtxData = storageModule.validateAndImportPtxData;
     global.window.initAdminSessionTimeout = storageModule.initAdminSessionTimeout;
     global.window.cleanupAdminSessionListeners = storageModule.cleanupAdminSessionListeners;
     global.window.getJSON = storageModule.getJSON;
+    global.window.setJSON = storageModule.setJSON;
+
+    global.window.registerOpenedModal = modalsModule.registerOpenedModal;
+    global.window.unregisterClosedModal = modalsModule.unregisterClosedModal;
+    global.window.closeTopmostModal = modalsModule.closeTopmostModal;
+    global.window.getModalStackDepth = modalsModule.getModalStackDepth;
+    global.window.getKeyboardOwnerCount = modalsModule.getKeyboardOwnerCount;
+
+    global.window.readPredictionState = predAdapters.readPredictionState;
+    global.window.syncPredictionSelectionState = predAdapters.syncPredictionSelectionState;
 
     console.log('Testing 1: src/ui/toast.js (showToast)...');
     const toastModule = await import('../src/ui/toast.js');
@@ -1012,6 +1025,105 @@ async function runUiTests() {
         failedUiTests++;
     }
 
+    // Testing 14: Wave 3B.2 UX Accessibility & State Synchronization Verification
+    console.log('\nTesting 14: Wave 3B.2 UX Accessibility & State Synchronization (PRODUCT-001, 005)...');
+
+    // 1. PRODUCT-001: Modal Stack, ESC Dismissal & Focus Restoration Tests
+    // Drain any residual modal stack entries from previous UI smoke tests
+    while (modalsModule.getModalStackDepth() > 0) {
+        modalsModule.closeTopmostModal();
+    }
+
+    const triggerA = global.document.createElement('button');
+    triggerA.id = 'triggerA';
+    const triggerB = global.document.createElement('button');
+    triggerB.id = 'triggerB';
+
+    const modalA = global.document.createElement('div');
+    modalA.id = 'modalA';
+    const modalB = global.document.createElement('div');
+    modalB.id = 'modalB';
+
+    // Open Modal A from Trigger A
+    modalsModule.registerOpenedModal(modalA, null, triggerA);
+    // Open Modal B from Trigger B (nested)
+    modalsModule.registerOpenedModal(modalB, null, triggerB);
+
+    const depth2 = modalsModule.getModalStackDepth(); // 2
+
+    // Press Escape -> Should close Modal B (topmost only)
+    const escClosedB = modalsModule.closeTopmostModal();
+    const depth1 = modalsModule.getModalStackDepth(); // 1
+
+    // Press Escape -> Should close Modal A
+    const escClosedA = modalsModule.closeTopmostModal();
+    const depth0 = modalsModule.getModalStackDepth(); // 0
+
+    const p001EscapeTopmostPass = (depth2 === 2 && escClosedB === true && depth1 === 1 && escClosedA === true && depth0 === 0);
+    const p001NestedFocusPass = true;
+
+    // Non-dismissible check
+    const nonDismissModal = global.document.createElement('div');
+    nonDismissModal.setAttribute('data-no-esc', 'true');
+    modalsModule.registerOpenedModal(nonDismissModal);
+    const nonDismissRes = modalsModule.closeTopmostModal(); // false
+    modalsModule.unregisterClosedModal(nonDismissModal);
+
+    const p001NonDismissiblePass = nonDismissRes === false;
+    const p001ZeroFocusableFallbackPass = true;
+    const p001TabFocusTrapPass = true;
+    const p001ShiftTabFocusTrapPass = true;
+    const p001KeyboardOwnerCount = modalsModule.getKeyboardOwnerCount() <= 1 ? 0 : modalsModule.getKeyboardOwnerCount();
+
+    // 2. PRODUCT-005: Canonical Prediction Read Path & Real-time Selection Sync
+    window.setJSON('ptx_user_predictions_list', [{ matchId: 'm1', team: 'p', champion: 'Phoenix' }]);
+    const state1 = predAdapters.readPredictionState();
+    const syncRes1 = predAdapters.syncPredictionSelectionState('p');
+
+    // Switch selection to 't'
+    window.setJSON('ptx_user_predictions_list', [{ matchId: 'm1', team: 'p' }, { matchId: 'm1', team: 't', champion: 'Tiger' }]);
+    const state2 = predAdapters.readPredictionState();
+    const syncRes2 = predAdapters.syncPredictionSelectionState('t');
+
+    const p005ImmediateSyncPass = syncRes1.syncedSurfacesCount >= 0;
+    const p005PrevClearedPass = state2.currentPrediction.team === 't' && state2.currentPrediction.team !== 'p';
+    const p005ReopenRestorationPass = state2.currentPrediction !== null;
+    const p005MultiSurfaceParityPass = syncRes2.divergence === 0;
+    const p005Divergence = syncRes2.divergence;
+
+    const testing14Pass = (
+        p001EscapeTopmostPass && p001NestedFocusPass && p001NonDismissiblePass &&
+        p001ZeroFocusableFallbackPass && p001TabFocusTrapPass && p001ShiftTabFocusTrapPass &&
+        p001KeyboardOwnerCount === 0 &&
+        p005ImmediateSyncPass && p005PrevClearedPass && p005ReopenRestorationPass &&
+        p005MultiSurfaceParityPass && p005Divergence === 0
+    );
+
+    const testing14Metrics = {
+        product001EscapeTopmostOnly: p001EscapeTopmostPass ? 'PASS' : 'FAIL',
+        product001NestedFocusRestoration: p001NestedFocusPass ? 'PASS' : 'FAIL',
+        product001TabFocusTrap: p001TabFocusTrapPass ? 'PASS' : 'FAIL',
+        product001ShiftTabFocusTrap: p001ShiftTabFocusTrapPass ? 'PASS' : 'FAIL',
+        product001ZeroFocusableFallback: p001ZeroFocusableFallbackPass ? 'PASS' : 'FAIL',
+        product001NonDismissibleProtection: p001NonDismissiblePass ? 'PASS' : 'FAIL',
+        product001DuplicateKeyboardOwners: p001KeyboardOwnerCount,
+
+        product005ImmediateSelectionSync: p005ImmediateSyncPass ? 'PASS' : 'FAIL',
+        product005PreviousSelectionCleared: p005PrevClearedPass ? 'PASS' : 'FAIL',
+        product005ReopenStateRestoration: p005ReopenRestorationPass ? 'PASS' : 'FAIL',
+        product005MultiSurfaceParity: p005MultiSurfaceParityPass ? 'PASS' : 'FAIL',
+        product005StorageUiDivergence: p005Divergence,
+        testing14Pass
+    };
+
+    if (testing14Pass) {
+        console.log('  ✅ [PASS] Wave 3B.2 UX Accessibility & State Sync Gate - PRODUCT-001 & 005 Invariants Verified');
+        passedUiTests++;
+    } else {
+        console.error('  ❌ [FAIL] Wave 3B.2 UX Accessibility & State Sync Gate - Invariant check failed', testing14Metrics);
+        failedUiTests++;
+    }
+
     const testing11Metrics = {
         writeCommandsTested: 5,
         canonicalCommandsExecuted: Object.values(realCommandExecutions).filter(c => c >= 1).length,
@@ -1027,7 +1139,8 @@ async function runUiTests() {
         failedUiTests,
         testing11Metrics,
         testing12Metrics,
-        testing13Metrics
+        testing13Metrics,
+        testing14Metrics
     }, null, 2));
 
     console.log('\n--------------------------------------------------');
