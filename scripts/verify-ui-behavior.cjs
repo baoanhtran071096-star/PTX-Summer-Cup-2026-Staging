@@ -1029,15 +1029,17 @@ async function runUiTests() {
     console.log('\nTesting 14: Wave 3B.2 UX Accessibility & State Synchronization (PRODUCT-001, 005)...');
 
     // 1. PRODUCT-001: Modal Stack, ESC Dismissal & Focus Restoration Tests
-    // Drain any residual modal stack entries from previous UI smoke tests
     while (modalsModule.getModalStackDepth() > 0) {
         modalsModule.closeTopmostModal();
     }
 
     const triggerA = global.document.createElement('button');
     triggerA.id = 'triggerA';
+    triggerA.focus = function() { global.document.activeElement = this; };
+
     const triggerB = global.document.createElement('button');
     triggerB.id = 'triggerB';
+    triggerB.focus = function() { global.document.activeElement = this; };
 
     const modalA = global.document.createElement('div');
     modalA.id = 'modalA';
@@ -1051,43 +1053,125 @@ async function runUiTests() {
 
     const depth2 = modalsModule.getModalStackDepth(); // 2
 
-    // Press Escape -> Should close Modal B (topmost only)
+    // Press Escape -> Should close Modal B (topmost only) & restore focus to Trigger B
     const escClosedB = modalsModule.closeTopmostModal();
     const depth1 = modalsModule.getModalStackDepth(); // 1
+    const focusedTriggerB = (global.document.activeElement === triggerB);
 
-    // Press Escape -> Should close Modal A
+    // Press Escape -> Should close Modal A & restore focus to Trigger A
     const escClosedA = modalsModule.closeTopmostModal();
     const depth0 = modalsModule.getModalStackDepth(); // 0
+    const focusedTriggerA = (global.document.activeElement === triggerA);
 
     const p001EscapeTopmostPass = (depth2 === 2 && escClosedB === true && depth1 === 1 && escClosedA === true && depth0 === 0);
-    const p001NestedFocusPass = true;
+    const p001NestedFocusPass = focusedTriggerB && focusedTriggerA;
+
+    // Zero-focusable fallback check
+    const zeroModal = global.document.createElement('div');
+    zeroModal.id = 'zeroModal';
+    zeroModal.focus = function() { global.document.activeElement = this; };
+    zeroModal.querySelectorAll = () => [];
+
+    modalsModule.registerOpenedModal(zeroModal);
+    const zeroFocused = (global.document.activeElement === zeroModal);
+    const zeroHasTabindex = zeroModal.getAttribute('tabindex') === '-1';
+    modalsModule.closeTopmostModal();
+
+    const p001ZeroFocusableFallbackPass = zeroFocused && zeroHasTabindex;
+
+    // Tab & Shift+Tab Focus Trap Check
+    const trapModal = global.document.createElement('div');
+    trapModal.id = 'trapModal';
+
+    const btn1 = global.document.createElement('button');
+    btn1.id = 'btn1';
+    btn1.offsetWidth = 100;
+    btn1.offsetHeight = 30;
+    btn1.focus = function() { global.document.activeElement = this; };
+
+    const btn2 = global.document.createElement('button');
+    btn2.id = 'btn2';
+    btn2.offsetWidth = 100;
+    btn2.offsetHeight = 30;
+    btn2.focus = function() { global.document.activeElement = this; };
+
+    trapModal.querySelectorAll = (sel) => [btn1, btn2];
+    trapModal.contains = (el) => el === btn1 || el === btn2 || el === trapModal;
+
+    modalsModule.registerOpenedModal(trapModal);
+
+    // Test Tab forward loop: focus on btn2 (last element) + Tab keydown -> wraps to btn1
+    global.document.activeElement = btn2;
+    global.document.dispatchEvent({ type: 'keydown', key: 'Tab', code: 'Tab', keyCode: 9, shiftKey: false, preventDefault: () => {} });
+    const tabWrappedToFirst = (global.document.activeElement === btn1);
+
+    // Test Shift+Tab backward loop: focus on btn1 (first element) + Shift+Tab keydown -> wraps to btn2
+    global.document.activeElement = btn1;
+    global.document.dispatchEvent({ type: 'keydown', key: 'Tab', code: 'Tab', keyCode: 9, shiftKey: true, preventDefault: () => {} });
+    const shiftTabWrappedToLast = (global.document.activeElement === btn2);
+
+    modalsModule.closeTopmostModal();
+
+    const p001TabFocusTrapPass = tabWrappedToFirst;
+    const p001ShiftTabFocusTrapPass = shiftTabWrappedToLast;
 
     // Non-dismissible check
     const nonDismissModal = global.document.createElement('div');
     nonDismissModal.setAttribute('data-no-esc', 'true');
     modalsModule.registerOpenedModal(nonDismissModal);
     const nonDismissRes = modalsModule.closeTopmostModal(); // false
-    modalsModule.unregisterClosedModal(nonDismissModal);
+    modalsModule.closeTopmostModal(); // Cleanup
 
     const p001NonDismissiblePass = nonDismissRes === false;
-    const p001ZeroFocusableFallbackPass = true;
-    const p001TabFocusTrapPass = true;
-    const p001ShiftTabFocusTrapPass = true;
     const p001KeyboardOwnerCount = modalsModule.getKeyboardOwnerCount() <= 1 ? 0 : modalsModule.getKeyboardOwnerCount();
 
     // 2. PRODUCT-005: Canonical Prediction Read Path & Real-time Selection Sync
+    // Mock 2 DOM prediction surfaces
+    const surfaceP = global.document.createElement('div');
+    surfaceP.setAttribute('data-prediction-team', 'p');
+    surfaceP.classList = {
+        _classes: new Set(),
+        add: function(...args) { args.forEach(c => this._classes.add(c)); },
+        remove: function(...args) { args.forEach(c => this._classes.delete(c)); },
+        contains: function(c) { return this._classes.has(c); }
+    };
+
+    const surfaceT = global.document.createElement('div');
+    surfaceT.setAttribute('data-prediction-team', 't');
+    surfaceT.classList = {
+        _classes: new Set(),
+        add: function(...args) { args.forEach(c => this._classes.add(c)); },
+        remove: function(...args) { args.forEach(c => this._classes.delete(c)); },
+        contains: function(c) { return this._classes.has(c); }
+    };
+
+    const origQuerySelectorAll = global.document.querySelectorAll;
+    global.document.querySelectorAll = (sel) => {
+        if (sel.includes('prediction-card') || sel.includes('data-prediction-team')) {
+            return [surfaceP, surfaceT];
+        }
+        return origQuerySelectorAll(sel);
+    };
+
+    // Select 'p'
     window.setJSON('ptx_user_predictions_list', [{ matchId: 'm1', team: 'p', champion: 'Phoenix' }]);
     const state1 = predAdapters.readPredictionState();
     const syncRes1 = predAdapters.syncPredictionSelectionState('p');
+
+    const pSelected = surfaceP.classList.contains('selected') && !surfaceT.classList.contains('selected');
 
     // Switch selection to 't'
     window.setJSON('ptx_user_predictions_list', [{ matchId: 'm1', team: 'p' }, { matchId: 'm1', team: 't', champion: 'Tiger' }]);
     const state2 = predAdapters.readPredictionState();
     const syncRes2 = predAdapters.syncPredictionSelectionState('t');
 
-    const p005ImmediateSyncPass = syncRes1.syncedSurfacesCount >= 0;
-    const p005PrevClearedPass = state2.currentPrediction.team === 't' && state2.currentPrediction.team !== 'p';
-    const p005ReopenRestorationPass = state2.currentPrediction !== null;
+    const tSelected = !surfaceP.classList.contains('selected') && surfaceT.classList.contains('selected');
+
+    global.document.querySelectorAll = origQuerySelectorAll; // Restore
+
+    const p005ImmediateSyncPass = syncRes1.syncedSurfacesCount === 2 && pSelected;
+    const p005PrevClearedPass = tSelected && state2.currentPrediction.team === 't';
+    const p005ReopenRestorationPass = state2.currentPrediction !== null && state2.currentPrediction.team === 't';
     const p005MultiSurfaceParityPass = syncRes2.divergence === 0;
     const p005Divergence = syncRes2.divergence;
 

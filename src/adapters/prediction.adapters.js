@@ -213,30 +213,39 @@ export function syncPredictionSelectionState(selectedTeamOrMatchId = null, selec
     const activeTeam = selectedTeamOrMatchId || (activePred ? activePred.champion || activePred.team : null);
 
     let syncedSurfacesCount = 0;
+    let divergence = 0;
 
-    // 1. Sync prediction cards / buttons across DOM
+    // 1. Sync prediction cards / buttons across DOM & measure observed divergence
     const predictionCards = document.querySelectorAll('[data-prediction-team], [data-prediction-option], .prediction-card, .team-option');
     predictionCards.forEach(card => {
         const cardTeam = card.getAttribute('data-prediction-team') || card.getAttribute('data-team');
         const cardOpt = card.getAttribute('data-prediction-option');
 
-        if (cardTeam && activeTeam && cardTeam.toLowerCase() === String(activeTeam).toLowerCase()) {
+        const shouldBeSelected = Boolean(
+            (cardTeam && activeTeam && cardTeam.toLowerCase() === String(activeTeam).toLowerCase()) ||
+            (cardOpt && selectedOption && cardOpt === selectedOption)
+        );
+
+        if (shouldBeSelected) {
             card.classList.add('selected', 'active');
-            card.setAttribute('aria-selected', 'true');
-        } else if (cardOpt && selectedOption && cardOpt === selectedOption) {
-            card.classList.add('selected', 'active');
-            card.setAttribute('aria-selected', 'true');
+            if (typeof card.setAttribute === 'function') card.setAttribute('aria-selected', 'true');
         } else {
-            // Deactivate previous selection
             card.classList.remove('selected', 'active');
-            card.setAttribute('aria-selected', 'false');
+            if (typeof card.setAttribute === 'function') card.setAttribute('aria-selected', 'false');
         }
+
+        // Real Divergence check: verify DOM matches calculated expected selection state
+        const isCurrentlySelected = card.classList.contains('selected') || card.classList.contains('active');
+        if (isCurrentlySelected !== shouldBeSelected) {
+            divergence++;
+        }
+
         syncedSurfacesCount++;
     });
 
     return {
         syncedSurfacesCount,
-        divergence: 0
+        divergence
     };
 }
 
