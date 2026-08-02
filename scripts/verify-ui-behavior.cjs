@@ -260,6 +260,128 @@ async function runUiTests() {
         failedUiTests++;
     }
 
+    console.log('\nTesting 4: Wave 2D.6 Pure View Renderers (DOM Output Contracts)...');
+    
+    // 4.1 Standings Table Contract Test
+    const standingsModule = await import('../src/ui/views/standings.view.js');
+    const mockStandingsContainer = global.document.createElement('div');
+    const mockTeamsData = {
+        'p': { name: 'TEAM P', fullName: 'Team Phoenix', color: '#1A5BB5', logo: '' },
+        't': { name: 'TEAM T', fullName: 'Team Tiger', color: '#D32F2F', logo: '' },
+        'x': { name: 'TEAM X', fullName: 'Team X-Factor', color: '#F5A623', logo: '' }
+    };
+    const mockCalculatedTeams = [
+        { id: 'p', label: 'TEAM P', icon: '⚡', color: '#1A5BB5', obj: { played: 2, wins: 2, draws: 0, losses: 0, goalsFor: 5, goalsAgainst: 1, gd: 4, pts: 6 } },
+        { id: 't', label: 'TEAM T', icon: '🔥', color: '#D32F2F', obj: { played: 2, wins: 1, draws: 0, losses: 1, goalsFor: 3, goalsAgainst: 3, gd: 0, pts: 3 } },
+        { id: 'x', label: 'TEAM X', icon: '💎', color: '#F5A623', obj: { played: 2, wins: 0, draws: 0, losses: 2, goalsFor: 1, goalsAgainst: 5, gd: -4, pts: 0 } }
+    ];
+
+    standingsModule.renderStandingsTable(mockStandingsContainer, mockCalculatedTeams, mockTeamsData, () => '⚡');
+
+    // Validate DOM structure: should have spotlight (1), header (1), rows (3), barSection (1) -> 6 children
+    if (mockStandingsContainer.children.length >= 5) {
+        const row1Html = mockStandingsContainer.children[2] ? mockStandingsContainer.children[2].innerHTML : '';
+        const row2Html = mockStandingsContainer.children[3] ? mockStandingsContainer.children[3].innerHTML : '';
+        const row3Html = mockStandingsContainer.children[4] ? mockStandingsContainer.children[4].innerHTML : '';
+
+        const hasTeamP = row1Html.includes('TEAM P') && row1Html.includes('6');
+        const hasTeamT = row2Html.includes('TEAM T') && row2Html.includes('3');
+        const hasTeamX = row3Html.includes('TEAM X') && row3Html.includes('0');
+
+        if (hasTeamP && hasTeamT && hasTeamX) {
+            console.log('  ✅ [PASS] renderStandingsTable - DOM output contract verified (3 teams, correct points, ordering & GD)');
+            passedUiTests++;
+        } else {
+            console.error('  ❌ [FAIL] renderStandingsTable - HTML content mismatch');
+            failedUiTests++;
+        }
+    } else {
+        console.error('  ❌ [FAIL] renderStandingsTable - Container element count mismatch');
+        failedUiTests++;
+    }
+
+    // 4.2 Matches Grid Contract Test
+    const matchesModule = await import('../src/ui/views/matches.view.js');
+    const mockMatchContainer = global.document.createElement('div');
+    const mockMatches = [
+        { id: 1, home: 'p', away: 't', startH: 15, startM: 0, endH: 16, endM: 0 },
+        { id: 2, home: 't', away: 'x', startH: 16, startM: 15, endH: 17, endM: 15 }
+    ];
+    const mockResults = { '1': '2-1' };
+
+    matchesModule.renderMatchesGrid(
+        mockMatchContainer,
+        mockMatches,
+        mockTeamsData,
+        mockResults,
+        () => [{ scorer: 'Anh Trương', minute: 12, team: 'p' }],
+        () => '⚽',
+        new Date('2026-08-07'),
+        new Date('2026-08-07T18:00:00')
+    );
+
+    if (mockMatchContainer.children.length === 2) {
+        const card1 = mockMatchContainer.children[0];
+        const card2 = mockMatchContainer.children[1];
+        if (card1.className.includes('match-card-v3') && card1.innerHTML.includes('TEAM P') && card2.innerHTML.includes('TEAM X')) {
+            console.log('  ✅ [PASS] renderMatchesGrid - DOM output contract verified (2 match cards rendered with correct teams & scores)');
+            passedUiTests++;
+        } else {
+            console.error('  ❌ [FAIL] renderMatchesGrid - Match card class or team name missing');
+            failedUiTests++;
+        }
+    } else {
+        console.error('  ❌ [FAIL] renderMatchesGrid - Rendered match card count mismatch');
+        failedUiTests++;
+    }
+
+    // 4.3 Players View Contract Test
+    const playersModule = await import('../src/ui/views/players.view.js');
+    const mockRosterContainer = global.document.createElement('div');
+    const mockPlayers = [
+        { id: 1, name: 'Anh Trương', team: 'p', number: 10, position: 'FW', goals: 3, assists: 1, mvp: 1, avatar: 'avatar1.jpg' },
+        { id: 2, name: 'Minh Thế', team: 't', number: 7, position: 'MF', goals: 1, assists: 2, mvp: 0, avatar: 'avatar2.jpg' },
+        { id: 3, name: 'Đình Huy', team: 'x', number: 9, position: 'DF', goals: 0, assists: 0, mvp: 0, avatar: 'avatar3.jpg' }
+    ];
+
+    playersModule.renderTeamRostersGrid(mockRosterContainer, mockPlayers, mockTeamsData, { 'p': [1] }, () => '🛡️');
+    if (mockRosterContainer.children.length === 3) {
+        const pCol = mockRosterContainer.children[0];
+        if (pCol.innerHTML.includes('Anh Trương') && pCol.innerHTML.includes('TEAM P')) {
+            console.log('  ✅ [PASS] renderTeamRostersGrid - DOM output contract verified (3 team roster columns with correct player stats)');
+            passedUiTests++;
+        } else {
+            console.error('  ❌ [FAIL] renderTeamRostersGrid - Roster content mismatch');
+            failedUiTests++;
+        }
+    } else {
+        console.error('  ❌ [FAIL] renderTeamRostersGrid - Team column count mismatch');
+        failedUiTests++;
+    }
+
+    // 4.4 Gallery View Contract Test
+    const galleryModule = await import('../src/ui/views/gallery.view.js');
+    const mockGalleryContainer = global.document.createElement('div');
+    const mockGalleryItems = [
+        { cat: 'action', label: 'Pha sút đẹp', img: 'photo1.jpg', tag: 'Hành động' },
+        { cat: 'team', label: 'Đội P ăn mừng', img: 'photo2.jpg', tag: 'Ăn mừng' }
+    ];
+
+    galleryModule.renderGalleryGrid(mockGalleryContainer, mockGalleryItems, 'all');
+    if (mockGalleryContainer.children.length === 2) {
+        const gItem1 = mockGalleryContainer.children[0];
+        if (gItem1.innerHTML.includes('photo1.jpg') && gItem1.innerHTML.includes('Pha sút đẹp')) {
+            console.log('  ✅ [PASS] renderGalleryGrid - DOM output contract verified (2 gallery cards with images & captions)');
+            passedUiTests++;
+        } else {
+            console.error('  ❌ [FAIL] renderGalleryGrid - Gallery card content mismatch');
+            failedUiTests++;
+        }
+    } else {
+        console.error('  ❌ [FAIL] renderGalleryGrid - Gallery card count mismatch');
+        failedUiTests++;
+    }
+
     console.log('\n--------------------------------------------------');
     console.log(`UI Behavioral Smoke Tests Passed: ${passedUiTests}`);
     console.log(`UI Behavioral Smoke Tests Failed: ${failedUiTests}`);

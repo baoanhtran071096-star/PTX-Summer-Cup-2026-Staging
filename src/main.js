@@ -23,6 +23,11 @@ import {
 
 import { showToast } from './ui/toast.js';
 import { navigate } from './ui/navigation.js';
+import { openLightboxAdapter, renderGalleryPageAdapter } from './adapters/gallery.adapters.js';
+import { renderStandingsAdapter, renderStandingsPageTableAdapter } from './adapters/standings.adapters.js';
+import { renderAllMatchesAdapter } from './adapters/matches.adapters.js';
+import { renderTeamRostersAdapter, renderPlayerCardsAdapter, openPlayerModalByIdAdapter } from './adapters/players.adapters.js';
+import { updateDashboardAdapter, renderHallOfFameAdapter } from './adapters/dashboard.adapters.js';
 import {
     navigateAdapter,
     switchTeamSubTabAdapter,
@@ -64,8 +69,18 @@ if (typeof window !== 'undefined') {
     window.getJSON = getJSON;
     window.setJSON = setJSON;
 
-    // UI Modules & Adapters
+    // UI Modules & View Adapters
     window.showToast = showToast;
+    window.openLightbox = openLightboxAdapter;
+    window.renderGalleryPage = renderGalleryPageAdapter;
+    window.renderStandings = renderStandingsAdapter;
+    window.renderStandingsPageTable = renderStandingsPageTableAdapter;
+    window.renderAllMatches = renderAllMatchesAdapter;
+    window.renderTeamRosters = renderTeamRostersAdapter;
+    window.renderPlayerCards = renderPlayerCardsAdapter;
+    window.openPlayerModalById = openPlayerModalByIdAdapter;
+    window.updateDashboard = updateDashboardAdapter;
+    window.renderHallOfFame = renderHallOfFameAdapter;
     window.navigate = navigateAdapter;
     window.switchTeamSubTab = switchTeamSubTabAdapter;
     window.switchAdminTab = switchAdminTabAdapter;
@@ -104,6 +119,16 @@ if (typeof window !== 'undefined') {
     registerLegacyHandler('installPTXPWAApp', installPTXPWAApp);
     registerLegacyHandler('dismissPWABanner', dismissPWABanner);
     registerLegacyHandler('showToast', showToast);
+    registerLegacyHandler('openLightbox', openLightboxAdapter);
+    registerLegacyHandler('renderGalleryPage', renderGalleryPageAdapter);
+    registerLegacyHandler('renderStandings', renderStandingsAdapter);
+    registerLegacyHandler('renderStandingsPageTable', renderStandingsPageTableAdapter);
+    registerLegacyHandler('renderAllMatches', renderAllMatchesAdapter);
+    registerLegacyHandler('renderTeamRosters', renderTeamRostersAdapter);
+    registerLegacyHandler('renderPlayerCards', renderPlayerCardsAdapter);
+    registerLegacyHandler('openPlayerModalById', openPlayerModalByIdAdapter);
+    registerLegacyHandler('updateDashboard', updateDashboardAdapter);
+    registerLegacyHandler('renderHallOfFame', renderHallOfFameAdapter);
     registerLegacyHandler('navigate', navigateAdapter);
     registerLegacyHandler('switchTeamSubTab', switchTeamSubTabAdapter);
     registerLegacyHandler('switchAdminTab', switchAdminTabAdapter);
