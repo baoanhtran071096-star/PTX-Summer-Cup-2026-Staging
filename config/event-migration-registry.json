@@ -88,8 +88,8 @@
       ],
       "category": "match_score",
       "bindingStrategy": "form_direct",
-      "nativeBindingModule": "src/events/score.events.js",
-      "migrationStatus": "pending",
+      "nativeBindingModule": "src/events/match.events.js",
+      "migrationStatus": "migrated",
       "wave": "2E.4",
       "risk": "high"
     },
@@ -114,9 +114,9 @@
       ],
       "category": "navigation_ui",
       "bindingStrategy": "direct",
-      "nativeBindingModule": "src/events/admin.events.js",
-      "migrationStatus": "pending",
-      "wave": "2E.5",
+      "nativeBindingModule": "src/events/match.events.js",
+      "migrationStatus": "migrated",
+      "wave": "2E.4",
       "risk": "critical"
     },
     "checkAdminNavClick": {
@@ -153,8 +153,8 @@
       ],
       "category": "navigation_ui",
       "bindingStrategy": "direct",
-      "nativeBindingModule": "src/events/score.events.js",
-      "migrationStatus": "pending",
+      "nativeBindingModule": "src/events/match.events.js",
+      "migrationStatus": "migrated",
       "wave": "2E.4",
       "risk": "high"
     },
@@ -205,8 +205,8 @@
       ],
       "category": "match_score",
       "bindingStrategy": "form_direct",
-      "nativeBindingModule": "src/events/score.events.js",
-      "migrationStatus": "pending",
+      "nativeBindingModule": "src/events/match.events.js",
+      "migrationStatus": "migrated",
       "wave": "2E.4",
       "risk": "high"
     },
@@ -556,9 +556,9 @@
       ],
       "category": "match_score",
       "bindingStrategy": "form_direct",
-      "nativeBindingModule": "src/events/admin.events.js",
-      "migrationStatus": "pending",
-      "wave": "2E.5",
+      "nativeBindingModule": "src/events/match.events.js",
+      "migrationStatus": "migrated",
+      "wave": "2E.4",
       "risk": "critical"
     },
     "setDemoScoresState": {
@@ -569,9 +569,9 @@
       ],
       "category": "match_score",
       "bindingStrategy": "form_direct",
-      "nativeBindingModule": "src/events/admin.events.js",
-      "migrationStatus": "pending",
-      "wave": "2E.5",
+      "nativeBindingModule": "src/events/match.events.js",
+      "migrationStatus": "migrated",
+      "wave": "2E.4",
       "risk": "critical"
     },
     "updateStandingsAndResults": {
@@ -582,8 +582,8 @@
       ],
       "category": "miscellaneous",
       "bindingStrategy": "direct",
-      "nativeBindingModule": "src/events/score.events.js",
-      "migrationStatus": "pending",
+      "nativeBindingModule": "src/events/match.events.js",
+      "migrationStatus": "migrated",
       "wave": "2E.4",
       "risk": "high"
     },
@@ -595,8 +595,8 @@
       ],
       "category": "match_score",
       "bindingStrategy": "form_direct",
-      "nativeBindingModule": "src/events/score.events.js",
-      "migrationStatus": "pending",
+      "nativeBindingModule": "src/events/match.events.js",
+      "migrationStatus": "migrated",
       "wave": "2E.4",
       "risk": "high"
     },
@@ -608,8 +608,8 @@
       ],
       "category": "statistics",
       "bindingStrategy": "direct",
-      "nativeBindingModule": "src/events/score.events.js",
-      "migrationStatus": "pending",
+      "nativeBindingModule": "src/events/match.events.js",
+      "migrationStatus": "migrated",
       "wave": "2E.4",
       "risk": "high"
     },
@@ -959,8 +959,8 @@
       ],
       "category": "match_score",
       "bindingStrategy": "form_direct",
-      "nativeBindingModule": "src/events/score.events.js",
-      "migrationStatus": "pending",
+      "nativeBindingModule": "src/events/match.events.js",
+      "migrationStatus": "migrated",
       "wave": "2E.4",
       "risk": "high"
     },
@@ -972,8 +972,8 @@
       ],
       "category": "player",
       "bindingStrategy": "direct",
-      "nativeBindingModule": "src/events/score.events.js",
-      "migrationStatus": "pending",
+      "nativeBindingModule": "src/events/match.events.js",
+      "migrationStatus": "migrated",
       "wave": "2E.4",
       "risk": "high"
     },
@@ -985,8 +985,8 @@
       ],
       "category": "miscellaneous",
       "bindingStrategy": "direct",
-      "nativeBindingModule": "src/events/score.events.js",
-      "migrationStatus": "pending",
+      "nativeBindingModule": "src/events/match.events.js",
+      "migrationStatus": "migrated",
       "wave": "2E.4",
       "risk": "high"
     },
@@ -998,8 +998,8 @@
       ],
       "category": "miscellaneous",
       "bindingStrategy": "direct",
-      "nativeBindingModule": "src/events/score.events.js",
-      "migrationStatus": "pending",
+      "nativeBindingModule": "src/events/match.events.js",
+      "migrationStatus": "migrated",
       "wave": "2E.4",
       "risk": "high"
     },
@@ -1011,8 +1011,8 @@
       ],
       "category": "navigation_ui",
       "bindingStrategy": "direct",
-      "nativeBindingModule": "src/events/score.events.js",
-      "migrationStatus": "pending",
+      "nativeBindingModule": "src/events/match.events.js",
+      "migrationStatus": "migrated",
       "wave": "2E.4",
       "risk": "high"
     },
@@ -1024,8 +1024,8 @@
       ],
       "category": "navigation_ui",
       "bindingStrategy": "direct",
-      "nativeBindingModule": "src/events/score.events.js",
-      "migrationStatus": "pending",
+      "nativeBindingModule": "src/events/match.events.js",
+      "migrationStatus": "migrated",
       "wave": "2E.4",
       "risk": "high"
     },
@@ -1063,8 +1063,8 @@
       ],
       "category": "miscellaneous",
       "bindingStrategy": "direct",
-      "nativeBindingModule": "src/events/score.events.js",
-      "migrationStatus": "pending",
+      "nativeBindingModule": "src/events/match.events.js",
+      "migrationStatus": "migrated",
       "wave": "2E.4",
       "risk": "high"
     },
@@ -1141,9 +1141,9 @@
       ],
       "category": "match_score",
       "bindingStrategy": "form_direct",
-      "nativeBindingModule": "src/events/admin.events.js",
-      "migrationStatus": "pending",
-      "wave": "2E.5",
+      "nativeBindingModule": "src/events/match.events.js",
+      "migrationStatus": "migrated",
+      "wave": "2E.4",
       "risk": "critical"
     },
     "loadCustomLiveStream": {
@@ -1232,9 +1232,9 @@
       ],
       "category": "admin",
       "bindingStrategy": "auth_direct",
-      "nativeBindingModule": "src/events/admin.events.js",
-      "migrationStatus": "pending",
-      "wave": "2E.5",
+      "nativeBindingModule": "src/events/match.events.js",
+      "migrationStatus": "migrated",
+      "wave": "2E.4",
       "risk": "critical"
     },
     "quickGoalFromFloat": {
@@ -1245,8 +1245,8 @@
       ],
       "category": "match_score",
       "bindingStrategy": "form_direct",
-      "nativeBindingModule": "src/events/score.events.js",
-      "migrationStatus": "pending",
+      "nativeBindingModule": "src/events/match.events.js",
+      "migrationStatus": "migrated",
       "wave": "2E.4",
       "risk": "high"
     },

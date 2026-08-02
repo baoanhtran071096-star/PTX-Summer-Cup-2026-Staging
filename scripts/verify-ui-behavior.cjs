@@ -515,6 +515,81 @@ async function runUiTests() {
         failedUiTests++;
     }
 
+    console.log('\nTesting 11: Wave 2E.4 Match & Score Write-Parity Gate Verification...');
+    const matchAdaptersModule = await import('../src/adapters/match.adapters.js');
+
+    const matchSpies = {
+        switchToPreMatchState: 0,
+        exportOfficialMatchReport: 0,
+        setZeroMatchesState: 0,
+        setDemoScoresState: 0,
+        updateStandingsAndResults: 0,
+        addQuickGoal: 0,
+        onRefMatchChange: 0,
+        onLiveStreamMatchChange: 0,
+        toggleFloatingAdmin: 0,
+        quickGoalFromFloat: 0,
+        updateStatsAdmin: 0,
+        tossRefCoin: 0,
+        changeFoulCount: 0,
+        toggleRefStopwatch: 0,
+        resetRefStopwatch: 0,
+        clearRefTimelineLog: 0,
+        showRefereeCard: 0,
+        triggerVARReview: 0,
+        openRefereeToolkit: 0
+    };
+
+    global.window.switchToPreMatchState = () => { matchSpies.switchToPreMatchState++; };
+    global.window.exportOfficialMatchReport = () => { matchSpies.exportOfficialMatchReport++; };
+    global.window.setZeroMatchesState = () => { matchSpies.setZeroMatchesState++; };
+    global.window.setDemoScoresState = () => { matchSpies.setDemoScoresState++; };
+    global.window.updateStandingsAndResults = () => { matchSpies.updateStandingsAndResults++; };
+    global.window.addQuickGoal = () => { matchSpies.addQuickGoal++; };
+    global.window.onRefMatchChange = () => { matchSpies.onRefMatchChange++; };
+    global.window.onLiveStreamMatchChange = () => { matchSpies.onLiveStreamMatchChange++; };
+    global.window.toggleFloatingAdmin = () => { matchSpies.toggleFloatingAdmin++; };
+    global.window.quickGoalFromFloat = () => { matchSpies.quickGoalFromFloat++; };
+    global.window.updateStatsAdmin = () => { matchSpies.updateStatsAdmin++; };
+    global.window.tossRefCoin = () => { matchSpies.tossRefCoin++; };
+    global.window.changeFoulCount = () => { matchSpies.changeFoulCount++; };
+    global.window.toggleRefStopwatch = () => { matchSpies.toggleRefStopwatch++; };
+    global.window.resetRefStopwatch = () => { matchSpies.resetRefStopwatch++; };
+    global.window.clearRefTimelineLog = () => { matchSpies.clearRefTimelineLog++; };
+    global.window.showRefereeCard = () => { matchSpies.showRefereeCard++; };
+    global.window.triggerVARReview = () => { matchSpies.triggerVARReview++; };
+    global.window.openRefereeToolkit = () => { matchSpies.openRefereeToolkit++; };
+
+    matchAdaptersModule.switchToPreMatchStateAdapter(mockEvt);
+    matchAdaptersModule.exportOfficialMatchReportAdapter(mockEvt);
+    matchAdaptersModule.setZeroMatchesStateAdapter(mockEvt);
+    matchAdaptersModule.setDemoScoresStateAdapter(mockEvt);
+    matchAdaptersModule.updateStandingsAndResultsAdapter(mockEvt);
+    matchAdaptersModule.addQuickGoalAdapter(mockEvt);
+    matchAdaptersModule.onRefMatchChangeAdapter('1');
+    matchAdaptersModule.onLiveStreamMatchChangeAdapter('1');
+    matchAdaptersModule.toggleFloatingAdminAdapter(mockEvt);
+    matchAdaptersModule.quickGoalFromFloatAdapter(mockEvt);
+    matchAdaptersModule.updateStatsAdminAdapter(mockEvt);
+    matchAdaptersModule.tossRefCoinAdapter(mockEvt);
+    matchAdaptersModule.changeFoulCountAdapter('HOME', 1);
+    matchAdaptersModule.toggleRefStopwatchAdapter(mockEvt);
+    matchAdaptersModule.resetRefStopwatchAdapter(mockEvt);
+    matchAdaptersModule.clearRefTimelineLogAdapter(mockEvt);
+    matchAdaptersModule.showRefereeCardAdapter('HOME', 'YELLOW');
+    matchAdaptersModule.triggerVARReviewAdapter('1', 'GOAL');
+    matchAdaptersModule.openRefereeToolkitAdapter(mockEvt);
+
+    const allMatchAdaptersPass = Object.values(matchSpies).every(count => count === 1);
+
+    if (allMatchAdaptersPass) {
+        console.log('  ✅ [PASS] Wave 2E.4 Match & Score Command Adapters - All 19 handlers executed with 1:1 single-intent parity');
+        passedUiTests++;
+    } else {
+        console.error('  ❌ [FAIL] Wave 2E.4 Match & Score Command Adapters - Write-Parity spy check failed', matchSpies);
+        failedUiTests++;
+    }
+
     console.log('\n--------------------------------------------------');
     console.log(`UI Behavioral Smoke Tests Passed: ${passedUiTests}`);
     console.log(`UI Behavioral Smoke Tests Failed: ${failedUiTests}`);

@@ -214,17 +214,12 @@
                             <a href="#sponsor" style="color:#fbbf24; font-weight:900; background:rgba(251,191,36,0.15);">
                                 <span>💎 Liên Hệ Tài Trợ & Donate</span> <span style="font-size:9px; background:#fbbf24; color:#0f172a; padding:1px 6px; border-radius:6px; font-weight:900;">HOT</span>
                             </a>
-                            <a href="#" onclick="switchToPreMatchState(); return false;" style="color:#38bdf8; font-weight:800; background:rgba(56,189,248,0.08);">
-                                <span>⏳ Chế Độ Trước Trận Đấu (0 Trận)</span>
-                            </a>
-                            <a href="#" onclick="resetSystemDataToOfficialDefaults(); return false;" style="color:#f59e0b; font-weight:800; background:rgba(245,158,11,0.08);">
-                                <span>⚽ Chế Độ Đã Thi Đấu (Demo)</span>
-                            </a>
+                            <a href="#" data-action="switch-to-pre-match-state" style="color:#38bdf8; font-weight:800; background:rgba(56,189,248,0.08);">⚡ Pre-Match State</a>
+                            <a href="#" data-action="open-referee-toolkit" style="color:#10b981;">🏁 Referee Toolkit</a>
+                            <a href="#" data-action="trigger-var-review" data-match="1" data-decision="GOAL" style="color:#f43f5e; font-weight:700; background:rgba(244,63,94,0.08);">🖥️ VAR Review</a>
+                            <a href="#" data-action="export-official-match-report" style="color:#34d399;">📥 Export Report</a>
                             <a href="#rules" data-i18n="nav_rules" style="color:#e2e8f0;">
                                 <span>📋 Điều Lệ & Quy Định 5v5</span>
-                            </a>
-                            <a href="#" onclick="openRefereeToolkit(); return false;" style="color:#10b981;">
-                                <span>🏁 Sổ tay Trọng tài 5v5</span>
                             </a>
                         </div>
 
@@ -242,7 +237,7 @@
                             <a href="#" data-action="openAiPressReleaseModal" style="color:#60a5fa; font-weight:700;">
                                 <span>📰 AI Viết Báo Chí PR</span> <span style="font-size:9px; background:#3b82f6; color:#fff; padding:1px 6px; border-radius:6px; font-weight:900;">🤖 AI</span>
                             </a>
-                            <a href="#" onclick="triggerVARReview('GOAL'); return false;" style="color:#f43f5e; font-weight:700; background:rgba(244,63,94,0.08);">
+                            <a href="#" data-action="trigger-var-review" data-match="1" data-decision="GOAL" style="color:#f43f5e; font-weight:700; background:rgba(244,63,94,0.08);">
                                 <span>🖥️ Mô phỏng VAR Check 3D</span> <span style="font-size:9px; background:#f43f5e; color:#fff; padding:1px 6px; border-radius:6px; font-weight:900;">NEW</span>
                             </a>
                             <a href="#" data-action="openStadiumDJModal" style="color:#ec4899;">
@@ -253,12 +248,6 @@
                             </a>
                             <a href="#" data-action="openInfographicModal" style="color:#fbbf24;">
                                 <span>📸 Xuất Poster HD</span>
-                            </a>
-                            <a href="#" onclick="exportOfficialMatchReport(); return false;" style="color:#34d399;">
-                                <span>📄 Xuất Báo Cáo BLĐ</span>
-                            </a>
-                            <a href="#" onclick="exportPtxMigrationData(); return false;" style="color:#f97316; font-weight:700; background:rgba(249,115,22,0.08);">
-                                <span>💾 Export Dữ liệu JSON</span>
                             </a>
                         </div>
                     </div>
@@ -490,7 +479,7 @@
             
             <!-- Mode Switcher Toolbar -->
             <div style="display:flex;justify-content:center;gap:12px;margin-bottom:24px;flex-wrap:wrap;">
-                <button onclick="switchToPreMatchState(); return false;" style="background:rgba(56,189,248,0.18);color:#38bdf8;border:1.5px solid #38bdf8;padding:8px 18px;border-radius:20px;font-size:12px;font-weight:900;cursor:pointer;display:flex;align-items:center;gap:6px;box-shadow:0 4px 12px rgba(56,189,248,0.25);">
+                <button type="button" data-action="switch-to-pre-match-state" style="background:rgba(56,189,248,0.18);color:#38bdf8;border:1.5px solid #38bdf8;padding:8px 18px;border-radius:20px;font-size:12px;font-weight:900;cursor:pointer;display:flex;align-items:center;gap:6px;box-shadow:0 4px 12px rgba(56,189,248,0.25);">
                     ⏳ KHÔI PHỤC CHẾ ĐỘ TRƯỚC TRẬN ĐẤU (0 TRẬN / 0 ĐIỂM)
                 </button>
                 <button onclick="resetSystemDataToOfficialDefaults(); return false;" style="background:rgba(251,191,36,0.18);color:#fbbf24;border:1.5px solid #fbbf24;padding:8px 18px;border-radius:20px;font-size:12px;font-weight:900;cursor:pointer;display:flex;align-items:center;gap:6px;box-shadow:0 4px 12px rgba(251,191,36,0.25);">
@@ -1587,17 +1576,7 @@
 
                 <!-- TAB 1: MATCHES & LIVE STANDINGS -->
                 <div id="adminTabContent1" style="display:block;">
-                    <!-- Pre-match status alert box -->
-                    <div style="background:rgba(234,88,12,0.1);border:1px solid rgba(234,88,12,0.4);border-radius:16px;padding:16px 20px;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
-                        <div>
-                            <div style="font-size:14px;font-weight:800;color:#f97316;">ℹ️ QUẢN LÝ TRẠNG THÁI GIẢI ĐẤU</div>
-                            <p style="font-size:12px;color:#cbd5e1;margin-top:2px;">Giải đấu chưa diễn ra sẽ hiển thị mặc định 0 Trận, 0 Điểm cho cả 3 Đội bóng trên Bảng xếp hạng (BXH).</p>
-                        </div>
-                        <div style="display:flex;gap:8px;">
-                            <button onclick="setZeroMatchesState()" style="background:#059669;color:#fff;border:none;padding:10px 18px;border-radius:12px;font-weight:800;font-size:12px;cursor:pointer;">
-                                🔄 Đặt Về Khởi Tạo (0 Trận - Chưa Thi Đấu)
-                            </button>
-                            <button onclick="setDemoScoresState()" style="background:#3b82f6;color:#fff;border:none;padding:10px 18px;border-radius:12px;font-weight:800;font-size:12px;cursor:pointer;">
+                            <button type="button" data-action="set-demo-scores-state" style="background:#3b82f6;color:#fff;border:none;padding:10px 18px;border-radius:12px;font-weight:800;font-size:12px;cursor:pointer;">
                                 ⚡ Bật Tỷ Số Demo Thử Nghiệm
                             </button>
                         </div>
@@ -1615,7 +1594,7 @@
                             <label>Trận 3: 🐟 TEAM X vs 🐯 TEAM T</label>
                             <input type="text" id="admin-result3" placeholder="Để trống nếu trận chưa diễn ra">
                             
-                            <button onclick="updateStandingsAndResults()" style="margin-top:10px;">💾 Cập Nhật Kết Quả & BXH Live</button>
+                            <button type="button" data-action="update-standings-and-results" style="margin-top:10px;">💾 Cập Nhật Kết Quả & BXH Live</button>
 
                             <div style="margin-top:24px;border-top:1px solid rgba(255,255,255,0.1);padding-top:16px;">
                                 <h4 style="color:#22c55e;margin-bottom:8px;font-size:14px;">⚡ Ghi Bàn Nhanh (Tự động format)</h4>
@@ -1636,7 +1615,7 @@
                                         <label>Phút</label>
                                         <input type="number" id="qg-minute" placeholder="VD: 12">
                                     </div>
-                                    <button onclick="addQuickGoal()">➕ Thêm</button>
+                                    <button type="button" data-action="add-quick-goal">➕ Thêm</button>
                                 </div>
                             </div>
                         </div>
@@ -1650,7 +1629,7 @@
                                 <div><label>Thẻ đỏ</label><input type="text" id="admin-red" placeholder="0"></div>
                             </div>
                             <input type="hidden" id="admin-players" value="24">
-                            <button onclick="updateStatsAdmin()" style="margin-top:10px;">💾 Lưu Thống Kê</button>
+                            <button type="button" data-action="update-stats-admin" style="margin-top:10px;">💾 Lưu Thống Kê</button>
                         </div>
                     </div>
                 </div>
@@ -4849,7 +4828,7 @@
             <!-- Match Selector Bar -->
             <div style="background:rgba(16,185,129,0.15);border:1px solid #10b981;border-radius:16px;padding:12px;margin-bottom:20px;">
                 <label style="font-size:11px;font-weight:800;color:#10b981;display:block;margin-bottom:6px;letter-spacing:1px;">🏟️ CHỌN TRẬN ĐẤU ĐIỀU HÀNH:</label>
-                <select id="refMatchSelect" onchange="onRefMatchChange()" style="width:100%;background:#0f172a;color:#fff;border:1px solid #10b981;padding:10px 14px;border-radius:12px;font-size:13px;font-weight:800;outline:none;">
+                <select id="refMatchSelect" style="width:100%;background:#0f172a;color:#fff;border:1px solid #10b981;padding:10px 14px;border-radius:12px;font-size:13px;font-weight:800;outline:none;">
                     <option value="1">Trận 1: 🦅 TEAM P (PHOENIX) vs 🐯 TEAM T (TIGER)</option>
                     <option value="2">Trận 2: 🐯 TEAM T (TIGER) vs 🐟 TEAM X (XIPHIAS)</option>
                     <option value="3">Trận 3: 🐟 TEAM X (XIPHIAS) vs 🦅 TEAM P (PHOENIX)</option>
@@ -4864,10 +4843,10 @@
                         <!-- Populate dynamically by JS -->
                     </select>
                     <div style="display:flex;gap:10px;justify-content:center;">
-                        <button onclick="showRefereeCard('YELLOW')" style="flex:1;background:#eab308;color:#000;border:none;padding:12px;border-radius:12px;font-weight:900;font-size:13px;cursor:pointer;box-shadow:0 6px 20px rgba(234,179,8,0.4);">
+                        <button type="button" data-action="show-referee-card" data-team="p" data-card="YELLOW" style="flex:1;background:#eab308;color:#000;border:none;padding:12px;border-radius:12px;font-weight:900;font-size:13px;cursor:pointer;box-shadow:0 6px 20px rgba(234,179,8,0.4);">
                             🟨 THẺ VÀNG
                         </button>
-                        <button onclick="showRefereeCard('RED')" style="flex:1;background:#ef4444;color:#fff;border:none;padding:14px;border-radius:12px;font-weight:900;font-size:13px;cursor:pointer;box-shadow:0 6px 20px rgba(239,68,68,0.4);">
+                        <button type="button" data-action="show-referee-card" data-team="p" data-card="RED" style="flex:1;background:#ef4444;color:#fff;border:none;padding:14px;border-radius:12px;font-weight:900;font-size:13px;cursor:pointer;box-shadow:0 6px 20px rgba(239,68,68,0.4);">
                             🟥 THẺ ĐỎ
                         </button>
                     </div>
@@ -4877,7 +4856,7 @@
                 <div style="background:rgba(15,23,42,0.8);border:1px solid #334155;border-radius:16px;padding:16px;">
                     <div style="font-size:14px;font-weight:900;color:#60a5fa;margin-bottom:12px;font-family:var(--font-title);">🪙 TUNG ĐỒNG XU CHỌN SÂN</div>
                     <div id="coinTossResult" style="font-size:20px;font-weight:900;margin-bottom:8px;min-height:36px;color:#fff;">🪙</div>
-                    <button onclick="tossRefCoin()" style="background:linear-gradient(135deg,#3b82f6,#1d4ed8);color:#fff;border:none;padding:10px 20px;border-radius:20px;font-weight:800;font-size:12px;cursor:pointer;">
+                    <button type="button" data-action="toss-ref-coin" style="background:linear-gradient(135deg,#3b82f6,#1d4ed8);color:#fff;border:none;padding:10px 20px;border-radius:20px;font-weight:800;font-size:12px;cursor:pointer;">
                         🌀 TUNG ĐỒNG XU
                     </button>
                 </div>
@@ -4891,16 +4870,16 @@
                         <div id="refHomeTeamLabel" style="font-size:13px;color:#60a5fa;font-weight:900;margin-bottom:4px;">🦅 TEAM P (HOME)</div>
                         <div id="foulCountHome" style="font-size:36px;font-weight:900;color:#fff;">0</div>
                         <div style="display:flex;gap:6px;justify-content:center;margin-top:6px;">
-                            <button onclick="changeFoulCount('HOME', 1)" style="background:#3b82f6;color:#fff;border:none;width:32px;height:32px;border-radius:8px;font-weight:900;font-size:16px;cursor:pointer;">+</button>
-                            <button onclick="changeFoulCount('HOME', -1)" style="background:rgba(255,255,255,0.1);color:#fff;border:none;width:32px;height:32px;border-radius:8px;font-weight:900;font-size:16px;cursor:pointer;">-</button>
+                            <button type="button" data-action="change-foul-count" data-team="HOME" data-delta="1" style="background:#3b82f6;color:#fff;border:none;width:32px;height:32px;border-radius:8px;font-weight:900;font-size:16px;cursor:pointer;">+</button>
+                            <button type="button" data-action="change-foul-count" data-team="HOME" data-delta="-1" style="background:rgba(255,255,255,0.1);color:#fff;border:none;width:32px;height:32px;border-radius:8px;font-weight:900;font-size:16px;cursor:pointer;">-</button>
                         </div>
                     </div>
                     <div style="background:rgba(239,68,68,0.15);border:1px solid #ef4444;border-radius:12px;padding:12px;">
                         <div id="refAwayTeamLabel" style="font-size:13px;color:#fca5a5;font-weight:900;margin-bottom:4px;">🐯 TEAM T (AWAY)</div>
                         <div id="foulCountAway" style="font-size:36px;font-weight:900;color:#fff;">0</div>
                         <div style="display:flex;gap:6px;justify-content:center;margin-top:6px;">
-                            <button onclick="changeFoulCount('AWAY', 1)" style="background:#ef4444;color:#fff;border:none;width:32px;height:32px;border-radius:8px;font-weight:900;font-size:16px;cursor:pointer;">+</button>
-                            <button onclick="changeFoulCount('AWAY', -1)" style="background:rgba(255,255,255,0.1);color:#fff;border:none;width:32px;height:32px;border-radius:8px;font-weight:900;font-size:16px;cursor:pointer;">-</button>
+                            <button type="button" data-action="change-foul-count" data-team="AWAY" data-delta="1" style="background:#ef4444;color:#fff;border:none;width:32px;height:32px;border-radius:8px;font-weight:900;font-size:16px;cursor:pointer;">+</button>
+                            <button type="button" data-action="change-foul-count" data-team="AWAY" data-delta="-1" style="background:rgba(255,255,255,0.1);color:#fff;border:none;width:32px;height:32px;border-radius:8px;font-weight:900;font-size:16px;cursor:pointer;">-</button>
                         </div>
                     </div>
                 </div>
@@ -4913,8 +4892,8 @@
                 <div style="display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:12px;">
                     <div id="refStopwatchText" style="font-size:34px;font-weight:900;color:#fbbf24;font-family:monospace;letter-spacing:2px;background:#051329;padding:6px 20px;border-radius:12px;border:1px solid #3b82f6;">15:00</div>
                     <div style="display:flex;flex-direction:column;gap:6px;">
-                        <button id="refTimerToggleBtn" onclick="toggleRefStopwatch()" style="background:#10b981;color:#fff;border:none;padding:8px 16px;border-radius:8px;font-weight:900;font-size:12px;cursor:pointer;">▶️ BẮT ĐẦU</button>
-                        <button onclick="resetRefStopwatch()" style="background:rgba(255,255,255,0.1);color:#fff;border:none;padding:6px 12px;border-radius:8px;font-weight:800;font-size:11px;cursor:pointer;">🔄 RESET</button>
+                        <button type="button" id="refTimerToggleBtn" data-action="toggle-ref-stopwatch" style="background:#10b981;color:#fff;border:none;padding:8px 16px;border-radius:8px;font-weight:900;font-size:12px;cursor:pointer;">▶️ BẮT ĐẦU</button>
+                        <button type="button" data-action="reset-ref-stopwatch" style="background:rgba(255,255,255,0.1);color:#fff;border:none;padding:6px 12px;border-radius:8px;font-weight:800;font-size:11px;cursor:pointer;">🔄 RESET</button>
                     </div>
                 </div>
 
@@ -4929,10 +4908,10 @@
             <div style="background:rgba(239,68,68,0.1);border:1.5px solid #ef4444;border-radius:16px;padding:16px;margin-bottom:20px;">
                 <div style="font-size:15px;font-weight:900;color:#ef4444;margin-bottom:10px;font-family:var(--font-title);">🖥️ KÍCH HOẠT QUAY MÀN HÌNH VAR CHECK (WORLD CUP STYLE)</div>
                 <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
-                    <button onclick="triggerVARReview('GOAL')" style="background:linear-gradient(135deg,#10b981,#059669);color:#fff;border:none;padding:10px 18px;border-radius:12px;font-weight:800;font-size:12px;cursor:pointer;">
+                    <button type="button" data-action="trigger-var-review" data-match="1" data-decision="GOAL" style="background:linear-gradient(135deg,#10b981,#059669);color:#fff;border:none;padding:10px 18px;border-radius:12px;font-weight:800;font-size:12px;cursor:pointer;">
                         ⚽ BÀN THẮNG HỢP LỆ (GOAL GIVEN)
                     </button>
-                    <button onclick="triggerVARReview('NO_GOAL')" style="background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;border:none;padding:10px 18px;border-radius:12px;font-weight:800;font-size:12px;cursor:pointer;">
+                    <button type="button" data-action="trigger-var-review" data-match="1" data-decision="NO_GOAL" style="background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;border:none;padding:10px 18px;border-radius:12px;font-weight:800;font-size:12px;cursor:pointer;">
                         ❌ KHÔNG CÓ BÀN THẮNG (NO GOAL)
                     </button>
                 </div>
@@ -4965,7 +4944,7 @@
             <div style="background:rgba(15,23,42,0.9);border:1.5px solid #64748b;border-radius:16px;padding:16px;text-align:left;">
                 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
                     <div style="font-size:14px;font-weight:900;color:#e2e8f0;font-family:var(--font-title);">📜 NHẬT KÝ DIỄN BIẾN TRẬN ĐẤU REALTIME</div>
-                    <button onclick="clearRefTimelineLog()" style="background:rgba(239,68,68,0.2);color:#fca5a5;border:1px solid #ef4444;padding:4px 10px;border-radius:8px;font-size:10px;font-weight:800;cursor:pointer;">🗑️ XÓA NHẬT KÝ</button>
+                    <button type="button" data-action="clear-ref-timeline-log" style="background:rgba(239,68,68,0.2);color:#fca5a5;border:1px solid #ef4444;padding:4px 10px;border-radius:8px;font-size:10px;font-weight:800;cursor:pointer;">🗑️ XÓA NHẬT KÝ</button>
                 </div>
                 <div id="refEventTimelineList" style="max-height:120px;overflow-y:auto;background:#051329;border:1px solid #334155;border-radius:10px;padding:10px;font-size:12px;color:#94a3b8;line-height:1.8;">
                     <div style="font-style:italic;color:#64748b;text-align:center;">Chưa có diễn biến nào được ghi nhận...</div>
@@ -5006,7 +4985,7 @@
             
             <div style="background:rgba(255,255,255,0.05);border-radius:12px;padding:12px;font-size:12px;color:#94a3b8;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;">
                 <span>📜 BÁO CÁO BAN LÃNH ĐẠO:</span>
-                <button onclick="exportOfficialMatchReport()" style="background:linear-gradient(135deg,#10b981,#059669);color:#fff;border:none;padding:8px 16px;border-radius:20px;font-weight:800;font-size:11px;cursor:pointer;font-family:var(--font-title);">
+                <button type="button" data-action="export-official-match-report" style="background:linear-gradient(135deg,#10b981,#059669);color:#fff;border:none;padding:8px 16px;border-radius:20px;font-weight:800;font-size:11px;cursor:pointer;font-family:var(--font-title);">
                     📄 XUẤT BIÊN BẢN GỬI BLĐ (PDF/HTML)
                 </button>
             </div>
@@ -5024,7 +5003,7 @@
                     <span style="display:inline-block;width:12px;height:12px;background:#ef4444;border-radius:50%;box-shadow:0 0 10px #ef4444;"></span>
                     <span>📺 TRỰC TIẾP LIVESTREAM TRẬN ĐẤU (4K BROADCAST HUB)</span>
                 </div>
-                <select id="liveStreamMatchSelect" onchange="onLiveStreamMatchChange()" style="background:#1e293b;color:#fff;border:1px solid #334155;padding:6px 12px;border-radius:10px;font-size:12px;font-weight:800;outline:none;">
+                <select id="liveStreamMatchSelect" style="background:#1e293b;color:#fff;border:1px solid #334155;padding:6px 12px;border-radius:10px;font-size:12px;font-weight:800;outline:none;">
                     <option value="1">Trận 1: 🦅 PHOENIX vs 🐯 TIGER</option>
                     <option value="2">Trận 2: 🐯 TIGER vs 🐟 XIPHIAS</option>
                     <option value="3">Trận 3: 🐟 XIPHIAS vs 🦅 PHOENIX</option>
@@ -5109,14 +5088,14 @@
 
     <!-- ====== FLOATING ADMIN QUICK-SCORE BUTTON ====== -->
     <div id="floatAdminBtn" style="position:fixed;bottom:90px;right:20px;z-index:9999;display:none;">
-        <button onclick="toggleFloatingAdmin()" title="Ghi bàn nhanh" style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#f97316,#ef4444);color:#fff;border:none;font-size:24px;cursor:pointer;box-shadow:0 6px 20px rgba(249,115,22,0.5);transition:transform 0.2s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">⚽</button>
+        <button type="button" data-action="toggle-floating-admin" title="Ghi bàn nhanh" style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#f97316,#ef4444);color:#fff;border:none;font-size:24px;cursor:pointer;box-shadow:0 6px 20px rgba(249,115,22,0.5);transition:transform 0.2s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">⚽</button>
         <div id="floatAdminPanel" style="display:none;position:absolute;bottom:70px;right:0;width:260px;background:var(--bg-card);border:1.5px solid var(--ptx-orange);border-radius:16px;padding:16px;box-shadow:0 10px 30px rgba(0,0,0,0.5);">
             <div style="font-weight:800;font-family:var(--font-title);color:var(--ptx-orange);margin-bottom:12px;font-size:14px;">⚽ GHI BÀN NHANH</div>
             <select id="floatMatchSel" style="width:100%;margin-bottom:8px;background:var(--bg-secondary);color:var(--text-primary);border:1px solid var(--border-color);padding:8px;border-radius:8px;font-size:12px;"></select>
             <datalist id="floatPlayerList"></datalist>
             <input id="floatPlayerInput" list="floatPlayerList" placeholder="Tên cầu thủ..." style="width:100%;margin-bottom:8px;background:var(--bg-secondary);color:var(--text-primary);border:1px solid var(--border-color);padding:8px;border-radius:8px;font-size:12px;box-sizing:border-box;">
             <input id="floatMinuteInput" type="number" min="1" max="30" placeholder="Phút..." style="width:100%;margin-bottom:12px;background:var(--bg-secondary);color:var(--text-primary);border:1px solid var(--border-color);padding:8px;border-radius:8px;font-size:12px;box-sizing:border-box;">
-            <button onclick="quickGoalFromFloat()" style="width:100%;background:linear-gradient(135deg,#f97316,#ef4444);color:#fff;border:none;padding:10px;border-radius:10px;font-weight:800;font-size:13px;cursor:pointer;font-family:var(--font-title);">✅ XÁC NHẬN BÀN THẮNG</button>
+            <button type="button" data-action="quick-goal-from-float" style="width:100%;background:linear-gradient(135deg,#f97316,#ef4444);color:#fff;border:none;padding:10px;border-radius:10px;font-weight:800;font-size:13px;cursor:pointer;font-family:var(--font-title);">✅ XÁC NHẬN BÀN THẮNG</button>
         </div>
     </div>
 
