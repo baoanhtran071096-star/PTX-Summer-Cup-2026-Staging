@@ -6,12 +6,12 @@
 /**
  * Computes dashboard overview statistics.
  * 
- * @param {Array} matches Match config array [{ id, score, played }]
+ * @param {Array} matches Match config array [{ id, ... }]
  * @param {Array} players Player data array [{ id, name, goals, assists, yellowCards, redCards, team, mvp }]
  * @param {Object} teams Teams dictionary object
  * @param {Object} storedResults Stored match results map e.g. { '1': '3-1 | ...' }
  * @param {Object} fallbackStats Optional fallback stats object
- * @returns {Object} Dashboard stats object { goals, matches, players, teams, yellow, red, totalMatchesPlayed, totalGoals, totalCards, topMVP, topScorer }
+ * @returns {Object} Dashboard stats object
  */
 export function computeDashboardStats(matches = [], players = [], teams = {}, storedResults = {}, fallbackStats = {}) {
     let totalGoals = 0;
@@ -84,14 +84,34 @@ export function computeDashboardStats(matches = [], players = [], teams = {}, st
 }
 
 /**
+ * Calculates aggregated statistics per player.
+ * 
+ * @param {Array} matches Matches array
+ * @param {Array} players Players array
+ * @returns {Array} Array of player stats copies
+ */
+export function calculatePlayerStats(matches = [], players = []) {
+    return players.map(p => {
+        const pCopy = { ...p };
+        pCopy.effectiveGoals = pCopy.goals || 0;
+        pCopy.effectiveAssists = pCopy.assists || 0;
+        pCopy.effectiveCards = (pCopy.yellowCards || 0) + (pCopy.redCards || 0);
+        return pCopy;
+    });
+}
+
+/**
  * Resolves player team metadata from team dictionary.
  * 
- * @param {string} playerName Player name string
+ * @param {string|Object} player Player name string or player object
  * @param {Object} teamsData Team dictionary object
  * @returns {string} Team label string
  */
-export function getPlayerTeam(playerName, teamsData = {}) {
+export function getPlayerTeam(player, teamsData = {}) {
+    if (!player) return 'N/A';
+    const playerName = typeof player === 'string' ? player : (player.name || player.scorer || '');
     if (!playerName) return 'N/A';
+
     for (const teamId in teamsData) {
         const t = teamsData[teamId];
         if (t.players && Array.isArray(t.players)) {

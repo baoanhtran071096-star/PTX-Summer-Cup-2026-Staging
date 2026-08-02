@@ -33,6 +33,8 @@ if (!fs.existsSync(domainDir)) {
 const domainFiles = fs.readdirSync(domainDir).filter(f => f.endsWith('.js'));
 console.log(`Scanning Domain Modules Purity (${domainFiles.length} modules)...`);
 
+const testedDomainFunctions = new Set();
+
 domainFiles.forEach(file => {
     const filePath = path.join(domainDir, file);
     const content = fs.readFileSync(filePath, 'utf8');
@@ -61,7 +63,6 @@ if (purityViolations > 0) {
     console.log(`  ✅ DOMAIN PURITY: 100% CLEAN (0 side-effects, 0 DOM/Storage calls)\n`);
 }
 
-// Dynamic import helper for ESM in CJS
 async function runFixtureTests() {
     const standingsModule = await import('../src/domain/standings.js');
     const statisticsModule = await import('../src/domain/statistics.js');
@@ -76,7 +77,16 @@ async function runFixtureTests() {
         suite.cases.forEach(c => {
             totalCases++;
             const inputBefore = deepClone(c.input);
-            const result = standingsModule.calculateStandings(c.input.matchResults, c.input.teamConfigs);
+            let result;
+
+            if (c.name.includes('sortStandings')) {
+                result = standingsModule.sortStandings(c.input);
+                testedDomainFunctions.add('sortStandings');
+            } else {
+                result = standingsModule.calculateStandings(c.input.matchResults, c.input.teamConfigs);
+                testedDomainFunctions.add('calculateStandings');
+            }
+
             const inputAfter = deepClone(c.input);
 
             if (!deepEqual(inputBefore, inputAfter)) {
@@ -102,7 +112,19 @@ async function runFixtureTests() {
         suite.cases.forEach(c => {
             totalCases++;
             const inputBefore = deepClone(c.input);
-            const result = statisticsModule.computeDashboardStats(c.input.matches, c.input.players, c.input.teams);
+            let result;
+
+            if (c.name.includes('calculatePlayerStats')) {
+                result = statisticsModule.calculatePlayerStats(c.input.matches, c.input.players);
+                testedDomainFunctions.add('calculatePlayerStats');
+            } else if (c.name.includes('getPlayerTeam')) {
+                result = statisticsModule.getPlayerTeam(c.input.playerName, c.input.teamsData);
+                testedDomainFunctions.add('getPlayerTeam');
+            } else {
+                result = statisticsModule.computeDashboardStats(c.input.matches, c.input.players, c.input.teams);
+                testedDomainFunctions.add('computeDashboardStats');
+            }
+
             const inputAfter = deepClone(c.input);
 
             if (!deepEqual(inputBefore, inputAfter)) {
@@ -130,10 +152,15 @@ async function runFixtureTests() {
             const inputBefore = deepClone(c.input);
             let result;
 
-            if (c.name.includes('Filter Matches')) {
+            if (c.name.includes('filterMatchesByRound')) {
                 result = matchesModule.filterMatchesByRound(c.input.matches, c.input.round);
-            } else if (c.name.includes('Parse Goal Data')) {
+                testedDomainFunctions.add('filterMatchesByRound');
+            } else if (c.name.includes('parseGoalDataWithTeam')) {
                 result = matchesModule.parseGoalDataWithTeam(c.input.resultStr, c.input.match);
+                testedDomainFunctions.add('parseGoalDataWithTeam');
+            } else if (c.name.includes('getMatchResult')) {
+                result = matchesModule.getMatchResult(c.input.matchId, c.input.storedResults);
+                testedDomainFunctions.add('getMatchResult');
             }
 
             const inputAfter = deepClone(c.input);
@@ -155,15 +182,16 @@ async function runFixtureTests() {
     console.log('\n--------------------------------------------------');
     console.log(`Golden Fixture Suites Executed: ${totalSuites}`);
     console.log(`Representative Cases Verified:  ${totalCases}`);
+    console.log(`Domain Functions Tested:        ${testedDomainFunctions.size}/8 (${Array.from(testedDomainFunctions).join(', ')})`);
     console.log(`Calculation Parity:             ${failedCases === 0 ? '100% PARITY MATCH' : 'FAIL'}`);
     console.log(`Unexpected Input Mutations:     0`);
     console.log('--------------------------------------------------');
 
-    if (failedCases === 0) {
+    if (failedCases === 0 && testedDomainFunctions.size === 8) {
         console.log('🏆 GOLDEN FIXTURES GATE: PASS (Exit code 0)\n');
         process.exit(0);
     } else {
-        console.error('❌ GOLDEN FIXTURES GATE: FAIL (Exit code 1)\n');
+        console.error(`❌ GOLDEN FIXTURES GATE: FAIL (Tested ${testedDomainFunctions.size}/8 domain functions)\n`);
         process.exit(1);
     }
 }

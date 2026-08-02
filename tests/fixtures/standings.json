@@ -2,7 +2,7 @@
   "suite": "Standings Suite",
   "cases": [
     {
-      "name": "Standard Match Results",
+      "name": "calculateStandings - Standard Match Results",
       "input": {
         "matchResults": {
           "1": "3-1 | Goal: Nguyen Su (2), Bao Anh | Goal: Quoc Khanh",
@@ -82,7 +82,7 @@
       ]
     },
     {
-      "name": "Empty Results (Unplayed State)",
+      "name": "calculateStandings - Empty Results (Unplayed State)",
       "input": {
         "matchResults": {},
         "teamConfigs": [
@@ -158,7 +158,7 @@
       ]
     },
     {
-      "name": "All Draw 0-0 (Tie-break Case)",
+      "name": "calculateStandings - All Draw 0-0 (Tie-break Case)",
       "input": {
         "matchResults": {
           "1": "0-0",
@@ -233,6 +233,146 @@
             "goalsAgainst": 0,
             "gd": 0,
             "pts": 2
+          }
+        }
+      ]
+    },
+    {
+      "name": "calculateStandings - Goals For Tie-break (Pts & GD Tied)",
+      "input": {
+        "matchResults": {
+          "1": "4-3",
+          "2": "2-1"
+        },
+        "teamConfigs": [
+          {
+            "id": "p",
+            "label": "TEAM P",
+            "icon": "⚡",
+            "color": "#1A5BB5"
+          },
+          {
+            "id": "t",
+            "label": "TEAM T",
+            "icon": "🔥",
+            "color": "#D32F2F"
+          },
+          {
+            "id": "x",
+            "label": "TEAM X",
+            "icon": "💎",
+            "color": "#F5A623"
+          }
+        ]
+      },
+      "expected": [
+        {
+          "id": "p",
+          "label": "TEAM P",
+          "icon": "⚡",
+          "color": "#1A5BB5",
+          "obj": {
+            "played": 2,
+            "wins": 2,
+            "draws": 0,
+            "losses": 0,
+            "goalsFor": 6,
+            "goalsAgainst": 4,
+            "gd": 2,
+            "pts": 6
+          }
+        },
+        {
+          "id": "t",
+          "label": "TEAM T",
+          "icon": "🔥",
+          "color": "#D32F2F",
+          "obj": {
+            "played": 1,
+            "wins": 0,
+            "draws": 0,
+            "losses": 1,
+            "goalsFor": 3,
+            "goalsAgainst": 4,
+            "gd": -1,
+            "pts": 0
+          }
+        },
+        {
+          "id": "x",
+          "label": "TEAM X",
+          "icon": "💎",
+          "color": "#F5A623",
+          "obj": {
+            "played": 1,
+            "wins": 0,
+            "draws": 0,
+            "losses": 1,
+            "goalsFor": 1,
+            "goalsAgainst": 2,
+            "gd": -1,
+            "pts": 0
+          }
+        }
+      ]
+    },
+    {
+      "name": "sortStandings - Direct Sort Function Verification",
+      "input": [
+        {
+          "id": "t",
+          "label": "TEAM T",
+          "obj": {
+            "pts": 3,
+            "gd": 0,
+            "goalsFor": 2
+          }
+        },
+        {
+          "id": "p",
+          "label": "TEAM P",
+          "obj": {
+            "pts": 6,
+            "gd": 3,
+            "goalsFor": 5
+          }
+        },
+        {
+          "id": "x",
+          "label": "TEAM X",
+          "obj": {
+            "pts": 3,
+            "gd": 0,
+            "goalsFor": 4
+          }
+        }
+      ],
+      "expected": [
+        {
+          "id": "p",
+          "label": "TEAM P",
+          "obj": {
+            "pts": 6,
+            "gd": 3,
+            "goalsFor": 5
+          }
+        },
+        {
+          "id": "x",
+          "label": "TEAM X",
+          "obj": {
+            "pts": 3,
+            "gd": 0,
+            "goalsFor": 4
+          }
+        },
+        {
+          "id": "t",
+          "label": "TEAM T",
+          "obj": {
+            "pts": 3,
+            "gd": 0,
+            "goalsFor": 2
           }
         }
       ]

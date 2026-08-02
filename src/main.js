@@ -10,9 +10,16 @@ import { normalizeAssetUrl, handleImageError, FALLBACK_PLAYER_SVG, FALLBACK_TEAM
 import { isStorageAvailable, getStorageItem, setStorageItem, removeStorageItem, getJSON, setJSON } from './infrastructure/storage.js';
 import { initPWAHelpers, installPTXPWAApp, dismissPWABanner } from './infrastructure/pwa.js';
 import { initLegacyBridge, registerLegacyHandler } from './legacy/bridge.js';
-import { calculateStandings, sortStandings } from './domain/standings.js';
-import { computeDashboardStats, getPlayerTeam } from './domain/statistics.js';
-import { filterMatchesByRound, parseGoalDataWithTeam, getMatchResult } from './domain/matches.js';
+import {
+    calculateStandingsAdapter,
+    sortStandingsAdapter,
+    computeDashboardStatsAdapter,
+    calculatePlayerStatsAdapter,
+    getPlayerTeamAdapter,
+    filterMatchesByRoundAdapter,
+    parseGoalDataWithTeamAdapter,
+    getMatchResultAdapter
+} from './adapters/domain.adapters.js';
 
 // Export utilities & infrastructure helpers to window scope for runtime compatibility
 if (typeof window !== 'undefined') {
@@ -37,14 +44,15 @@ if (typeof window !== 'undefined') {
     window.getJSON = getJSON;
     window.setJSON = setJSON;
 
-    // Domain Pure Calculation Modules
-    window.calculateStandings = calculateStandings;
-    window.sortStandings = sortStandings;
-    window.computeDashboardStats = computeDashboardStats;
-    window.getPlayerTeam = getPlayerTeam;
-    window.filterMatchesByRound = filterMatchesByRound;
-    window.parseGoalDataWithTeam = parseGoalDataWithTeam;
-    window.getMatchResult = getMatchResult;
+    // Domain Compatibility Adapters (8/8 Domain Functions Preserving Legacy Signatures)
+    window.calculateStandings = calculateStandingsAdapter;
+    window.sortStandings = sortStandingsAdapter;
+    window.computeDashboardStats = computeDashboardStatsAdapter;
+    window.calculatePlayerStats = calculatePlayerStatsAdapter;
+    window.getPlayerTeam = getPlayerTeamAdapter;
+    window.filterMatchesByRound = filterMatchesByRoundAdapter;
+    window.parseGoalDataWithTeam = parseGoalDataWithTeamAdapter;
+    window.getMatchResult = getMatchResultAdapter;
 
     // Register PWA Handlers into Legacy Bridge Registry
     registerLegacyHandler('installPTXPWAApp', installPTXPWAApp);

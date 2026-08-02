@@ -173,8 +173,8 @@ while ((match = idRegex.exec(html)) !== null) {
 const extractedFunctionsToCheck = [
     'installPTXPWAApp', 'dismissPWABanner', 'isStorageAvailable', 'getStorageItem',
     'setStorageItem', 'removeStorageItem', 'getJSON', 'setJSON',
-    'calculateStandings', 'sortStandings', 'computeDashboardStats', 'getPlayerTeam',
-    'filterMatchesByRound', 'parseGoalDataWithTeam', 'getMatchResult'
+    'calculateStandings', 'sortStandings', 'computeDashboardStats', 'calculatePlayerStats',
+    'getPlayerTeam', 'filterMatchesByRound', 'parseGoalDataWithTeam', 'getMatchResult'
 ];
 
 extractedFunctionsToCheck.forEach(fn => {
@@ -244,7 +244,7 @@ if (contract.requiredDomAnchors && Array.isArray(contract.requiredDomAnchors)) {
 }
 
 // 9. EXECUTE GOLDEN FIXTURE TESTS & DOMAIN PURITY GATE
-let fixtureGateStatus = 'PASSED (3 suites / 8 cases)';
+let fixtureGateStatus = 'PASSED (3 suites / 13 cases / 8 of 8 domain functions)';
 try {
     execSync('node scripts/verify-domain-fixtures.cjs', { stdio: 'inherit', cwd: rootDir });
 } catch (err) {

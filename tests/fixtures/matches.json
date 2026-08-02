@@ -2,7 +2,7 @@
   "suite": "Matches Suite",
   "cases": [
     {
-      "name": "Filter Matches By Round (Round 1)",
+      "name": "filterMatchesByRound - Filter Round 1 Matches",
       "input": {
         "matches": [
           {
@@ -42,7 +42,7 @@
       ]
     },
     {
-      "name": "Filter Matches By Non-existent Round (Round 99)",
+      "name": "filterMatchesByRound - Filter Non-existent Round 99",
       "input": {
         "matches": [
           {
@@ -57,7 +57,7 @@
       "expected": []
     },
     {
-      "name": "Parse Goal Data String with Team Metadata",
+      "name": "parseGoalDataWithTeam - Parse Goal Data String",
       "input": {
         "resultStr": "3-1 | Goal: Nguyen Su (2), Bao Anh | Goal: Quoc Khanh",
         "match": {
@@ -76,6 +76,16 @@
           "Quoc Khanh"
         ]
       }
+    },
+    {
+      "name": "getMatchResult - Resolve Stored Result String",
+      "input": {
+        "matchId": "1",
+        "storedResults": {
+          "1": "3-1"
+        }
+      },
+      "expected": "3-1"
     }
   ]
 }

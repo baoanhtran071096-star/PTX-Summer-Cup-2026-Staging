@@ -2,7 +2,7 @@
   "suite": "Statistics Suite",
   "cases": [
     {
-      "name": "Dashboard Overview Stats",
+      "name": "computeDashboardStats - Dashboard Overview Stats",
       "input": {
         "matches": [
           {
@@ -108,7 +108,7 @@
       }
     },
     {
-      "name": "Zero-Stat Edge Case Players",
+      "name": "computeDashboardStats - Zero-Stat Edge Case Players",
       "input": {
         "matches": [],
         "players": [
@@ -155,6 +155,57 @@
         },
         "topScorer": null
       }
+    },
+    {
+      "name": "calculatePlayerStats - Player Aggregated Stats Calculation",
+      "input": {
+        "matches": [
+          {
+            "id": "1",
+            "score": "3-1"
+          }
+        ],
+        "players": [
+          {
+            "id": "p1",
+            "name": "Nguyen Su",
+            "goals": 3,
+            "assists": 1,
+            "yellowCards": 1,
+            "redCards": 0
+          }
+        ]
+      },
+      "expected": [
+        {
+          "id": "p1",
+          "name": "Nguyen Su",
+          "goals": 3,
+          "assists": 1,
+          "yellowCards": 1,
+          "redCards": 0,
+          "effectiveGoals": 3,
+          "effectiveAssists": 1,
+          "effectiveCards": 1
+        }
+      ]
+    },
+    {
+      "name": "getPlayerTeam - Resolve Player Team Metadata",
+      "input": {
+        "playerName": "Nguyen Su",
+        "teamsData": {
+          "p": {
+            "name": "TEAM P",
+            "players": [
+              {
+                "name": "Nguyen Su"
+              }
+            ]
+          }
+        }
+      },
+      "expected": "TEAM P"
     }
   ]
 }
