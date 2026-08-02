@@ -55,8 +55,23 @@ global.document = {
 
 global.window = global;
 
+// Callback Spies
+const spies = {
+    generateAIPressRelease: [],
+    renderCompareView: 0,
+    onLiveStreamMatchChange: 0,
+    drawInfographicCanvas: 0,
+    updateTicketName: []
+};
+
+global.window.generateAIPressRelease = (type) => { spies.generateAIPressRelease.push(type); };
+global.window.renderCompareView = () => { spies.renderCompareView++; };
+global.window.onLiveStreamMatchChange = () => { spies.onLiveStreamMatchChange++; };
+global.window.drawInfographicCanvas = () => { spies.drawInfographicCanvas++; };
+global.window.updateTicketName = (val) => { spies.updateTicketName.push(val); };
+
 async function runUiTests() {
-    console.log('Testing src/ui/toast.js (showToast)...');
+    console.log('Testing 1: src/ui/toast.js (showToast)...');
     const toastModule = await import('../src/ui/toast.js');
 
     toastModule.showToast('Smoke Test Toast Notification', 'success');
@@ -76,22 +91,21 @@ async function runUiTests() {
         failedUiTests++;
     }
 
-    console.log('\nTesting src/ui/modals.js (16 Modal Open/Close functions)...');
-    const modalsModule = await import('../src/ui/modals.js');
+    console.log('\nTesting 2: src/ui/modals.js (Pure Presentation Primitives)...');
+    const pureModalsModule = await import('../src/ui/modals.js');
 
-    const modalCases = [
-        { name: 'Login Modal', open: modalsModule.openLogin, close: modalsModule.closeLogin, id: 'loginModal', type: 'class', val: 'active' },
-        { name: 'AI Growth Modal', open: modalsModule.openAiGrowthModal, close: modalsModule.closeAiGrowthModal, id: 'aiGrowthModal', type: 'style', openVal: 'flex', closeVal: 'none' },
-        { name: 'VIP Ticket Modal', open: () => modalsModule.openVipTicketModal('Test Player'), close: modalsModule.closeVipTicketModal, id: 'vipTicketModal', type: 'style', openVal: 'flex', closeVal: 'none' },
-        { name: 'Compare Players Modal', open: () => modalsModule.openComparePlayersModal(), close: modalsModule.closeComparePlayersModal, id: 'comparePlayersModal', type: 'style', openVal: 'flex', closeVal: 'none' },
-        { name: 'Infographic Modal', open: modalsModule.openInfographicModal, close: modalsModule.closeInfographicModal, id: 'infographicModal', type: 'style', openVal: 'flex', closeVal: 'none' },
-        { name: 'LiveStream Hub Modal', open: modalsModule.openLiveStreamHubModal, close: modalsModule.closeLiveStreamHubModal, id: 'liveStreamHubModal', type: 'style', openVal: 'flex', closeVal: 'none' },
-        { name: 'AI Press Release Modal', open: modalsModule.openAiPressReleaseModal, close: modalsModule.closeAiPressReleaseModal, id: 'aiPressReleaseModal', type: 'style', openVal: 'flex', closeVal: 'none' },
-        { name: 'Stadium DJ Modal', open: modalsModule.openStadiumDJModal, close: modalsModule.closeStadiumDJModal, id: 'stadiumDjModal', type: 'style', openVal: 'flex', closeVal: 'none' }
+    const pureCases = [
+        { name: 'Login Pure Primitive', show: pureModalsModule.showLoginModal, hide: pureModalsModule.hideLoginModal, id: 'loginModal', type: 'class', val: 'active' },
+        { name: 'AI Growth Pure Primitive', show: pureModalsModule.showAiGrowthModal, hide: pureModalsModule.hideAiGrowthModal, id: 'aiGrowthModal', type: 'style', openVal: 'flex', closeVal: 'none' },
+        { name: 'VIP Ticket Pure Primitive', show: pureModalsModule.showVipTicketModal, hide: pureModalsModule.hideVipTicketModal, id: 'vipTicketModal', type: 'style', openVal: 'flex', closeVal: 'none' },
+        { name: 'Compare Players Pure Primitive', show: pureModalsModule.showComparePlayersModal, hide: pureModalsModule.hideComparePlayersModal, id: 'comparePlayersModal', type: 'style', openVal: 'flex', closeVal: 'none' },
+        { name: 'Infographic Pure Primitive', show: pureModalsModule.showInfographicModal, hide: pureModalsModule.hideInfographicModal, id: 'infographicModal', type: 'style', openVal: 'flex', closeVal: 'none' },
+        { name: 'LiveStream Hub Pure Primitive', show: pureModalsModule.showLiveStreamHubModal, hide: pureModalsModule.hideLiveStreamHubModal, id: 'liveStreamHubModal', type: 'style', openVal: 'flex', closeVal: 'none' },
+        { name: 'AI Press Release Pure Primitive', show: pureModalsModule.showAiPressReleaseModal, hide: pureModalsModule.hideAiPressReleaseModal, id: 'aiPressReleaseModal', type: 'style', openVal: 'flex', closeVal: 'none' },
+        { name: 'Stadium DJ Pure Primitive', show: pureModalsModule.showStadiumDJModal, hide: pureModalsModule.hideStadiumDJModal, id: 'stadiumDjModal', type: 'style', openVal: 'flex', closeVal: 'none' }
     ];
 
-    modalCases.forEach(tc => {
-        // Ensure static HTML contains this modal element ID
+    pureCases.forEach(tc => {
         if (!html.includes(`id="${tc.id}"`) && !html.includes(`id='${tc.id}'`)) {
             console.error(`  ❌ [FAIL] Modal element #${tc.id} missing in index.html`);
             failedUiTests++;
@@ -100,27 +114,68 @@ async function runUiTests() {
 
         const el = global.document.getElementById(tc.id);
 
-        // Test Open
-        tc.open();
-        let isOpen = tc.type === 'class' ? el.classList.contains(tc.val) : el.style.display === tc.openVal;
-        if (!isOpen) {
-            console.error(`  ❌ [FAIL] ${tc.name} failed to open (display: ${el.style.display})`);
+        tc.show();
+        let isShown = tc.type === 'class' ? el.classList.contains(tc.val) : el.style.display === tc.openVal;
+        if (!isShown) {
+            console.error(`  ❌ [FAIL] ${tc.name} failed to show`);
             failedUiTests++;
             return;
         }
 
-        // Test Close
-        tc.close();
-        let isClosed = tc.type === 'class' ? !el.classList.contains(tc.val) : el.style.display === tc.closeVal;
-        if (!isClosed) {
-            console.error(`  ❌ [FAIL] ${tc.name} failed to close (display: ${el.style.display})`);
+        tc.hide();
+        let isHidden = tc.type === 'class' ? !el.classList.contains(tc.val) : el.style.display === tc.closeVal;
+        if (!isHidden) {
+            console.error(`  ❌ [FAIL] ${tc.name} failed to hide`);
             failedUiTests++;
             return;
         }
 
-        console.log(`  ✅ [PASS] ${tc.name} - Open/Close state toggled successfully`);
+        console.log(`  ✅ [PASS] ${tc.name} - Pure DOM visibility toggled cleanly`);
         passedUiTests++;
     });
+
+    console.log('\nTesting 3: src/adapters/ui.adapters.js (UI Orchestration & Callback Spies)...');
+    const uiAdapters = await import('../src/adapters/ui.adapters.js');
+
+    // Test AI Press Release Adapter Callback Spy
+    uiAdapters.openAiPressReleaseModalAdapter();
+    if (spies.generateAIPressRelease.includes('PRE_MATCH')) {
+        console.log('  ✅ [PASS] openAiPressReleaseModalAdapter - Triggered generateAIPressRelease("PRE_MATCH")');
+        passedUiTests++;
+    } else {
+        console.error('  ❌ [FAIL] openAiPressReleaseModalAdapter - Failed to trigger generateAIPressRelease with PRE_MATCH');
+        failedUiTests++;
+    }
+
+    // Test LiveStream Hub Adapter Callback Spy
+    uiAdapters.openLiveStreamHubModalAdapter();
+    if (spies.onLiveStreamMatchChange > 0) {
+        console.log('  ✅ [PASS] openLiveStreamHubModalAdapter - Triggered onLiveStreamMatchChange()');
+        passedUiTests++;
+    } else {
+        console.error('  ❌ [FAIL] openLiveStreamHubModalAdapter - Failed to trigger onLiveStreamMatchChange');
+        failedUiTests++;
+    }
+
+    // Test VIP Ticket Adapter Callback Spy
+    uiAdapters.openVipTicketModalAdapter('MESSI');
+    if (spies.updateTicketName.includes('MESSI')) {
+        console.log('  ✅ [PASS] openVipTicketModalAdapter - Populated input & triggered updateTicketName("MESSI")');
+        passedUiTests++;
+    } else {
+        console.error('  ❌ [FAIL] openVipTicketModalAdapter - Failed to trigger updateTicketName');
+        failedUiTests++;
+    }
+
+    // Test Compare Players Adapter Callback Spy
+    uiAdapters.openComparePlayersModalAdapter(1, 2);
+    if (spies.renderCompareView > 0) {
+        console.log('  ✅ [PASS] openComparePlayersModalAdapter - Populated selects & triggered renderCompareView()');
+        passedUiTests++;
+    } else {
+        console.error('  ❌ [FAIL] openComparePlayersModalAdapter - Failed to trigger renderCompareView');
+        failedUiTests++;
+    }
 
     console.log('\n--------------------------------------------------');
     console.log(`UI Behavioral Smoke Tests Passed: ${passedUiTests}`);

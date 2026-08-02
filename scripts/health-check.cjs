@@ -135,8 +135,9 @@ while ((match = inlineEventRegex.exec(html)) !== null) {
 
 // Extract function declarations across index.html AND src/**/*.js
 const funcDeclRegex = /function\s+([a-zA-Z0-9_$]+)\s*\(/g;
-const funcAssignRegex = /(?:window\.)?([a-zA-Z0-9_$]+)\s*=\s*(?:function|\([^)]*\)\s*=>)/g;
+const funcAssignRegex = /(?:window\.)?([a-zA-Z0-9_$]+)\s*=\s*(?:function|\([^)]*\)\s*=>|[a-zA-Z0-9_$]+)/g;
 const exportFuncRegex = /export\s+function\s+([a-zA-Z0-9_$]+)\s*\(/g;
+const bridgeRegisterRegex = /registerLegacyHandler\s*\(\s*["']([a-zA-Z0-9_$]+)["']/g;
 const definedFuncs = new Set();
 
 while ((match = funcDeclRegex.exec(fullRuntimeGraph)) !== null) {
@@ -146,6 +147,9 @@ while ((match = funcAssignRegex.exec(fullRuntimeGraph)) !== null) {
     definedFuncs.add(match[1]);
 }
 while ((match = exportFuncRegex.exec(fullRuntimeGraph)) !== null) {
+    definedFuncs.add(match[1]);
+}
+while ((match = bridgeRegisterRegex.exec(fullRuntimeGraph)) !== null) {
     definedFuncs.add(match[1]);
 }
 

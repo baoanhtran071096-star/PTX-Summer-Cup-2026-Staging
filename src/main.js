@@ -23,15 +23,15 @@ import {
 
 import { showToast } from './ui/toast.js';
 import {
-    openLogin, closeLogin,
-    openAiGrowthModal, closeAiGrowthModal,
-    openVipTicketModal, closeVipTicketModal,
-    openComparePlayersModal, closeComparePlayersModal,
-    openInfographicModal, closeInfographicModal,
-    openLiveStreamHubModal, closeLiveStreamHubModal,
-    openAiPressReleaseModal, closeAiPressReleaseModal,
-    openStadiumDJModal, closeStadiumDJModal
-} from './ui/modals.js';
+    openLoginAdapter, closeLoginAdapter,
+    openAiGrowthModalAdapter, closeAiGrowthModalAdapter,
+    openVipTicketModalAdapter, closeVipTicketModalAdapter,
+    openComparePlayersModalAdapter, closeComparePlayersModalAdapter,
+    openInfographicModalAdapter, closeInfographicModalAdapter,
+    openLiveStreamHubModalAdapter, closeLiveStreamHubModalAdapter,
+    openAiPressReleaseModalAdapter, closeAiPressReleaseModalAdapter,
+    openStadiumDJModalAdapter, closeStadiumDJModalAdapter
+} from './adapters/ui.adapters.js';
 
 // Export utilities & infrastructure helpers to window scope for runtime compatibility
 if (typeof window !== 'undefined') {
@@ -56,8 +56,24 @@ if (typeof window !== 'undefined') {
     window.getJSON = getJSON;
     window.setJSON = setJSON;
 
-    // UI Modules
+    // UI Modules & Adapters
     window.showToast = showToast;
+    window.openLogin = openLoginAdapter;
+    window.closeLogin = closeLoginAdapter;
+    window.openAiGrowthModal = openAiGrowthModalAdapter;
+    window.closeAiGrowthModal = closeAiGrowthModalAdapter;
+    window.openVipTicketModal = openVipTicketModalAdapter;
+    window.closeVipTicketModal = closeVipTicketModalAdapter;
+    window.openComparePlayersModal = openComparePlayersModalAdapter;
+    window.closeComparePlayersModal = closeComparePlayersModalAdapter;
+    window.openInfographicModal = openInfographicModalAdapter;
+    window.closeInfographicModal = closeInfographicModalAdapter;
+    window.openLiveStreamHubModal = openLiveStreamHubModalAdapter;
+    window.closeLiveStreamHubModal = closeLiveStreamHubModalAdapter;
+    window.openAiPressReleaseModal = openAiPressReleaseModalAdapter;
+    window.closeAiPressReleaseModal = closeAiPressReleaseModalAdapter;
+    window.openStadiumDJModal = openStadiumDJModalAdapter;
+    window.closeStadiumDJModal = closeStadiumDJModalAdapter;
 
     // Domain Compatibility Adapters (8/8 Domain Functions Preserving Legacy Signatures)
     window.calculateStandings = calculateStandingsAdapter;
@@ -73,22 +89,22 @@ if (typeof window !== 'undefined') {
     registerLegacyHandler('installPTXPWAApp', installPTXPWAApp);
     registerLegacyHandler('dismissPWABanner', dismissPWABanner);
     registerLegacyHandler('showToast', showToast);
-    registerLegacyHandler('openLogin', openLogin);
-    registerLegacyHandler('closeLogin', closeLogin);
-    registerLegacyHandler('openAiGrowthModal', openAiGrowthModal);
-    registerLegacyHandler('closeAiGrowthModal', closeAiGrowthModal);
-    registerLegacyHandler('openVipTicketModal', openVipTicketModal);
-    registerLegacyHandler('closeVipTicketModal', closeVipTicketModal);
-    registerLegacyHandler('openComparePlayersModal', openComparePlayersModal);
-    registerLegacyHandler('closeComparePlayersModal', closeComparePlayersModal);
-    registerLegacyHandler('openInfographicModal', openInfographicModal);
-    registerLegacyHandler('closeInfographicModal', closeInfographicModal);
-    registerLegacyHandler('openLiveStreamHubModal', openLiveStreamHubModal);
-    registerLegacyHandler('closeLiveStreamHubModal', closeLiveStreamHubModal);
-    registerLegacyHandler('openAiPressReleaseModal', openAiPressReleaseModal);
-    registerLegacyHandler('closeAiPressReleaseModal', closeAiPressReleaseModal);
-    registerLegacyHandler('openStadiumDJModal', openStadiumDJModal);
-    registerLegacyHandler('closeStadiumDJModal', closeStadiumDJModal);
+    registerLegacyHandler('openLogin', openLoginAdapter);
+    registerLegacyHandler('closeLogin', closeLoginAdapter);
+    registerLegacyHandler('openAiGrowthModal', openAiGrowthModalAdapter);
+    registerLegacyHandler('closeAiGrowthModal', closeAiGrowthModalAdapter);
+    registerLegacyHandler('openVipTicketModal', openVipTicketModalAdapter);
+    registerLegacyHandler('closeVipTicketModal', closeVipTicketModalAdapter);
+    registerLegacyHandler('openComparePlayersModal', openComparePlayersModalAdapter);
+    registerLegacyHandler('closeComparePlayersModal', closeComparePlayersModalAdapter);
+    registerLegacyHandler('openInfographicModal', openInfographicModalAdapter);
+    registerLegacyHandler('closeInfographicModal', closeInfographicModalAdapter);
+    registerLegacyHandler('openLiveStreamHubModal', openLiveStreamHubModalAdapter);
+    registerLegacyHandler('closeLiveStreamHubModal', closeLiveStreamHubModalAdapter);
+    registerLegacyHandler('openAiPressReleaseModal', openAiPressReleaseModalAdapter);
+    registerLegacyHandler('closeAiPressReleaseModal', closeAiPressReleaseModalAdapter);
+    registerLegacyHandler('openStadiumDJModal', openStadiumDJModalAdapter);
+    registerLegacyHandler('closeStadiumDJModal', closeStadiumDJModalAdapter);
 
     // Initialize PWA Listeners & Legacy Bridge
     initPWAHelpers();
