@@ -131,7 +131,7 @@ while ((match = idRegex.exec(html)) !== null) {
 console.log(`Assets Scanned:          ${scannedAssets.size}`);
 console.log(`Missing Assets:          ${missingAssets}`);
 console.log(`Legacy Paths:            ${legacyPathsCount}`);
-console.log(`Inline Handlers:         ${inlineHandlers.size}`);
+console.log(`Unique Inline Handlers:  ${inlineHandlers.size}`);
 console.log(`Missing Handlers:        ${missingHandlers}`);
 console.log(`Duplicate IDs:           ${duplicateIds}`);
 console.log(`Manifest Errors:         ${manifestErrors}`);
