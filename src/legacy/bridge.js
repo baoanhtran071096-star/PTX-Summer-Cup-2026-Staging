@@ -1,5 +1,5 @@
 // ============================================================
-// PHASE 2D.1 — LEGACY HANDLER ALLOWLIST BRIDGE (CLEAN REGISTRY PATTERN)
+// PHASE 2D.1 — LEGACY HANDLER ALLOWLIST BRIDGE (COMPLETE 103/103 HANDLERS)
 // ============================================================
 
 export const LEGACY_HANDLERS_ALLOWLIST = [
@@ -29,7 +29,10 @@ export const LEGACY_HANDLERS_ALLOWLIST = [
     'onLiveStreamMatchChange', 'playSelectedAudioTrack', 'toggleGlobalBgMusic',
     'copyLiveStreamLink', 'openPlayerDetail', 'openPlayerModal', 'resetAdminPasswordToDefault',
     'exportMatchDataJson', 'clearSystemStorage', 'toggleAdminNav', 'initFanPredictionForm',
-    'loadSamplePredictions', 'clearAllPredictionsList', 'toggleFloatingAdmin', 'quickGoalFromFloat'
+    'loadSamplePredictions', 'clearAllPredictionsList', 'toggleFloatingAdmin', 'quickGoalFromFloat',
+    'loadCustomLiveStream', 'sendLiveReaction', 'sendLiveChatMessage', 'closeAiPressReleaseModal',
+    'generateAIPressRelease', 'copyPressReleaseText', 'togglePTXChatbotWindow', 'sendPTXChatQuick',
+    'sendPTXChatMessage', 'downloadVIPPredictionTicket', 'showToast'
 ];
 
 export function initLegacyBridge() {
