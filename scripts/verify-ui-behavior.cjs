@@ -1330,7 +1330,8 @@ async function runUiTests() {
         testing11Metrics,
         testing12Metrics,
         testing13Metrics,
-        testing14Metrics
+        testing14Metrics,
+        testing15Metrics
     }, null, 2));
 
     console.log('\n--------------------------------------------------');

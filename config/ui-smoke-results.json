@@ -57,5 +57,18 @@
     "product005MultiSurfaceParity": "PASS",
     "product005StorageUiDivergence": 0,
     "testing14Pass": true
+  },
+  "testing15Metrics": {
+    "freshVisitorBootstrap": "PASS",
+    "preferenceOnlyBootstrap": "PASS",
+    "refreshNonOverwrite": "PASS",
+    "playedMatchPreservation": "PASS",
+    "resultBeyond3Preservation": "PASS",
+    "statOnlyPreservation": "PASS",
+    "playersNoVersionPreservation": "PASS",
+    "oldVersionNoResetPreservation": "PASS",
+    "destructiveBootstrapMutations": 0,
+    "existingTournamentStatePreserved": true,
+    "testing15Pass": true
   }
 }

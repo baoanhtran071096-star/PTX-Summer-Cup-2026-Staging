@@ -457,8 +457,8 @@ try {
     process.exit(1);
 }
 
-if (!uiResults.testing11Metrics || !uiResults.testing12Metrics || !uiResults.testing13Metrics || !uiResults.testing14Metrics) {
-    console.error('❌ FAIL-CLOSED: Machine-readable test results incomplete (missing testing11Metrics, testing12Metrics, testing13Metrics, or testing14Metrics)');
+if (!uiResults.testing11Metrics || !uiResults.testing12Metrics || !uiResults.testing13Metrics || !uiResults.testing14Metrics || !uiResults.testing15Metrics) {
+    console.error('❌ FAIL-CLOSED: Machine-readable test results incomplete (missing testing11Metrics, testing12Metrics, testing13Metrics, testing14Metrics, or testing15Metrics)');
     process.exit(1);
 }
 
@@ -466,6 +466,26 @@ const m11 = uiResults.testing11Metrics;
 const m12 = uiResults.testing12Metrics;
 const m13 = uiResults.testing13Metrics;
 const m14 = uiResults.testing14Metrics;
+const m15 = uiResults.testing15Metrics;
+
+const testing15Pass = (
+    m15 &&
+    m15.freshVisitorBootstrap === 'PASS' &&
+    m15.preferenceOnlyBootstrap === 'PASS' &&
+    m15.refreshNonOverwrite === 'PASS' &&
+    m15.playedMatchPreservation === 'PASS' &&
+    m15.resultBeyond3Preservation === 'PASS' &&
+    m15.statOnlyPreservation === 'PASS' &&
+    m15.playersNoVersionPreservation === 'PASS' &&
+    m15.oldVersionNoResetPreservation === 'PASS' &&
+    m15.destructiveBootstrapMutations === 0 &&
+    m15.existingTournamentStatePreserved === true &&
+    m15.testing15Pass === true
+);
+
+if (!testing15Pass) {
+    console.warn(`  ⚠️ Testing 15 Failure: Fresh Visitor Data Bootstrap & Non-Destructive Preservation gate failed.`);
+}
 
 const testing14Pass = (
     m14.product001EscapeTopmostOnly === 'PASS' &&
@@ -607,7 +627,8 @@ const pass = missingAssets <= contract.allowedMissingAssets &&
              !packageVersionMismatch &&
              testing12Pass &&
              testing13Pass &&
-             testing14Pass;
+             testing14Pass &&
+             testing15Pass;
 
 if (pass) {
     console.log('✅ RESULT: PASS (Exit code 0)\n');

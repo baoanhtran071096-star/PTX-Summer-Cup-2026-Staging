@@ -1,10 +1,10 @@
 {
   "project": "PTX Summer Cup 2026",
-  "version": "3.0.2-hotfix-rc2-m1",
-  "wave": "HOTFIX_P0_DYNAMIC_KEY_STATE_DETECTION_M1",
-  "artifact_tree_commit_sha": "499457b1568cdc49a331ee7c387de0e2e271c9b4",
-  "artifact_source_commit_sha": "499457b1568cdc49a331ee7c387de0e2e271c9b4",
-  "provenance_commit_sha": "499457b1568cdc49a331ee7c387de0e2e271c9b4",
-  "buildTimestamp": "2026-08-02T18:08:00.000Z",
+  "version": "3.0.2-hotfix-rc2-m2",
+  "wave": "HOTFIX_P0_TESTING15_CERTIFICATION_WIRING_M2",
+  "artifact_tree_commit_sha": "33bffc8025e990b0fa2db890ffda771dd349580c",
+  "artifact_source_commit_sha": "33bffc8025e990b0fa2db890ffda771dd349580c",
+  "provenance_commit_sha": "33bffc8025e990b0fa2db890ffda771dd349580c",
+  "buildTimestamp": "2026-08-02T18:10:00.000Z",
   "provenanceVerified": true
 }
