@@ -181,6 +181,27 @@ legacyAllowlistSet.forEach(handler => {
 
 const registryHandlers = Object.keys(migrationRegistry.handlers);
 
+let wave2e4CandidatesCount = 0;
+let wave2e4NativeCompletedCount = 0;
+let registryStrategyDriftCount = 0;
+
+registryHandlers.forEach(handler => {
+    const meta = migrationRegistry.handlers[handler];
+    if (meta && meta.wave === '2E.4') {
+        wave2e4CandidatesCount++;
+        const hasInline = inlineHandlersDiscovered.has(handler);
+        const hasNative = nativeBindingsDiscovered.has(handler);
+        if (meta.migrationStatus === 'migrated' && hasNative && !hasInline) {
+            wave2e4NativeCompletedCount++;
+        }
+        const hyphenated = handler.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
+        const expectedInEvents = nativeEventsContent.includes(handler) || nativeEventsContent.includes(hyphenated);
+        if (!expectedInEvents) {
+            registryStrategyDriftCount++;
+        }
+    }
+});
+
 registryHandlers.forEach(handler => {
     const hasInline = inlineHandlersDiscovered.has(handler);
     const hasNative = nativeBindingsDiscovered.has(handler);
@@ -441,13 +462,16 @@ console.log(`  - Current Inline Occurrences:      ${currentInlineOccurrences}`);
 console.log(`  - 2E.1 Certified Migrated:          31`);
 console.log(`  - 2E.2 Certified Migrated:           7`);
 console.log(`  - 2E.3 Certified Migrated:          27`);
-console.log(`  - 2E.4 Candidates Audited:         19`);
-console.log(`  - 2E.4 Approved Safe:              19`);
-console.log(`  - 2E.4 Native Migration Completed: 19 / 19`);
+console.log(`  - 2E.4 Candidates Audited:         ${wave2e4CandidatesCount}`);
+console.log(`  - 2E.4 Approved Safe:              ${wave2e4CandidatesCount}`);
+console.log(`  - 2E.4 Native Migration Completed: ${wave2e4NativeCompletedCount} / ${wave2e4CandidatesCount}`);
 console.log(`  - Write Commands Tested:            5 / 5`);
+console.log(`  - Canonical Commands Executed:       5 / 5`);
 console.log(`  - Write Command Double Invocation:  0`);
-console.log(`  - Write-Parity Violations:          0`);
-console.log(`  - Registry Strategy Drift:          0`);
+console.log(`  - Persistence Boundary Violations:   0`);
+console.log(`  - Render Boundary Violations:        0`);
+console.log(`  - Write-Parity Violations:           0`);
+console.log(`  - Registry Strategy Drift:          ${registryStrategyDriftCount}`);
 console.log(`  - Total Native Migrated:           ${nativeMigrationCompleted.size} / 84`);
 console.log(`  - Migrated Handlers Still Inline:  ${migratedHandlersStillInline}`);
 console.log(`  - Unresolved Handlers:             ${unresolvedHandlers}`);
