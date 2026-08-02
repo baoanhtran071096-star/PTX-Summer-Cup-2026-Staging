@@ -2,8 +2,9 @@
   "project": "PTX Summer Cup 2026",
   "version": "2.6.6-wave2d",
   "wave": "2D.6",
+  "artifact_tree_commit_sha": "ddddac1a63b69ab214494c91c4642980b9172555",
   "artifact_source_commit_sha": "ba2e6519ea856c3c4a684f76f834c36c24133cb9",
   "provenance_commit_sha": "a1100254c3b29f212e8d1dff1aa56ad55dcc000f",
-  "buildTimestamp": "2026-08-02T13:58:00Z",
+  "buildTimestamp": "2026-08-02T14:04:00Z",
   "provenanceVerified": true
 }
