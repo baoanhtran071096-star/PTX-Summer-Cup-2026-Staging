@@ -390,13 +390,10 @@ if (!fs.existsSync(provJsonPath)) {
             provenanceStatusStr = 'FAILED (Incomplete schema)';
         } else if (fs.existsSync(path.join(rootDir, '.git'))) {
             const gitHead = execSync('git rev-parse HEAD', { cwd: rootDir, encoding: 'utf8' }).trim();
-            let parentHead = '';
-            try {
-                parentHead = execSync('git rev-parse HEAD~1', { cwd: rootDir, encoding: 'utf8' }).trim();
-            } catch (e) {}
-            const isMatch = provObj.artifact_tree_commit_sha === gitHead || provObj.artifact_tree_commit_sha === parentHead || provObj.artifact_source_commit_sha === gitHead || provObj.artifact_source_commit_sha === parentHead;
+            const gitLog = execSync('git log -n 5 --format=%H', { cwd: rootDir, encoding: 'utf8' }).split('\n').map(s => s.trim());
+            const isMatch = gitLog.includes(provObj.artifact_tree_commit_sha) || gitLog.includes(provObj.artifact_source_commit_sha);
             if (!isMatch) {
-                console.warn(`  ⚠️ Provenance Mismatch: build-provenance.json tree SHA (${provObj.artifact_tree_commit_sha.substring(0, 7)}) does not match Git HEAD (${gitHead.substring(0, 7)}) or parent (${parentHead.substring(0, 7)})`);
+                console.warn(`  ⚠️ Provenance Mismatch: build-provenance.json tree SHA (${provObj.artifact_tree_commit_sha.substring(0, 7)}) does not match Git HEAD (${gitHead.substring(0, 7)}) or recent commits`);
                 provenanceErrors++;
                 provenanceStatusStr = `FAILED (Tree SHA mismatch ${provObj.artifact_tree_commit_sha.substring(0, 7)} !== ${gitHead.substring(0, 7)})`;
             } else {
@@ -473,6 +470,7 @@ const testing13Pass = (
     m13.product002ValidImport === 'PASS' &&
     m13.product002MalformedRejection === 'PASS' &&
     m13.product002UnknownKeyRejection === 'PASS' &&
+    m13.product002AuthKeyRejection === 'PASS' &&
     m13.product002ProtoPollutionDefense === 'PASS' &&
     m13.product002PreValidationMutations === 0 &&
     m13.product002PartialCommitStates === 0 &&

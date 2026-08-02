@@ -110,27 +110,41 @@ export function validateAndImportPtxData(input) {
         return { success: false, reason: 'MISSING_OR_INVALID_LOCALSTORAGE_SECTION' };
     }
 
-    // Allowlist Check against persistence-inventory.json schema
-    const permittedExactKeys = new Set([
-        'theme', 'lang', 'currentPage', 'ptx_admin_hash_v2', 'ptx_admin_salt_v2',
-        'ptx_admin_auth', 'ptx_players_data', 'ptx_seeded_flag', 'ptx_stat_goals',
-        'ptx_stat_matches', 'ptx_user_predictions_list', 'pwa_dismissed', 'ptx_slogan',
-        'ptx_msg', 'ptx_date', 'ptx_location', 'ptx_user_prediction', 'ptx_admin_hash',
-        'ptx_admin_user', 'ptx_salt', 'adminLoggedIn', 'adminLoginTimestamp'
+    // Explicitly exclude all authentication and session state keys from data import payloads
+    const AUTH_SESSION_KEYS = new Set([
+        'ptx_admin_hash_v2', 'ptx_admin_salt_v2', 'ptx_admin_auth',
+        'ptx_admin_hash', 'ptx_admin_user', 'ptx_salt',
+        'adminLoggedIn', 'adminLoginTimestamp', 'ptx_admin_last_activity'
+    ]);
+
+    // Authoritative Inventoried Persistence Keys from config/persistence-inventory.json
+    const PERMITTED_EXACT_KEYS = new Set([
+        'theme', 'lang', 'currentPage', 'ptx_players_data', 'ptx_seeded_flag',
+        'ptx_stat_goals', 'ptx_stat_matches', 'ptx_user_predictions_list',
+        'pwa_dismissed', 'ptx_slogan', 'ptx_msg', 'ptx_date', 'ptx_location',
+        'ptx_user_prediction'
     ]);
 
     const isPermittedKey = (key) => {
         if (typeof key !== 'string') return false;
         if (key === '__proto__' || key === 'constructor' || key === 'prototype') return false;
-        if (permittedExactKeys.has(key)) return true;
-        if (key.startsWith('ptx_result_') || key.startsWith('gallery_') || key.startsWith('hof_') || key.startsWith('ptx_stat_')) {
-            return true;
-        }
+        if (AUTH_SESSION_KEYS.has(key)) return false;
+        if (PERMITTED_EXACT_KEYS.has(key)) return true;
+
+        // Authoritative Inventoried Dynamic Surface Patterns
+        if (/^ptx_result_[0-9]+$/.test(key)) return true;
+        if (/^gallery_(202[5-9]|2030)$/.test(key)) return true;
+        if (/^hof_(202[5-9]|2030)$/.test(key)) return true;
+        if (/^ptx_stat_[a-z_]+$/.test(key)) return true;
+
         return false;
     };
 
     const keys = Object.keys(lsData);
     for (const key of keys) {
+        if (AUTH_SESSION_KEYS.has(key)) {
+            return { success: false, reason: 'AUTH_SESSION_KEYS_NOT_PERMITTED_IN_IMPORT', key };
+        }
         if (!isPermittedKey(key)) {
             return { success: false, reason: 'UNAUTHORIZED_KEY_DETECTED', key };
         }
@@ -149,7 +163,10 @@ export function validateAndImportPtxData(input) {
     // Atomic Commit: Write all keys inside try...catch. Rollback snapshot on ANY failure.
     try {
         keys.forEach(k => {
-            setStorageItem(k, String(lsData[k]));
+            const written = setStorageItem(k, String(lsData[k]));
+            if (!written) {
+                throw new Error(`STORAGE_WRITE_FAILED_KEY_${k}`);
+            }
         });
         return { success: true, importedKeysCount: keys.length };
     } catch (err) {

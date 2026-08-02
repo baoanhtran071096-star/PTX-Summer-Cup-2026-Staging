@@ -30,6 +30,7 @@
     "product002ValidImport": "PASS",
     "product002MalformedRejection": "PASS",
     "product002UnknownKeyRejection": "PASS",
+    "product002AuthKeyRejection": "PASS",
     "product002ProtoPollutionDefense": "PASS",
     "product002PreValidationMutations": 0,
     "product002PartialCommitStates": 0,

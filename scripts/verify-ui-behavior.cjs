@@ -913,17 +913,41 @@ async function runUiTests() {
     // Testing 13: Wave 3B.1 Data & Security Hardening Verification
     console.log('\nTesting 13: Wave 3B.1 Data & Security Hardening (PRODUCT-002, 003, 004)...');
 
-    // 1. PRODUCT-002: Import Validation & Atomic Commit Tests
+    // 1. PRODUCT-002: Import Validation & Atomic Commit Tests (with Fault-Injection)
     const validImportRes = window.validateAndImportPtxData({ localStorage: { ptx_slogan: 'PTX 2026' } });
     const malformedJsonRes = window.validateAndImportPtxData('{invalid_json');
     const unknownKeyRes = window.validateAndImportPtxData({ localStorage: { unauthorized_key_test: 'bad' } });
+    const authKeyRes = window.validateAndImportPtxData({ localStorage: { ptx_admin_hash_v2: 'hacked_hash' } });
     const protoPollutionRes = window.validateAndImportPtxData('{"localStorage":{"ptx_slogan":"safe"},"__proto__":{"admin":true}}');
     const preValidationMutations = window.localStorage.getItem('unauthorized_key_test') !== null ? 1 : 0;
-    const partialCommitStates = 0;
+
+    // Fault-Injection Test for Atomic Rollback: Key 1 succeeds, Key 2 throws Error
+    window.localStorage.setItem('ptx_slogan', 'PRE_IMPORT_SLOGAN');
+    window.localStorage.setItem('theme', 'PRE_IMPORT_THEME');
+
+    const origLocalStorageSetItem = window.localStorage.setItem;
+    window.localStorage.setItem = (k, v) => {
+        if (k === 'theme') {
+            throw new Error('FAULT_INJECTED_STORAGE_WRITE_FAILURE');
+        }
+        return origLocalStorageSetItem.call(window.localStorage, k, v);
+    };
+
+    const faultRes = window.validateAndImportPtxData({ localStorage: { ptx_slogan: 'DIRTY_SLOGAN', theme: 'DIRTY_THEME' } });
+    window.localStorage.setItem = origLocalStorageSetItem; // Restore
+
+    const atomicRollbackPass = (
+        faultRes.success === false &&
+        faultRes.reason === 'ATOMIC_COMMIT_FAILED' &&
+        window.localStorage.getItem('ptx_slogan') === 'PRE_IMPORT_SLOGAN' &&
+        window.localStorage.getItem('theme') === 'PRE_IMPORT_THEME'
+    );
+    const partialCommitStates = atomicRollbackPass ? 0 : 1;
 
     const p002ValidPass = validImportRes.success === true;
     const p002MalformedPass = malformedJsonRes.success === false && malformedJsonRes.reason === 'MALFORMED_JSON';
     const p002UnknownKeyPass = unknownKeyRes.success === false && unknownKeyRes.reason === 'UNAUTHORIZED_KEY_DETECTED';
+    const p002AuthKeyPass = authKeyRes.success === false && authKeyRes.reason === 'AUTH_SESSION_KEYS_NOT_PERMITTED_IN_IMPORT';
     const p002ProtoPass = protoPollutionRes.success === false && protoPollutionRes.reason === 'PROTOTYPE_POLLUTION_DETECTED';
 
     // 2. PRODUCT-003: Admin Session Inactivity Timeout Tests
@@ -954,7 +978,7 @@ async function runUiTests() {
     const p004SafeFallbackPass = (fallbackVal === 'SAFE_DEFAULT') && (window.localStorage.getItem('ptx_corrupted_key') === '{bad_json_string:');
 
     const testing13Pass = (
-        p002ValidPass && p002MalformedPass && p002UnknownKeyPass && p002ProtoPass &&
+        p002ValidPass && p002MalformedPass && p002UnknownKeyPass && p002AuthKeyPass && p002ProtoPass &&
         preValidationMutations === 0 && partialCommitStates === 0 &&
         p003ExpiryPass && p003ExtensionPass && p003CleanupPass && p003ExpiredRestoration === 0 &&
         p004Crash === 0 && p004DestructiveAutoRepair === 0 && p004SafeFallbackPass
@@ -964,6 +988,7 @@ async function runUiTests() {
         product002ValidImport: p002ValidPass ? 'PASS' : 'FAIL',
         product002MalformedRejection: p002MalformedPass ? 'PASS' : 'FAIL',
         product002UnknownKeyRejection: p002UnknownKeyPass ? 'PASS' : 'FAIL',
+        product002AuthKeyRejection: p002AuthKeyPass ? 'PASS' : 'FAIL',
         product002ProtoPollutionDefense: p002ProtoPass ? 'PASS' : 'FAIL',
         product002PreValidationMutations: preValidationMutations,
         product002PartialCommitStates: partialCommitStates,
