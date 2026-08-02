@@ -6,6 +6,7 @@
 import { initNavigationEvents } from './navigation.events.js';
 import { initModalEvents } from './modal.events.js';
 import { initPlayerEvents } from './player.events.js';
+import { initPredictionEvents } from './prediction.events.js';
 
 let eventsBootstrapInitialized = false;
 
@@ -15,10 +16,11 @@ export function initEvents() {
     }
     eventsBootstrapInitialized = true;
 
-    // Initialize Wave 2E.1 & 2E.2 Event Modules
+    // Initialize Wave 2E.1, 2E.2 & 2E.3 Event Modules
     initNavigationEvents();
     initModalEvents();
     initPlayerEvents();
+    initPredictionEvents();
 
     return true;
 }

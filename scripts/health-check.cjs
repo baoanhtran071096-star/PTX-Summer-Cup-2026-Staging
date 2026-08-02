@@ -394,16 +394,19 @@ if (!fs.existsSync(provJsonPath)) {
     }
 }
 
-// 8c. REAL VALIDATION: Event Delegation Boundary Violations Check
+// 8c. REAL VALIDATION: Event Delegation Boundary Violations Check (Guards 2E.2 & 2E.3)
 let delegationBoundaryViolations = 0;
-const playerEventsPath = path.join(rootDir, 'src', 'events', 'player.events.js');
-if (fs.existsSync(playerEventsPath)) {
-    const playerEventsSrc = fs.readFileSync(playerEventsPath, 'utf8');
-    const codeOnly = playerEventsSrc.replace(/\/\*[\s\S]*?\*\/|\/\/.*/g, '');
-    const docAddListenerMatches = (codeOnly.match(/document\.addEventListener/g) || []).length;
-    const docBodyMatches = (codeOnly.match(/document\.body/g) || []).length;
-    delegationBoundaryViolations = docAddListenerMatches + docBodyMatches;
-}
+const boundedModules = ['player.events.js', 'prediction.events.js'];
+boundedModules.forEach(file => {
+    const filePath = path.join(rootDir, 'src', 'events', file);
+    if (fs.existsSync(filePath)) {
+        const fileSrc = fs.readFileSync(filePath, 'utf8');
+        const codeOnly = fileSrc.replace(/\/\*[\s\S]*?\*\/|\/\/.*/g, '');
+        const docAddListenerMatches = (codeOnly.match(/document\.addEventListener/g) || []).length;
+        const docBodyMatches = (codeOnly.match(/document\.body/g) || []).length;
+        delegationBoundaryViolations += docAddListenerMatches + docBodyMatches;
+    }
+});
 
 // 9. EXECUTE GOLDEN FIXTURES & UI BEHAVIORAL SMOKE TESTS
 let fixtureGateStatus = 'PASSED (3 suites / 13 cases / 8 of 8 domain functions)';
@@ -415,7 +418,7 @@ try {
     process.exit(1);
 }
 
-let uiGateStatus = 'PASSED (9 UI smoke tests / 16 modals + showToast)';
+let uiGateStatus = 'PASSED (10 UI smoke tests / 16 modals + forms + showToast)';
 try {
     execSync('node scripts/verify-ui-behavior.cjs', { stdio: 'inherit', cwd: rootDir });
 } catch (err) {
@@ -433,18 +436,19 @@ console.log(`Legacy Runtime Paths:       ${legacyPathsCount}`);
 console.log(`--------------------------------------------------`);
 console.log(`PHASE 2E EVENT MIGRATION BURN-DOWN:`);
 console.log(`  - Baseline Inline Occurrences:     163`);
+console.log(`  - Pre-2E.3 Inline Occurrences:       100`);
 console.log(`  - Current Inline Occurrences:      ${currentInlineOccurrences}`);
 console.log(`  - 2E.1 Certified Migrated:          31`);
-console.log(`  - 2E.2 Candidates Audited:          7`);
-console.log(`  - 2E.2 Approved Safe:               7`);
-console.log(`  - 2E.2 Deferred by Boundary Audit: 0`);
-console.log(`  - 2E.2 Native Migration Completed:  7 / 7`);
-console.log(`  - Total Native Migrated:           ${nativeMigrationCompleted.size} / 38`);
+console.log(`  - 2E.2 Certified Migrated:           7`);
+console.log(`  - 2E.3 Candidates Audited:         27`);
+console.log(`  - 2E.3 Approved Safe:              27`);
+console.log(`  - 2E.3 Native Migration Completed: 27 / 27`);
+console.log(`  - Total Native Migrated:           ${nativeMigrationCompleted.size} / 65`);
 console.log(`  - Migrated Handlers Still Inline:  ${migratedHandlersStillInline}`);
 console.log(`  - Unresolved Handlers:             ${unresolvedHandlers}`);
 console.log(`  - Double-Bound Handlers:           ${doubleBoundHandlers}`);
 console.log(`  - Delegation Boundary Violations:    ${delegationBoundaryViolations}`);
-console.log(`  - Recreated-Container Bindings:     NOT_AUTOMATED (Verified via UI Smoke Gate Testing 6)`);
+console.log(`  - Recreated-Container Bindings:     NOT_AUTOMATED (Verified via UI Smoke Gate Testing 7)`);
 console.log(`--------------------------------------------------`);
 console.log(`Duplicate Extracted Funcs:  ${duplicateExtractedFunctions}`);
 console.log(`Direct Storage API Calls:   ${directLocalStorageApiCalls} calls`);

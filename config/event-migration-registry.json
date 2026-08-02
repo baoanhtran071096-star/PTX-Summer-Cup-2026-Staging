@@ -282,9 +282,9 @@
         "click"
       ],
       "category": "prediction",
-      "bindingStrategy": "form_direct",
+      "bindingStrategy": "bounded_delegation",
       "nativeBindingModule": "src/events/prediction.events.js",
-      "migrationStatus": "pending",
+      "migrationStatus": "migrated",
       "wave": "2E.3",
       "risk": "medium"
     },
@@ -295,9 +295,9 @@
         "click"
       ],
       "category": "prediction",
-      "bindingStrategy": "form_direct",
+      "bindingStrategy": "form_submit",
       "nativeBindingModule": "src/events/prediction.events.js",
-      "migrationStatus": "pending",
+      "migrationStatus": "migrated",
       "wave": "2E.3",
       "risk": "medium"
     },
@@ -308,9 +308,9 @@
         "click"
       ],
       "category": "match_score",
-      "bindingStrategy": "form_direct",
+      "bindingStrategy": "bounded_delegation",
       "nativeBindingModule": "src/events/prediction.events.js",
-      "migrationStatus": "pending",
+      "migrationStatus": "migrated",
       "wave": "2E.3",
       "risk": "medium"
     },
@@ -321,9 +321,9 @@
         "click"
       ],
       "category": "miscellaneous",
-      "bindingStrategy": "direct",
+      "bindingStrategy": "bounded_delegation",
       "nativeBindingModule": "src/events/prediction.events.js",
-      "migrationStatus": "pending",
+      "migrationStatus": "migrated",
       "wave": "2E.3",
       "risk": "medium"
     },
@@ -425,9 +425,9 @@
         "change"
       ],
       "category": "navigation_ui",
-      "bindingStrategy": "direct",
+      "bindingStrategy": "direct_change",
       "nativeBindingModule": "src/events/prediction.events.js",
-      "migrationStatus": "pending",
+      "migrationStatus": "migrated",
       "wave": "2E.3",
       "risk": "medium"
     },
@@ -464,9 +464,9 @@
         "click"
       ],
       "category": "miscellaneous",
-      "bindingStrategy": "direct",
+      "bindingStrategy": "bounded_delegation",
       "nativeBindingModule": "src/events/prediction.events.js",
-      "migrationStatus": "pending",
+      "migrationStatus": "migrated",
       "wave": "2E.3",
       "risk": "medium"
     },
@@ -477,9 +477,9 @@
         "click"
       ],
       "category": "navigation_ui",
-      "bindingStrategy": "direct",
+      "bindingStrategy": "bounded_delegation",
       "nativeBindingModule": "src/events/prediction.events.js",
-      "migrationStatus": "pending",
+      "migrationStatus": "migrated",
       "wave": "2E.3",
       "risk": "medium"
     },
@@ -490,9 +490,9 @@
         "click"
       ],
       "category": "miscellaneous",
-      "bindingStrategy": "direct",
+      "bindingStrategy": "bounded_delegation",
       "nativeBindingModule": "src/events/prediction.events.js",
-      "migrationStatus": "pending",
+      "migrationStatus": "migrated",
       "wave": "2E.3",
       "risk": "medium"
     },
@@ -503,9 +503,9 @@
         "submit"
       ],
       "category": "miscellaneous",
-      "bindingStrategy": "direct",
+      "bindingStrategy": "form_submit",
       "nativeBindingModule": "src/events/prediction.events.js",
-      "migrationStatus": "pending",
+      "migrationStatus": "migrated",
       "wave": "2E.3",
       "risk": "medium"
     },
@@ -737,9 +737,9 @@
         "click"
       ],
       "category": "prediction",
-      "bindingStrategy": "form_direct",
+      "bindingStrategy": "bounded_delegation",
       "nativeBindingModule": "src/events/prediction.events.js",
-      "migrationStatus": "pending",
+      "migrationStatus": "migrated",
       "wave": "2E.3",
       "risk": "medium"
     },
@@ -750,9 +750,9 @@
         "click"
       ],
       "category": "prediction",
-      "bindingStrategy": "form_direct",
+      "bindingStrategy": "bounded_delegation",
       "nativeBindingModule": "src/events/prediction.events.js",
-      "migrationStatus": "pending",
+      "migrationStatus": "migrated",
       "wave": "2E.3",
       "risk": "medium"
     },
@@ -763,9 +763,9 @@
         "click"
       ],
       "category": "miscellaneous",
-      "bindingStrategy": "direct",
+      "bindingStrategy": "bounded_delegation",
       "nativeBindingModule": "src/events/prediction.events.js",
-      "migrationStatus": "pending",
+      "migrationStatus": "migrated",
       "wave": "2E.3",
       "risk": "medium"
     },
@@ -828,9 +828,9 @@
         "input"
       ],
       "category": "miscellaneous",
-      "bindingStrategy": "direct",
+      "bindingStrategy": "realtime_input",
       "nativeBindingModule": "src/events/prediction.events.js",
-      "migrationStatus": "pending",
+      "migrationStatus": "migrated",
       "wave": "2E.3",
       "risk": "medium"
     },
@@ -841,9 +841,9 @@
         "click"
       ],
       "category": "miscellaneous",
-      "bindingStrategy": "direct",
+      "bindingStrategy": "bounded_delegation",
       "nativeBindingModule": "src/events/prediction.events.js",
-      "migrationStatus": "pending",
+      "migrationStatus": "migrated",
       "wave": "2E.3",
       "risk": "medium"
     },
@@ -854,9 +854,9 @@
         "click"
       ],
       "category": "miscellaneous",
-      "bindingStrategy": "direct",
+      "bindingStrategy": "bounded_delegation",
       "nativeBindingModule": "src/events/prediction.events.js",
-      "migrationStatus": "pending",
+      "migrationStatus": "migrated",
       "wave": "2E.3",
       "risk": "medium"
     },
@@ -932,9 +932,9 @@
         "click"
       ],
       "category": "miscellaneous",
-      "bindingStrategy": "direct",
+      "bindingStrategy": "bounded_delegation",
       "nativeBindingModule": "src/events/prediction.events.js",
-      "migrationStatus": "pending",
+      "migrationStatus": "migrated",
       "wave": "2E.3",
       "risk": "medium"
     },
@@ -1153,9 +1153,9 @@
         "click"
       ],
       "category": "miscellaneous",
-      "bindingStrategy": "direct",
+      "bindingStrategy": "bounded_delegation",
       "nativeBindingModule": "src/events/prediction.events.js",
-      "migrationStatus": "pending",
+      "migrationStatus": "migrated",
       "wave": "2E.3",
       "risk": "medium"
     },
@@ -1166,9 +1166,9 @@
         "click"
       ],
       "category": "miscellaneous",
-      "bindingStrategy": "direct",
+      "bindingStrategy": "bounded_delegation",
       "nativeBindingModule": "src/events/prediction.events.js",
-      "migrationStatus": "pending",
+      "migrationStatus": "migrated",
       "wave": "2E.3",
       "risk": "medium"
     },
@@ -1179,9 +1179,9 @@
         "click"
       ],
       "category": "miscellaneous",
-      "bindingStrategy": "direct",
+      "bindingStrategy": "form_submit",
       "nativeBindingModule": "src/events/prediction.events.js",
-      "migrationStatus": "pending",
+      "migrationStatus": "migrated",
       "wave": "2E.3",
       "risk": "medium"
     },
@@ -1205,9 +1205,9 @@
         "click"
       ],
       "category": "miscellaneous",
-      "bindingStrategy": "direct",
+      "bindingStrategy": "bounded_delegation",
       "nativeBindingModule": "src/events/prediction.events.js",
-      "migrationStatus": "pending",
+      "migrationStatus": "migrated",
       "wave": "2E.3",
       "risk": "medium"
     },
@@ -1218,9 +1218,9 @@
         "click"
       ],
       "category": "miscellaneous",
-      "bindingStrategy": "direct",
+      "bindingStrategy": "bounded_delegation",
       "nativeBindingModule": "src/events/prediction.events.js",
-      "migrationStatus": "pending",
+      "migrationStatus": "migrated",
       "wave": "2E.3",
       "risk": "medium"
     },
@@ -1257,9 +1257,9 @@
         "click"
       ],
       "category": "miscellaneous",
-      "bindingStrategy": "direct",
+      "bindingStrategy": "bounded_delegation",
       "nativeBindingModule": "src/events/prediction.events.js",
-      "migrationStatus": "pending",
+      "migrationStatus": "migrated",
       "wave": "2E.3",
       "risk": "medium"
     },
@@ -1270,9 +1270,9 @@
         "click"
       ],
       "category": "miscellaneous",
-      "bindingStrategy": "direct",
+      "bindingStrategy": "bounded_delegation",
       "nativeBindingModule": "src/events/prediction.events.js",
-      "migrationStatus": "pending",
+      "migrationStatus": "migrated",
       "wave": "2E.3",
       "risk": "medium"
     },
@@ -1283,9 +1283,9 @@
         "click"
       ],
       "category": "miscellaneous",
-      "bindingStrategy": "direct",
+      "bindingStrategy": "form_submit",
       "nativeBindingModule": "src/events/prediction.events.js",
-      "migrationStatus": "pending",
+      "migrationStatus": "migrated",
       "wave": "2E.3",
       "risk": "medium"
     },
@@ -1296,9 +1296,9 @@
         "click"
       ],
       "category": "prediction",
-      "bindingStrategy": "form_direct",
+      "bindingStrategy": "bounded_delegation",
       "nativeBindingModule": "src/events/prediction.events.js",
-      "migrationStatus": "pending",
+      "migrationStatus": "migrated",
       "wave": "2E.3",
       "risk": "medium"
     },
@@ -1322,9 +1322,9 @@
         "click"
       ],
       "category": "prediction",
-      "bindingStrategy": "form_direct",
+      "bindingStrategy": "bounded_delegation",
       "nativeBindingModule": "src/events/prediction.events.js",
-      "migrationStatus": "pending",
+      "migrationStatus": "migrated",
       "wave": "2E.3",
       "risk": "medium"
     },
@@ -1335,9 +1335,9 @@
         "click"
       ],
       "category": "prediction",
-      "bindingStrategy": "form_direct",
+      "bindingStrategy": "bounded_delegation",
       "nativeBindingModule": "src/events/prediction.events.js",
-      "migrationStatus": "pending",
+      "migrationStatus": "migrated",
       "wave": "2E.3",
       "risk": "medium"
     }

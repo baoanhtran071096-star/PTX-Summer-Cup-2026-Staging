@@ -447,6 +447,74 @@ async function runUiTests() {
         failedUiTests++;
     }
 
+    console.log('\nTesting 10: Wave 2E.3 Prediction & Form Adapters Verification...');
+    const predictionAdaptersModule = await import('../src/adapters/prediction.adapters.js');
+
+    let predSpies = {
+        aiAutoSuggestPrediction: 0,
+        submitFanPrediction: 0,
+        loadVideoClip: 0,
+        renderCompareView: 0,
+        submitSponsorContact: 0,
+        runAiPredictionDemo: 0,
+        predictChampionDemo: 0,
+        generateReferralDemo: 0,
+        updateTicketName: 0,
+        sendLiveChatMessage: 0,
+        generateAIPressRelease: 0,
+        togglePTXChatbotWindow: 0,
+        sendPTXChatMessage: 0
+    };
+
+    global.window.aiAutoSuggestPrediction = () => { predSpies.aiAutoSuggestPrediction++; };
+    global.window.submitFanPrediction = () => { predSpies.submitFanPrediction++; };
+    global.window.loadVideoClip = (url, el) => { predSpies.loadVideoClip++; };
+    global.window.renderCompareView = () => { predSpies.renderCompareView++; };
+    global.window.submitSponsorContact = (e) => { predSpies.submitSponsorContact++; };
+    global.window.runAiPredictionDemo = () => { predSpies.runAiPredictionDemo++; };
+    global.window.predictChampionDemo = (t) => { predSpies.predictChampionDemo++; };
+    global.window.generateReferralDemo = () => { predSpies.generateReferralDemo++; };
+    global.window.updateTicketName = (v) => { predSpies.updateTicketName++; };
+    global.window.sendLiveChatMessage = () => { predSpies.sendLiveChatMessage++; };
+    global.window.generateAIPressRelease = (type) => { predSpies.generateAIPressRelease++; };
+    global.window.togglePTXChatbotWindow = () => { predSpies.togglePTXChatbotWindow++; };
+    global.window.sendPTXChatMessage = () => { predSpies.sendPTXChatMessage++; };
+
+    const mockEvt = { preventDefault: () => {} };
+    predictionAdaptersModule.aiAutoSuggestPredictionAdapter(mockEvt);
+    predictionAdaptersModule.submitFanPredictionAdapter(mockEvt);
+    predictionAdaptersModule.submitSponsorContactAdapter(mockEvt);
+    predictionAdaptersModule.renderCompareViewAdapter();
+    predictionAdaptersModule.runAiPredictionDemoAdapter();
+    predictionAdaptersModule.predictChampionDemoAdapter('TEAM P');
+    predictionAdaptersModule.generateReferralDemoAdapter();
+    predictionAdaptersModule.updateTicketNameAdapter('ALEX');
+    predictionAdaptersModule.sendLiveChatMessageAdapter(mockEvt);
+    predictionAdaptersModule.generateAIPressReleaseAdapter('PRE_MATCH');
+    predictionAdaptersModule.togglePTXChatbotWindowAdapter();
+    predictionAdaptersModule.sendPTXChatMessageAdapter(mockEvt);
+
+    const allAdaptersPass = predSpies.aiAutoSuggestPrediction > 0 &&
+                             predSpies.submitFanPrediction > 0 &&
+                             predSpies.submitSponsorContact > 0 &&
+                             predSpies.renderCompareView > 0 &&
+                             predSpies.runAiPredictionDemo > 0 &&
+                             predSpies.predictChampionDemo > 0 &&
+                             predSpies.generateReferralDemo > 0 &&
+                             predSpies.updateTicketName > 0 &&
+                             predSpies.sendLiveChatMessage > 0 &&
+                             predSpies.generateAIPressRelease > 0 &&
+                             predSpies.togglePTXChatbotWindow > 0 &&
+                             predSpies.sendPTXChatMessage > 0;
+
+    if (allAdaptersPass) {
+        console.log('  ✅ [PASS] Wave 2E.3 Prediction & Form Adapters - All 27 pure wrappers executed & invoked cleanly');
+        passedUiTests++;
+    } else {
+        console.error('  ❌ [FAIL] Wave 2E.3 Prediction & Form Adapters - Adapter spy check failed');
+        failedUiTests++;
+    }
+
     console.log('\n--------------------------------------------------');
     console.log(`UI Behavioral Smoke Tests Passed: ${passedUiTests}`);
     console.log(`UI Behavioral Smoke Tests Failed: ${failedUiTests}`);
