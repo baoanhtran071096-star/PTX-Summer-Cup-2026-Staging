@@ -22,6 +22,8 @@
     "destructiveBoundaryViolations": 0,
     "registryStrategyDrift": 0,
     "totalNativeMigrated": "103 / 103",
-    "legacyBridgeRetirementReady": true
+    "bridgeFileExists": false,
+    "bridgeReferencesCount": 0,
+    "legacyBridgeRetired": true
   }
 }

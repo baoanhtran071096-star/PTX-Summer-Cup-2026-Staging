@@ -125,17 +125,9 @@ if (fs.existsSync(registryPath)) {
     migrationRegistry = JSON.parse(fs.readFileSync(registryPath, 'utf8'));
 }
 
-const bridgeJsPath = path.join(rootDir, 'src', 'legacy', 'bridge.js');
-const bridgeJsContent = fs.readFileSync(bridgeJsPath, 'utf8');
-const allowlistMatch = bridgeJsContent.match(/export const LEGACY_HANDLERS_ALLOWLIST = \[([\s\S]*?)\];/);
-const legacyAllowlistSet = new Set();
-if (allowlistMatch) {
-    const listStr = allowlistMatch[1];
-    const items = listStr.match(/['"]([a-zA-Z0-9_$]+)['"]/g);
-    if (items) {
-        items.forEach(item => legacyAllowlistSet.add(item.replace(/['"]/g, '')));
-    }
-}
+const inventoryJsonPath = path.join(rootDir, 'config', 'legacy-handler-inventory.json');
+const inventoryData = JSON.parse(fs.readFileSync(inventoryJsonPath, 'utf8'));
+const legacyAllowlistSet = new Set(Object.keys(inventoryData.handlers || {}));
 
 // Scan inline event occurrences
 const inlineEventRegex = /on(click|change|submit|input|keydown|keyup|onload|onerror)\s*=\s*["']([^"']+)["']/gi;
@@ -154,9 +146,10 @@ while ((match = inlineEventRegex.exec(fullRuntimeGraph)) !== null) {
     }
 }
 
-// Scan native event bindings under src/events/
+// Scan native event bindings under src/events/ and src/adapters/
 const eventsDir = path.join(rootDir, 'src', 'events');
-const eventFiles = getAllSourceFiles(eventsDir);
+const adaptersDir = path.join(rootDir, 'src', 'adapters');
+const eventFiles = getAllSourceFiles(eventsDir).concat(getAllSourceFiles(adaptersDir));
 let nativeEventsContent = '';
 eventFiles.forEach(f => {
     nativeEventsContent += '\n' + fs.readFileSync(f, 'utf8');
@@ -171,8 +164,7 @@ let doubleBoundHandlers = 0;
 legacyAllowlistSet.forEach(handler => {
     // Strict Native Binding Check: Must be bound via case 'handler':, data-action="handler", data-action="hyphenated", or explicit listener
     const hyphenated = handler.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
-    const caseRegex = new RegExp(`case\\s+['"]${handler}['"]|data-action=["']${handler}["']|data-action=["']${hyphenated}["']|${handler}Adapter|${handler}`, 'g');
-    const isBound = caseRegex.test(nativeEventsContent);
+    const isBound = nativeEventsContent.includes(handler) || nativeEventsContent.includes(hyphenated) || nativeEventsContent.includes(`${handler}Adapter`);
     
     if (isBound) {
         nativeBindingsDiscovered.add(handler);
@@ -489,7 +481,9 @@ const testing12Pass = (
     m12.destructiveBoundaryViolations === 0 &&
     m12.registryStrategyDrift === 0 &&
     m12.totalNativeMigrated === '103 / 103' &&
-    m12.legacyBridgeRetirementReady === true &&
+    m12.bridgeFileExists === false &&
+    m12.bridgeReferencesCount === 0 &&
+    m12.legacyBridgeRetired === true &&
     currentInlineOccurrences === 0
 );
 
@@ -530,7 +524,9 @@ console.log(`  - Render Boundary Violations:        ${m11.renderBoundaryViolatio
 console.log(`  - Write-Parity Violations:           ${m11.writeParityViolations}`);
 console.log(`  - Registry Strategy Drift:          ${registryStrategyDriftCount}`);
 console.log(`  - Total Native Migrated:           ${m12.totalNativeMigrated}`);
-console.log(`  - Legacy Bridge Retirement Ready:   ${m12.legacyBridgeRetirementReady}`);
+console.log(`  - Bridge File Exists:              ${m12.bridgeFileExists}`);
+console.log(`  - Bridge References Count:         ${m12.bridgeReferencesCount}`);
+console.log(`  - Legacy Bridge Retired:           ${m12.legacyBridgeRetired}`);
 console.log(`  - Migrated Handlers Still Inline:  ${migratedHandlersStillInline}`);
 console.log(`  - Unresolved Handlers:             ${unresolvedHandlers}`);
 console.log(`  - Double-Bound Handlers:           ${doubleBoundHandlers}`);

@@ -807,16 +807,38 @@ async function runUiTests() {
         unauthorizedExecutions++;
     }
 
-    // Scan remaining inline occurrences for 2E.5 candidates
-    let inlineOccurrences = 0;
-    const bridgeJsContentStr = fs.readFileSync(path.join(rootDir, 'src', 'legacy', 'bridge.js'), 'utf8');
-    const allowlistMatchStr = bridgeJsContentStr.match(/export const LEGACY_HANDLERS_ALLOWLIST = \[([\s\S]*?)\];/);
-    const allowlistSetStr = new Set();
-    if (allowlistMatchStr) {
-        const itemsStr = allowlistMatchStr[1].match(/['"]([a-zA-Z0-9_$]+)['"]/g);
-        if (itemsStr) itemsStr.forEach(i => allowlistSetStr.add(i.replace(/['"]/g, '')));
-    }
+    // Broad Surface Scan for Bridge References & Deletion Check
+    const bridgeJsPathStr = path.join(rootDir, 'src', 'legacy', 'bridge.js');
+    const bridgeFileExists = fs.existsSync(bridgeJsPathStr);
 
+    let bridgeReferencesCount = 0;
+    const scanDirs = [
+        path.join(rootDir, 'index.html'),
+        path.join(rootDir, 'src')
+    ];
+
+    const searchBridgeKeywords = ['legacy/bridge', 'initLegacyBridge', 'registerLegacyHandler'];
+
+    const scanFilesForBridge = (targetPath) => {
+        if (!fs.existsSync(targetPath)) return;
+        const stat = fs.statSync(targetPath);
+        if (stat.isDirectory()) {
+            fs.readdirSync(targetPath).forEach(child => scanFilesForBridge(path.join(targetPath, child)));
+        } else if (stat.isFile() && (targetPath.endsWith('.js') || targetPath.endsWith('.cjs') || targetPath.endsWith('.html'))) {
+            const content = fs.readFileSync(targetPath, 'utf8');
+            searchBridgeKeywords.forEach(kw => {
+                const matches = (content.match(new RegExp(kw, 'g')) || []).length;
+                bridgeReferencesCount += matches;
+            });
+        }
+    };
+    scanDirs.forEach(scanFilesForBridge);
+
+    // Read allowlist from inventory json
+    const inventoryObj = JSON.parse(fs.readFileSync(path.join(rootDir, 'config', 'legacy-handler-inventory.json'), 'utf8'));
+    const allowlistSetStr = new Set(Object.keys(inventoryObj.handlers || {}));
+
+    let inlineOccurrences = 0;
     const htmlStr = fs.readFileSync(path.join(rootDir, 'index.html'), 'utf8');
     const inlineRegexStr = /on(click|change|submit|input|keydown|keyup|onload|onerror)\s*=\s*["']([^"']+)["']/gi;
     let matchStr;
@@ -838,15 +860,19 @@ async function runUiTests() {
     const destructiveBoundaryViolations = 0;
     const registryStrategyDrift = 0;
     const canonicalPaths = 19;
+    const testing11Pass = (setItemCallCount >= 5 && removeItemCallCount >= 3 && refreshAllCallCount >= 4);
 
-    const legacyBridgeRetirementReady = (
+    const legacyBridgeRetired = (
+        !bridgeFileExists &&
+        bridgeReferencesCount === 0 &&
         inlineOccurrences === 0 &&
-        candidateHandlers === 19 &&
         totalNativeMigrated === 103 &&
+        candidateHandlers === 19 &&
         duplicateOwners === 0 &&
         doubleDispatches === 0 &&
         unauthorizedExecutions === 0 &&
-        exportMutationViolations === 0
+        exportMutationViolations === 0 &&
+        testing11Pass
     );
 
     const testing12Metrics = {
@@ -862,15 +888,17 @@ async function runUiTests() {
         destructiveBoundaryViolations,
         registryStrategyDrift,
         totalNativeMigrated: `${totalNativeMigrated} / 103`,
-        legacyBridgeRetirementReady
+        bridgeFileExists,
+        bridgeReferencesCount,
+        legacyBridgeRetired
     };
 
-    if (candidateHandlers === 19 && inlineOccurrences === 0 && exportMutationViolations === 0 && legacyBridgeRetirementReady) {
+    if (candidateHandlers === 19 && inlineOccurrences === 0 && exportMutationViolations === 0 && legacyBridgeRetired) {
         console.log('  ✅ [PASS] Wave 2E.5 Admin/Auth Gate - All 19 candidates native, 0 inline occurrences, export parity verified');
-        console.log('  ✅ [PASS] Legacy Bridge Retirement Gate PREPARED: legacyBridgeRetirementReady = true');
+        console.log('  ✅ [PASS] Legacy Bridge Retirement Gate CERTIFIED: legacyBridgeRetired = true (0 bridge dependencies)');
         passedUiTests++;
     } else {
-        console.error('  ❌ [FAIL] Wave 2E.5 Admin/Auth Gate - Invariant check failed', testing12Metrics);
+        console.error('  ❌ [FAIL] Wave 2E.5 Admin/Auth & Bridge Retirement Gate - Invariant check failed', testing12Metrics);
         failedUiTests++;
     }
 

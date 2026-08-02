@@ -9,7 +9,6 @@ import { formatScore, formatJerseyName, truncateText } from './utils/formatters.
 import { normalizeAssetUrl, handleImageError, FALLBACK_PLAYER_SVG, FALLBACK_TEAM_SVG, FALLBACK_GENERAL_SVG } from './utils/assets.js';
 import { isStorageAvailable, getStorageItem, setStorageItem, removeStorageItem, getJSON, setJSON } from './infrastructure/storage.js';
 import { initPWAHelpers, installPTXPWAApp, dismissPWABanner } from './infrastructure/pwa.js';
-import { initLegacyBridge, registerLegacyHandler } from './legacy/bridge.js';
 import {
     calculateStandingsAdapter,
     sortStandingsAdapter,
@@ -116,47 +115,8 @@ if (typeof window !== 'undefined') {
     window.parseGoalDataWithTeam = parseGoalDataWithTeamAdapter;
     window.getMatchResult = getMatchResultAdapter;
 
-    // Register PWA & UI Handlers into Legacy Bridge Registry
-    registerLegacyHandler('installPTXPWAApp', installPTXPWAApp);
-    registerLegacyHandler('dismissPWABanner', dismissPWABanner);
-    registerLegacyHandler('showToast', showToast);
-    registerLegacyHandler('openLightbox', openLightboxAdapter);
-    registerLegacyHandler('renderGalleryPage', renderGalleryPageAdapter);
-    registerLegacyHandler('renderStandings', renderStandingsAdapter);
-    registerLegacyHandler('renderStandingsPageTable', renderStandingsPageTableAdapter);
-    registerLegacyHandler('renderAllMatches', renderAllMatchesAdapter);
-    registerLegacyHandler('renderTeamRosters', renderTeamRostersAdapter);
-    registerLegacyHandler('renderPlayerCards', renderPlayerCardsAdapter);
-    registerLegacyHandler('openPlayerModalById', openPlayerModalByIdAdapter);
-    registerLegacyHandler('updateDashboard', updateDashboardAdapter);
-    registerLegacyHandler('renderHallOfFame', renderHallOfFameAdapter);
-    registerLegacyHandler('navigate', navigateAdapter);
-    registerLegacyHandler('switchTeamSubTab', switchTeamSubTabAdapter);
-    registerLegacyHandler('switchAdminTab', switchAdminTabAdapter);
-    registerLegacyHandler('filterFifaByTeam', filterFifaByTeamAdapter);
-    registerLegacyHandler('filterGalleryPage', filterGalleryPageAdapter);
-    registerLegacyHandler('openTacticalVisualizerModal', openTacticalVisualizerModalAdapter);
-    registerLegacyHandler('closeTacticalVisualizerModal', closeTacticalVisualizerModalAdapter);
-    registerLegacyHandler('openLogin', openLoginAdapter);
-    registerLegacyHandler('closeLogin', closeLoginAdapter);
-    registerLegacyHandler('openAiGrowthModal', openAiGrowthModalAdapter);
-    registerLegacyHandler('closeAiGrowthModal', closeAiGrowthModalAdapter);
-    registerLegacyHandler('openVipTicketModal', openVipTicketModalAdapter);
-    registerLegacyHandler('closeVipTicketModal', closeVipTicketModalAdapter);
-    registerLegacyHandler('openComparePlayersModal', openComparePlayersModalAdapter);
-    registerLegacyHandler('closeComparePlayersModal', closeComparePlayersModalAdapter);
-    registerLegacyHandler('openInfographicModal', openInfographicModalAdapter);
-    registerLegacyHandler('closeInfographicModal', closeInfographicModalAdapter);
-    registerLegacyHandler('openLiveStreamHubModal', openLiveStreamHubModalAdapter);
-    registerLegacyHandler('closeLiveStreamHubModal', closeLiveStreamHubModalAdapter);
-    registerLegacyHandler('openAiPressReleaseModal', openAiPressReleaseModalAdapter);
-    registerLegacyHandler('closeAiPressReleaseModal', closeAiPressReleaseModalAdapter);
-    registerLegacyHandler('openStadiumDJModal', openStadiumDJModalAdapter);
-    registerLegacyHandler('closeStadiumDJModal', closeStadiumDJModalAdapter);
-
-    // Initialize PWA Listeners, Legacy Bridge & Native Events
+    // Initialize PWA Listeners & Native Events
     initPWAHelpers();
-    initLegacyBridge();
     initEvents();
 }
 
