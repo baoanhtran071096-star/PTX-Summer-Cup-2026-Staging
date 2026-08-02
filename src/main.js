@@ -21,6 +21,18 @@ import {
     getMatchResultAdapter
 } from './adapters/domain.adapters.js';
 
+import { showToast } from './ui/toast.js';
+import {
+    openLogin, closeLogin,
+    openAiGrowthModal, closeAiGrowthModal,
+    openVipTicketModal, closeVipTicketModal,
+    openComparePlayersModal, closeComparePlayersModal,
+    openInfographicModal, closeInfographicModal,
+    openLiveStreamHubModal, closeLiveStreamHubModal,
+    openAiPressReleaseModal, closeAiPressReleaseModal,
+    openStadiumDJModal, closeStadiumDJModal
+} from './ui/modals.js';
+
 // Export utilities & infrastructure helpers to window scope for runtime compatibility
 if (typeof window !== 'undefined') {
     window.APP_CONFIG = APP_CONFIG;
@@ -44,6 +56,9 @@ if (typeof window !== 'undefined') {
     window.getJSON = getJSON;
     window.setJSON = setJSON;
 
+    // UI Modules
+    window.showToast = showToast;
+
     // Domain Compatibility Adapters (8/8 Domain Functions Preserving Legacy Signatures)
     window.calculateStandings = calculateStandingsAdapter;
     window.sortStandings = sortStandingsAdapter;
@@ -54,9 +69,26 @@ if (typeof window !== 'undefined') {
     window.parseGoalDataWithTeam = parseGoalDataWithTeamAdapter;
     window.getMatchResult = getMatchResultAdapter;
 
-    // Register PWA Handlers into Legacy Bridge Registry
+    // Register PWA & UI Handlers into Legacy Bridge Registry
     registerLegacyHandler('installPTXPWAApp', installPTXPWAApp);
     registerLegacyHandler('dismissPWABanner', dismissPWABanner);
+    registerLegacyHandler('showToast', showToast);
+    registerLegacyHandler('openLogin', openLogin);
+    registerLegacyHandler('closeLogin', closeLogin);
+    registerLegacyHandler('openAiGrowthModal', openAiGrowthModal);
+    registerLegacyHandler('closeAiGrowthModal', closeAiGrowthModal);
+    registerLegacyHandler('openVipTicketModal', openVipTicketModal);
+    registerLegacyHandler('closeVipTicketModal', closeVipTicketModal);
+    registerLegacyHandler('openComparePlayersModal', openComparePlayersModal);
+    registerLegacyHandler('closeComparePlayersModal', closeComparePlayersModal);
+    registerLegacyHandler('openInfographicModal', openInfographicModal);
+    registerLegacyHandler('closeInfographicModal', closeInfographicModal);
+    registerLegacyHandler('openLiveStreamHubModal', openLiveStreamHubModal);
+    registerLegacyHandler('closeLiveStreamHubModal', closeLiveStreamHubModal);
+    registerLegacyHandler('openAiPressReleaseModal', openAiPressReleaseModal);
+    registerLegacyHandler('closeAiPressReleaseModal', closeAiPressReleaseModal);
+    registerLegacyHandler('openStadiumDJModal', openStadiumDJModal);
+    registerLegacyHandler('closeStadiumDJModal', closeStadiumDJModal);
 
     // Initialize PWA Listeners & Legacy Bridge
     initPWAHelpers();

@@ -169,12 +169,16 @@ while ((match = idRegex.exec(html)) !== null) {
     }
 }
 
-// 4. DUPLICATION GATE: Check that functions exported in src/infrastructure/ and src/domain/ are NOT re-declared in index.html
+// 4. DUPLICATION GATE: Check that functions extracted to src/ are NOT re-declared in index.html
 const extractedFunctionsToCheck = [
     'installPTXPWAApp', 'dismissPWABanner', 'isStorageAvailable', 'getStorageItem',
     'setStorageItem', 'removeStorageItem', 'getJSON', 'setJSON',
     'calculateStandings', 'sortStandings', 'computeDashboardStats', 'calculatePlayerStats',
-    'getPlayerTeam', 'filterMatchesByRound', 'parseGoalDataWithTeam', 'getMatchResult'
+    'getPlayerTeam', 'filterMatchesByRound', 'parseGoalDataWithTeam', 'getMatchResult',
+    'showToast', 'openLogin', 'closeLogin', 'openAiGrowthModal', 'closeAiGrowthModal',
+    'openVipTicketModal', 'closeVipTicketModal', 'openComparePlayersModal', 'closeComparePlayersModal',
+    'openInfographicModal', 'closeInfographicModal', 'openLiveStreamHubModal', 'closeLiveStreamHubModal',
+    'openAiPressReleaseModal', 'closeAiPressReleaseModal', 'openStadiumDJModal', 'closeStadiumDJModal'
 ];
 
 extractedFunctionsToCheck.forEach(fn => {
@@ -243,13 +247,22 @@ if (contract.requiredDomAnchors && Array.isArray(contract.requiredDomAnchors)) {
     });
 }
 
-// 9. EXECUTE GOLDEN FIXTURE TESTS & DOMAIN PURITY GATE
+// 9. EXECUTE GOLDEN FIXTURES & UI BEHAVIORAL SMOKE TESTS
 let fixtureGateStatus = 'PASSED (3 suites / 13 cases / 8 of 8 domain functions)';
 try {
     execSync('node scripts/verify-domain-fixtures.cjs', { stdio: 'inherit', cwd: rootDir });
 } catch (err) {
     fixtureGateStatus = 'FAILED';
     console.error('❌ GOLDEN FIXTURES GATE FAILED!');
+    process.exit(1);
+}
+
+let uiGateStatus = 'PASSED (9 UI smoke tests / 16 modals + showToast)';
+try {
+    execSync('node scripts/verify-ui-behavior.cjs', { stdio: 'inherit', cwd: rootDir });
+} catch (err) {
+    uiGateStatus = 'FAILED';
+    console.error('❌ UI BEHAVIORAL SMOKE GATE FAILED!');
     process.exit(1);
 }
 
@@ -267,6 +280,7 @@ console.log(`Manifest Validation:        ${manifestErrors === 0 ? 'VALIDATED (0 
 console.log(`Service Worker Check:       ${swErrors === 0 ? 'VALIDATED (0 errors)' : swErrors + ' errors'}`);
 console.log(`Static DOM Anchors:         ${missingDomAnchors === 0 ? 'VALIDATED (0 missing)' : missingDomAnchors + ' missing'}`);
 console.log(`Golden Fixture Test Gate:   ${fixtureGateStatus}`);
+console.log(`UI Behavioral Smoke Gate:   ${uiGateStatus}`);
 console.log('--------------------------------------------------');
 console.log(`ℹ️ NOTE: Runtime console errors & network 404s require [BROWSER GATE] verification.`);
 console.log('--------------------------------------------------');

@@ -2532,29 +2532,7 @@
         });
 
         // ============================================================
-        // TOAST SYSTEM
-        // ============================================================
-        function showToast(message, type = 'info') {
-            const container = document.getElementById('toastContainer');
-            const toast = document.createElement('div');
-            toast.className = `toast-item ${type}`;
-            const icons = {
-                success: '✅',
-                error: '❌',
-                warning: '⚠️',
-                info: 'ℹ️'
-            };
-            toast.innerHTML = `
-                <span class="toast-icon">${icons[type] || 'ℹ️'}</span>
-                <span>${message}</span>
-                <button class="toast-close" onclick="if(this.parentElement.remove)this.parentElement.remove();else if(this.parentElement.parentNode)this.parentElement.parentNode.removeChild(this.parentElement);">✕</button>
-            `;
-            container.appendChild(toast);
-            setTimeout(() => {
-                toast.style.animation = 'slideOutRight 0.4s ease forwards';
-                setTimeout(() => { if (toast.remove) toast.remove(); else if (toast.parentNode) toast.parentNode.removeChild(toast); }, 500);
-            }, 4000);
-        }
+        // TOAST SYSTEM (Delegated to src/ui/toast.js)
 
         // ============================================================
         // ROUTING
@@ -3765,26 +3743,7 @@
         window.openTacticalVisualizerModal = openTacticalVisualizerModal;
         window.closeTacticalVisualizerModal = closeTacticalVisualizerModal;
 
-        // ============================================================
-        // 1. XUẤT VÉ VÀNG VIP 3D (3D GOLDEN VIP TICKET)
-        // ============================================================
-        function openVipTicketModal(playerName) {
-            const modal = document.getElementById('vipTicketModal');
-            if (!modal) return;
-            const input = document.getElementById('ticketNameInput');
-            if (playerName && typeof playerName === 'string') {
-                input.value = playerName.toUpperCase();
-            } else {
-                input.value = 'KYLIAN MBAPPÉ';
-            }
-            updateTicketName(input.value);
-            modal.style.display = 'flex';
-        }
-
-        function closeVipTicketModal() {
-            const modal = document.getElementById('vipTicketModal');
-            if (modal) modal.style.display = 'none';
-        }
+        // 1. XUẤT VÉ VÀNG VIP 3D (3D GOLDEN VIP TICKET) (Delegated to src/ui/modals.js)
 
         function updateTicketName(val) {
             const nameDisplay = document.getElementById('ticketNameDisplay');
@@ -3876,48 +3835,7 @@
         }
 
         // ============================================================
-        // 2. SO SÁNH CẦU THỦ FIFA (FIFA PLAYER HEAD-TO-HEAD COMPARISON)
-        // ============================================================
-        function openComparePlayersModal(player1Id, player2Id) {
-            const modal = document.getElementById('comparePlayersModal');
-            const sel1 = document.getElementById('compareSelect1');
-            const sel2 = document.getElementById('compareSelect2');
-            if (!modal || !sel1 || !sel2) return;
-
-            sel1.innerHTML = '';
-            sel2.innerHTML = '';
-
-            const players = window.PLAYERS_DATA || (typeof PLAYERS_DATA !== 'undefined' ? PLAYERS_DATA : []);
-            const teams = window.TEAMS_DATA || (typeof TEAMS_DATA !== 'undefined' ? TEAMS_DATA : {});
-
-            players.forEach((p) => {
-                const team = teams[p.team];
-                const opt1 = document.createElement('option');
-                opt1.value = p.id;
-                opt1.textContent = `[${team ? team.name : p.team}] #${p.number} ${p.name} (${p.position})`;
-                sel1.appendChild(opt1);
-
-                const opt2 = document.createElement('option');
-                opt2.value = p.id;
-                opt2.textContent = `[${team ? team.name : p.team}] #${p.number} ${p.name} (${p.position})`;
-                sel2.appendChild(opt2);
-            });
-
-            if (player1Id) sel1.value = player1Id;
-            else if (players[0]) sel1.value = players[0].id;
-
-            if (player2Id) sel2.value = player2Id;
-            else if (players[1]) sel2.value = players[1].id;
-            else if (players[0]) sel2.value = players[0].id;
-
-            modal.style.display = 'flex';
-            renderCompareView();
-        }
-
-        function closeComparePlayersModal() {
-            const modal = document.getElementById('comparePlayersModal');
-            if (modal) modal.style.display = 'none';
-        }
+        // 2. SO SÁNH CẦU THỦ FIFA (Delegated to src/ui/modals.js)
 
         function renderCompareView() {
             const body = document.getElementById('compareViewBody');
@@ -5149,13 +5067,7 @@
             showToast('✅ Đã xuất file ptx_migration_data.json thành công!', 'success');
         }
 
-        function openAiGrowthModal() {
-            document.getElementById('aiGrowthModal').style.display = 'flex';
-        }
-
-        function closeAiGrowthModal() {
-            document.getElementById('aiGrowthModal').style.display = 'none';
-        }
+        // AI & Growth Modal (Delegated to src/ui/modals.js)
 
         function runAiPredictionDemo() {
             const box = document.getElementById('aiResultBox');
@@ -5328,12 +5240,7 @@
             }
         }
 
-        function openLogin() { document.getElementById('loginModal').classList.add('active'); }
-
-        function closeLogin() {
-            document.getElementById('loginModal').classList.remove('active');
-            document.getElementById('loginError').style.display = 'none';
-        }
+        // Login Modal (Delegated to src/ui/modals.js)
 
         async function handleLogin() {
             const user = document.getElementById('userInput').value;
@@ -6465,19 +6372,7 @@
 
         // ============================================================
         // INFOGRAPHIC CANVAS GENERATOR & EXPORTER
-        // ============================================================
-        function openInfographicModal() {
-            const modal = document.getElementById('infographicModal');
-            if (modal) {
-                modal.style.display = 'flex';
-                setTimeout(drawInfographicCanvas, 100);
-            }
-        }
-
-        function closeInfographicModal() {
-            const modal = document.getElementById('infographicModal');
-            if (modal) modal.style.display = 'none';
-        }
+        // INFOGRAPHIC CANVAS (Delegated to src/ui/modals.js)
 
         function drawInfographicCanvas() {
             const canvas = document.getElementById('infographicCanvas');
@@ -7329,18 +7224,7 @@
         window.changeFoulCount = changeFoulCount;
         window.tossRefCoin = tossRefCoin;
 
-        // ============================================================
-        // STADIUM DJ SOUNDBOARD FUNCTIONS (WEB AUDIO API SYNTHESIZER)
-        // ============================================================
-        function openStadiumDJModal() {
-            const modal = document.getElementById('stadiumDjModal');
-            if (modal) modal.style.display = 'flex';
-        }
-
-        function closeStadiumDJModal() {
-            const modal = document.getElementById('stadiumDjModal');
-            if (modal) modal.style.display = 'none';
-        }
+        // STADIUM DJ SOUNDBOARD (Delegated to src/ui/modals.js)
 
         function playCrowdCheerSound() {
             try {
@@ -7594,29 +7478,18 @@
         }
 
         // ============================================================
-        // LIVE STREAM BROADCAST HUB & AI PRESS RELEASE FUNCTIONS
-        // ============================================================
-        function openLiveStreamHubModal() {
-            const modal = document.getElementById('liveStreamHubModal');
-            if (modal) modal.style.display = 'flex';
-            onLiveStreamMatchChange();
-        }
-
-        function closeLiveStreamHubModal() {
-            const modal = document.getElementById('liveStreamHubModal');
-            if (modal) modal.style.display = 'none';
-        }
+        // LIVE STREAM BROADCAST HUB & AI PRESS RELEASE (Delegated to src/ui/modals.js)
 
         function onLiveStreamMatchChange() {
             const matchId = document.getElementById('liveStreamMatchSelect')?.value || '1';
-            const matchConf = MATCHES_CONFIG.find(m => m.id == matchId);
+            const matchConf = (window.MATCHES_CONFIG || []).find(m => m.id == matchId);
             if (!matchConf) return;
 
-            const homeTeam = TEAMS_DATA[matchConf.home];
-            const awayTeam = TEAMS_DATA[matchConf.away];
+            const homeTeam = (window.TEAMS_DATA || {})[matchConf.home];
+            const awayTeam = (window.TEAMS_DATA || {})[matchConf.away];
 
             const nameEl = document.getElementById('liveTVMatchName');
-            if (nameEl) {
+            if (nameEl && homeTeam && awayTeam) {
                 nameEl.innerHTML = `${homeTeam.icon} ${homeTeam.name} <span style="color:#fbbf24;margin:0 4px;">2 - 1</span> ${awayTeam.icon} ${awayTeam.name}`;
             }
         }
@@ -7657,17 +7530,6 @@
                 chatMsgs.scrollTop = chatMsgs.scrollHeight;
             }
             if (input) input.value = '';
-        }
-
-        function openAiPressReleaseModal() {
-            const modal = document.getElementById('aiPressReleaseModal');
-            if (modal) modal.style.display = 'flex';
-            generateAIPressRelease('PRE_MATCH');
-        }
-
-        function closeAiPressReleaseModal() {
-            const modal = document.getElementById('aiPressReleaseModal');
-            if (modal) modal.style.display = 'none';
         }
 
         function generateAIPressRelease(type) {
