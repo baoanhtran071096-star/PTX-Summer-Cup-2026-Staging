@@ -1,0 +1,1345 @@
+{
+  "version": "2.6.6-wave2e0",
+  "totalHandlers": 103,
+  "handlers": {
+    "installPTXPWAApp": {
+      "handler": "installPTXPWAApp",
+      "legacyOccurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "navigation_ui",
+      "bindingStrategy": "direct",
+      "nativeBindingModule": "src/events/navigation.events.js",
+      "migrationStatus": "migrated",
+      "wave": "2E.1",
+      "risk": "low"
+    },
+    "dismissPWABanner": {
+      "handler": "dismissPWABanner",
+      "legacyOccurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "navigation_ui",
+      "bindingStrategy": "direct",
+      "nativeBindingModule": "src/events/navigation.events.js",
+      "migrationStatus": "migrated",
+      "wave": "2E.1",
+      "risk": "low"
+    },
+    "navigate": {
+      "handler": "navigate",
+      "legacyOccurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "navigation_ui",
+      "bindingStrategy": "delegation",
+      "nativeBindingModule": "src/events/navigation.events.js",
+      "migrationStatus": "migrated",
+      "wave": "2E.1",
+      "risk": "low"
+    },
+    "openLiveStreamHubModal": {
+      "handler": "openLiveStreamHubModal",
+      "legacyOccurrences": 3,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "navigation_ui",
+      "bindingStrategy": "direct",
+      "nativeBindingModule": "src/events/navigation.events.js",
+      "migrationStatus": "migrated",
+      "wave": "2E.1",
+      "risk": "low"
+    },
+    "openVipTicketModal": {
+      "handler": "openVipTicketModal",
+      "legacyOccurrences": 4,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "navigation_ui",
+      "bindingStrategy": "direct",
+      "nativeBindingModule": "src/events/navigation.events.js",
+      "migrationStatus": "migrated",
+      "wave": "2E.1",
+      "risk": "low"
+    },
+    "openComparePlayersModal": {
+      "handler": "openComparePlayersModal",
+      "legacyOccurrences": 2,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "navigation_ui",
+      "bindingStrategy": "direct",
+      "nativeBindingModule": "src/events/navigation.events.js",
+      "migrationStatus": "migrated",
+      "wave": "2E.1",
+      "risk": "low"
+    },
+    "switchToPreMatchState": {
+      "handler": "switchToPreMatchState",
+      "legacyOccurrences": 2,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "match_score",
+      "bindingStrategy": "form_direct",
+      "nativeBindingModule": "src/events/score.events.js",
+      "migrationStatus": "pending",
+      "wave": "2E.4",
+      "risk": "high"
+    },
+    "resetSystemDataToOfficialDefaults": {
+      "handler": "resetSystemDataToOfficialDefaults",
+      "legacyOccurrences": 2,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "admin",
+      "bindingStrategy": "auth_direct",
+      "nativeBindingModule": "src/events/admin.events.js",
+      "migrationStatus": "pending",
+      "wave": "2E.5",
+      "risk": "critical"
+    },
+    "openRefereeToolkit": {
+      "handler": "openRefereeToolkit",
+      "legacyOccurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "navigation_ui",
+      "bindingStrategy": "direct",
+      "nativeBindingModule": "src/events/admin.events.js",
+      "migrationStatus": "pending",
+      "wave": "2E.5",
+      "risk": "critical"
+    },
+    "checkAdminNavClick": {
+      "handler": "checkAdminNavClick",
+      "legacyOccurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "navigation_ui",
+      "bindingStrategy": "direct",
+      "nativeBindingModule": "src/events/admin.events.js",
+      "migrationStatus": "pending",
+      "wave": "2E.5",
+      "risk": "critical"
+    },
+    "openAiPressReleaseModal": {
+      "handler": "openAiPressReleaseModal",
+      "legacyOccurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "navigation_ui",
+      "bindingStrategy": "direct",
+      "nativeBindingModule": "src/events/navigation.events.js",
+      "migrationStatus": "migrated",
+      "wave": "2E.1",
+      "risk": "low"
+    },
+    "triggerVARReview": {
+      "handler": "triggerVARReview",
+      "legacyOccurrences": 3,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "navigation_ui",
+      "bindingStrategy": "direct",
+      "nativeBindingModule": "src/events/score.events.js",
+      "migrationStatus": "pending",
+      "wave": "2E.4",
+      "risk": "high"
+    },
+    "openStadiumDJModal": {
+      "handler": "openStadiumDJModal",
+      "legacyOccurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "navigation_ui",
+      "bindingStrategy": "direct",
+      "nativeBindingModule": "src/events/navigation.events.js",
+      "migrationStatus": "migrated",
+      "wave": "2E.1",
+      "risk": "low"
+    },
+    "togglePTXAudio": {
+      "handler": "togglePTXAudio",
+      "legacyOccurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "miscellaneous",
+      "bindingStrategy": "direct",
+      "nativeBindingModule": "src/events/admin.events.js",
+      "migrationStatus": "pending",
+      "wave": "2E.5",
+      "risk": "critical"
+    },
+    "openInfographicModal": {
+      "handler": "openInfographicModal",
+      "legacyOccurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "navigation_ui",
+      "bindingStrategy": "direct",
+      "nativeBindingModule": "src/events/navigation.events.js",
+      "migrationStatus": "migrated",
+      "wave": "2E.1",
+      "risk": "low"
+    },
+    "exportOfficialMatchReport": {
+      "handler": "exportOfficialMatchReport",
+      "legacyOccurrences": 2,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "match_score",
+      "bindingStrategy": "form_direct",
+      "nativeBindingModule": "src/events/score.events.js",
+      "migrationStatus": "pending",
+      "wave": "2E.4",
+      "risk": "high"
+    },
+    "exportPtxMigrationData": {
+      "handler": "exportPtxMigrationData",
+      "legacyOccurrences": 3,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "statistics",
+      "bindingStrategy": "direct",
+      "nativeBindingModule": "src/events/score.events.js",
+      "migrationStatus": "pending",
+      "wave": "2E.4",
+      "risk": "high"
+    },
+    "applyLanguage": {
+      "handler": "applyLanguage",
+      "legacyOccurrences": 2,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "navigation_ui",
+      "bindingStrategy": "direct",
+      "nativeBindingModule": "src/events/admin.events.js",
+      "migrationStatus": "pending",
+      "wave": "2E.5",
+      "risk": "critical"
+    },
+    "toggleTheme": {
+      "handler": "toggleTheme",
+      "legacyOccurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "navigation_ui",
+      "bindingStrategy": "direct",
+      "nativeBindingModule": "src/events/navigation.events.js",
+      "migrationStatus": "migrated",
+      "wave": "2E.1",
+      "risk": "low"
+    },
+    "runAITacticalAnalysis": {
+      "handler": "runAITacticalAnalysis",
+      "legacyOccurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "miscellaneous",
+      "bindingStrategy": "direct",
+      "nativeBindingModule": "src/events/admin.events.js",
+      "migrationStatus": "pending",
+      "wave": "2E.5",
+      "risk": "critical"
+    },
+    "filterMatchRound": {
+      "handler": "filterMatchRound",
+      "legacyOccurrences": 4,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "match_score",
+      "bindingStrategy": "delegation",
+      "nativeBindingModule": "src/events/modal.events.js",
+      "migrationStatus": "migrated",
+      "wave": "2E.1",
+      "risk": "low"
+    },
+    "aiAutoSuggestPrediction": {
+      "handler": "aiAutoSuggestPrediction",
+      "legacyOccurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "prediction",
+      "bindingStrategy": "form_direct",
+      "nativeBindingModule": "src/events/prediction.events.js",
+      "migrationStatus": "pending",
+      "wave": "2E.3",
+      "risk": "medium"
+    },
+    "submitFanPrediction": {
+      "handler": "submitFanPrediction",
+      "legacyOccurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "prediction",
+      "bindingStrategy": "form_direct",
+      "nativeBindingModule": "src/events/prediction.events.js",
+      "migrationStatus": "pending",
+      "wave": "2E.3",
+      "risk": "medium"
+    },
+    "loadVideoClip": {
+      "handler": "loadVideoClip",
+      "legacyOccurrences": 5,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "match_score",
+      "bindingStrategy": "form_direct",
+      "nativeBindingModule": "src/events/prediction.events.js",
+      "migrationStatus": "pending",
+      "wave": "2E.3",
+      "risk": "medium"
+    },
+    "shareResult": {
+      "handler": "shareResult",
+      "legacyOccurrences": 3,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "miscellaneous",
+      "bindingStrategy": "direct",
+      "nativeBindingModule": "src/events/prediction.events.js",
+      "migrationStatus": "pending",
+      "wave": "2E.3",
+      "risk": "medium"
+    },
+    "switchTeamSubTab": {
+      "handler": "switchTeamSubTab",
+      "legacyOccurrences": 2,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "navigation_ui",
+      "bindingStrategy": "delegation",
+      "nativeBindingModule": "src/events/navigation.events.js",
+      "migrationStatus": "migrated",
+      "wave": "2E.1",
+      "risk": "low"
+    },
+    "selectPitchTeam": {
+      "handler": "selectPitchTeam",
+      "legacyOccurrences": 3,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "miscellaneous",
+      "bindingStrategy": "direct",
+      "nativeBindingModule": "src/events/player.events.js",
+      "migrationStatus": "pending",
+      "wave": "2E.2",
+      "risk": "low_medium"
+    },
+    "changePitchFormation": {
+      "handler": "changePitchFormation",
+      "legacyOccurrences": 1,
+      "eventTypes": [
+        "change"
+      ],
+      "category": "miscellaneous",
+      "bindingStrategy": "direct",
+      "nativeBindingModule": "src/events/player.events.js",
+      "migrationStatus": "pending",
+      "wave": "2E.2",
+      "risk": "low_medium"
+    },
+    "openTacticalVisualizerModal": {
+      "handler": "openTacticalVisualizerModal",
+      "legacyOccurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "navigation_ui",
+      "bindingStrategy": "direct",
+      "nativeBindingModule": "src/events/navigation.events.js",
+      "migrationStatus": "migrated",
+      "wave": "2E.1",
+      "risk": "low"
+    },
+    "autoOptimize5v5Squad": {
+      "handler": "autoOptimize5v5Squad",
+      "legacyOccurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "miscellaneous",
+      "bindingStrategy": "direct",
+      "nativeBindingModule": "src/events/player.events.js",
+      "migrationStatus": "pending",
+      "wave": "2E.2",
+      "risk": "low_medium"
+    },
+    "filterFifaByTeam": {
+      "handler": "filterFifaByTeam",
+      "legacyOccurrences": 4,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "statistics",
+      "bindingStrategy": "delegation",
+      "nativeBindingModule": "src/events/modal.events.js",
+      "migrationStatus": "migrated",
+      "wave": "2E.1",
+      "risk": "low"
+    },
+    "closePlayerCompareModal": {
+      "handler": "closePlayerCompareModal",
+      "legacyOccurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "navigation_ui",
+      "bindingStrategy": "direct",
+      "nativeBindingModule": "src/events/navigation.events.js",
+      "migrationStatus": "migrated",
+      "wave": "2E.1",
+      "risk": "low"
+    },
+    "renderCompareView": {
+      "handler": "renderCompareView",
+      "legacyOccurrences": 4,
+      "eventTypes": [
+        "change"
+      ],
+      "category": "navigation_ui",
+      "bindingStrategy": "direct",
+      "nativeBindingModule": "src/events/prediction.events.js",
+      "migrationStatus": "pending",
+      "wave": "2E.3",
+      "risk": "medium"
+    },
+    "filterGalleryPage": {
+      "handler": "filterGalleryPage",
+      "legacyOccurrences": 4,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "statistics",
+      "bindingStrategy": "delegation",
+      "nativeBindingModule": "src/events/modal.events.js",
+      "migrationStatus": "migrated",
+      "wave": "2E.1",
+      "risk": "low"
+    },
+    "triggerTrophyRotate": {
+      "handler": "triggerTrophyRotate",
+      "legacyOccurrences": 3,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "miscellaneous",
+      "bindingStrategy": "direct",
+      "nativeBindingModule": "src/events/player.events.js",
+      "migrationStatus": "pending",
+      "wave": "2E.2",
+      "risk": "low_medium"
+    },
+    "copyBankStk": {
+      "handler": "copyBankStk",
+      "legacyOccurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "miscellaneous",
+      "bindingStrategy": "direct",
+      "nativeBindingModule": "src/events/prediction.events.js",
+      "migrationStatus": "pending",
+      "wave": "2E.3",
+      "risk": "medium"
+    },
+    "scrollSponsorForm": {
+      "handler": "scrollSponsorForm",
+      "legacyOccurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "navigation_ui",
+      "bindingStrategy": "direct",
+      "nativeBindingModule": "src/events/prediction.events.js",
+      "migrationStatus": "pending",
+      "wave": "2E.3",
+      "risk": "medium"
+    },
+    "selectSponsorPackage": {
+      "handler": "selectSponsorPackage",
+      "legacyOccurrences": 3,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "miscellaneous",
+      "bindingStrategy": "direct",
+      "nativeBindingModule": "src/events/prediction.events.js",
+      "migrationStatus": "pending",
+      "wave": "2E.3",
+      "risk": "medium"
+    },
+    "submitSponsorContact": {
+      "handler": "submitSponsorContact",
+      "legacyOccurrences": 1,
+      "eventTypes": [
+        "submit"
+      ],
+      "category": "miscellaneous",
+      "bindingStrategy": "direct",
+      "nativeBindingModule": "src/events/prediction.events.js",
+      "migrationStatus": "pending",
+      "wave": "2E.3",
+      "risk": "medium"
+    },
+    "openLogin": {
+      "handler": "openLogin",
+      "legacyOccurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "navigation_ui",
+      "bindingStrategy": "direct",
+      "nativeBindingModule": "src/events/navigation.events.js",
+      "migrationStatus": "migrated",
+      "wave": "2E.1",
+      "risk": "low"
+    },
+    "handleLogout": {
+      "handler": "handleLogout",
+      "legacyOccurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "miscellaneous",
+      "bindingStrategy": "direct",
+      "nativeBindingModule": "src/events/admin.events.js",
+      "migrationStatus": "pending",
+      "wave": "2E.5",
+      "risk": "critical"
+    },
+    "switchAdminTab": {
+      "handler": "switchAdminTab",
+      "legacyOccurrences": 4,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "navigation_ui",
+      "bindingStrategy": "delegation",
+      "nativeBindingModule": "src/events/navigation.events.js",
+      "migrationStatus": "migrated",
+      "wave": "2E.1",
+      "risk": "low"
+    },
+    "setZeroMatchesState": {
+      "handler": "setZeroMatchesState",
+      "legacyOccurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "match_score",
+      "bindingStrategy": "form_direct",
+      "nativeBindingModule": "src/events/admin.events.js",
+      "migrationStatus": "pending",
+      "wave": "2E.5",
+      "risk": "critical"
+    },
+    "setDemoScoresState": {
+      "handler": "setDemoScoresState",
+      "legacyOccurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "match_score",
+      "bindingStrategy": "form_direct",
+      "nativeBindingModule": "src/events/admin.events.js",
+      "migrationStatus": "pending",
+      "wave": "2E.5",
+      "risk": "critical"
+    },
+    "updateStandingsAndResults": {
+      "handler": "updateStandingsAndResults",
+      "legacyOccurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "miscellaneous",
+      "bindingStrategy": "direct",
+      "nativeBindingModule": "src/events/score.events.js",
+      "migrationStatus": "pending",
+      "wave": "2E.4",
+      "risk": "high"
+    },
+    "addQuickGoal": {
+      "handler": "addQuickGoal",
+      "legacyOccurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "match_score",
+      "bindingStrategy": "form_direct",
+      "nativeBindingModule": "src/events/score.events.js",
+      "migrationStatus": "pending",
+      "wave": "2E.4",
+      "risk": "high"
+    },
+    "updateStatsAdmin": {
+      "handler": "updateStatsAdmin",
+      "legacyOccurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "statistics",
+      "bindingStrategy": "direct",
+      "nativeBindingModule": "src/events/score.events.js",
+      "migrationStatus": "pending",
+      "wave": "2E.4",
+      "risk": "high"
+    },
+    "loadAdminPlayerDetail": {
+      "handler": "loadAdminPlayerDetail",
+      "legacyOccurrences": 1,
+      "eventTypes": [
+        "change"
+      ],
+      "category": "player",
+      "bindingStrategy": "direct",
+      "nativeBindingModule": "src/events/admin.events.js",
+      "migrationStatus": "pending",
+      "wave": "2E.5",
+      "risk": "critical"
+    },
+    "savePlayerAdminDetail": {
+      "handler": "savePlayerAdminDetail",
+      "legacyOccurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "player",
+      "bindingStrategy": "direct",
+      "nativeBindingModule": "src/events/admin.events.js",
+      "migrationStatus": "pending",
+      "wave": "2E.5",
+      "risk": "critical"
+    },
+    "saveContentAdmin": {
+      "handler": "saveContentAdmin",
+      "legacyOccurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "admin",
+      "bindingStrategy": "auth_direct",
+      "nativeBindingModule": "src/events/admin.events.js",
+      "migrationStatus": "pending",
+      "wave": "2E.5",
+      "risk": "critical"
+    },
+    "saveHallOfFameAdmin": {
+      "handler": "saveHallOfFameAdmin",
+      "legacyOccurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "admin",
+      "bindingStrategy": "auth_direct",
+      "nativeBindingModule": "src/events/admin.events.js",
+      "migrationStatus": "pending",
+      "wave": "2E.5",
+      "risk": "critical"
+    },
+    "changeAdminPassword": {
+      "handler": "changeAdminPassword",
+      "legacyOccurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "admin",
+      "bindingStrategy": "auth_direct",
+      "nativeBindingModule": "src/events/admin.events.js",
+      "migrationStatus": "pending",
+      "wave": "2E.5",
+      "risk": "critical"
+    },
+    "openAiGrowthModal": {
+      "handler": "openAiGrowthModal",
+      "legacyOccurrences": 2,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "navigation_ui",
+      "bindingStrategy": "direct",
+      "nativeBindingModule": "src/events/navigation.events.js",
+      "migrationStatus": "migrated",
+      "wave": "2E.1",
+      "risk": "low"
+    },
+    "closeLogin": {
+      "handler": "closeLogin",
+      "legacyOccurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "navigation_ui",
+      "bindingStrategy": "direct",
+      "nativeBindingModule": "src/events/navigation.events.js",
+      "migrationStatus": "migrated",
+      "wave": "2E.1",
+      "risk": "low"
+    },
+    "handleLogin": {
+      "handler": "handleLogin",
+      "legacyOccurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "admin",
+      "bindingStrategy": "auth_direct",
+      "nativeBindingModule": "src/events/admin.events.js",
+      "migrationStatus": "pending",
+      "wave": "2E.5",
+      "risk": "critical"
+    },
+    "closeAiGrowthModal": {
+      "handler": "closeAiGrowthModal",
+      "legacyOccurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "navigation_ui",
+      "bindingStrategy": "direct",
+      "nativeBindingModule": "src/events/navigation.events.js",
+      "migrationStatus": "migrated",
+      "wave": "2E.1",
+      "risk": "low"
+    },
+    "runAiPredictionDemo": {
+      "handler": "runAiPredictionDemo",
+      "legacyOccurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "prediction",
+      "bindingStrategy": "form_direct",
+      "nativeBindingModule": "src/events/prediction.events.js",
+      "migrationStatus": "pending",
+      "wave": "2E.3",
+      "risk": "medium"
+    },
+    "predictChampionDemo": {
+      "handler": "predictChampionDemo",
+      "legacyOccurrences": 3,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "prediction",
+      "bindingStrategy": "form_direct",
+      "nativeBindingModule": "src/events/prediction.events.js",
+      "migrationStatus": "pending",
+      "wave": "2E.3",
+      "risk": "medium"
+    },
+    "generateReferralDemo": {
+      "handler": "generateReferralDemo",
+      "legacyOccurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "miscellaneous",
+      "bindingStrategy": "direct",
+      "nativeBindingModule": "src/events/prediction.events.js",
+      "migrationStatus": "pending",
+      "wave": "2E.3",
+      "risk": "medium"
+    },
+    "closePlayerModal": {
+      "handler": "closePlayerModal",
+      "legacyOccurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "navigation_ui",
+      "bindingStrategy": "direct",
+      "nativeBindingModule": "src/events/navigation.events.js",
+      "migrationStatus": "migrated",
+      "wave": "2E.1",
+      "risk": "low"
+    },
+    "closeSubstitutionModal": {
+      "handler": "closeSubstitutionModal",
+      "legacyOccurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "navigation_ui",
+      "bindingStrategy": "direct",
+      "nativeBindingModule": "src/events/navigation.events.js",
+      "migrationStatus": "migrated",
+      "wave": "2E.1",
+      "risk": "low"
+    },
+    "closeTacticalVisualizerModal": {
+      "handler": "closeTacticalVisualizerModal",
+      "legacyOccurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "navigation_ui",
+      "bindingStrategy": "direct",
+      "nativeBindingModule": "src/events/navigation.events.js",
+      "migrationStatus": "migrated",
+      "wave": "2E.1",
+      "risk": "low"
+    },
+    "closeVipTicketModal": {
+      "handler": "closeVipTicketModal",
+      "legacyOccurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "navigation_ui",
+      "bindingStrategy": "direct",
+      "nativeBindingModule": "src/events/navigation.events.js",
+      "migrationStatus": "migrated",
+      "wave": "2E.1",
+      "risk": "low"
+    },
+    "updateTicketName": {
+      "handler": "updateTicketName",
+      "legacyOccurrences": 1,
+      "eventTypes": [
+        "input"
+      ],
+      "category": "miscellaneous",
+      "bindingStrategy": "direct",
+      "nativeBindingModule": "src/events/prediction.events.js",
+      "migrationStatus": "pending",
+      "wave": "2E.3",
+      "risk": "medium"
+    },
+    "randomizeTicketSerial": {
+      "handler": "randomizeTicketSerial",
+      "legacyOccurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "miscellaneous",
+      "bindingStrategy": "direct",
+      "nativeBindingModule": "src/events/prediction.events.js",
+      "migrationStatus": "pending",
+      "wave": "2E.3",
+      "risk": "medium"
+    },
+    "downloadVipTicketImage": {
+      "handler": "downloadVipTicketImage",
+      "legacyOccurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "miscellaneous",
+      "bindingStrategy": "direct",
+      "nativeBindingModule": "src/events/prediction.events.js",
+      "migrationStatus": "pending",
+      "wave": "2E.3",
+      "risk": "medium"
+    },
+    "closeComparePlayersModal": {
+      "handler": "closeComparePlayersModal",
+      "legacyOccurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "navigation_ui",
+      "bindingStrategy": "direct",
+      "nativeBindingModule": "src/events/navigation.events.js",
+      "migrationStatus": "migrated",
+      "wave": "2E.1",
+      "risk": "low"
+    },
+    "openSubstitutionModalById": {
+      "handler": "openSubstitutionModalById",
+      "legacyOccurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "navigation_ui",
+      "bindingStrategy": "direct",
+      "nativeBindingModule": "src/events/player.events.js",
+      "migrationStatus": "pending",
+      "wave": "2E.2",
+      "risk": "low_medium"
+    },
+    "openPlayerModalById": {
+      "handler": "openPlayerModalById",
+      "legacyOccurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "navigation_ui",
+      "bindingStrategy": "direct",
+      "nativeBindingModule": "src/events/player.events.js",
+      "migrationStatus": "pending",
+      "wave": "2E.2",
+      "risk": "low_medium"
+    },
+    "openLightbox": {
+      "handler": "openLightbox",
+      "legacyOccurrences": 2,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "navigation_ui",
+      "bindingStrategy": "direct",
+      "nativeBindingModule": "src/events/player.events.js",
+      "migrationStatus": "pending",
+      "wave": "2E.2",
+      "risk": "low_medium"
+    },
+    "closeInfographicModal": {
+      "handler": "closeInfographicModal",
+      "legacyOccurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "navigation_ui",
+      "bindingStrategy": "direct",
+      "nativeBindingModule": "src/events/navigation.events.js",
+      "migrationStatus": "migrated",
+      "wave": "2E.1",
+      "risk": "low"
+    },
+    "downloadInfographicImage": {
+      "handler": "downloadInfographicImage",
+      "legacyOccurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "miscellaneous",
+      "bindingStrategy": "direct",
+      "nativeBindingModule": "src/events/prediction.events.js",
+      "migrationStatus": "pending",
+      "wave": "2E.3",
+      "risk": "medium"
+    },
+    "closeRefereeToolkit": {
+      "handler": "closeRefereeToolkit",
+      "legacyOccurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "navigation_ui",
+      "bindingStrategy": "direct",
+      "nativeBindingModule": "src/events/navigation.events.js",
+      "migrationStatus": "migrated",
+      "wave": "2E.1",
+      "risk": "low"
+    },
+    "onRefMatchChange": {
+      "handler": "onRefMatchChange",
+      "legacyOccurrences": 1,
+      "eventTypes": [
+        "change"
+      ],
+      "category": "match_score",
+      "bindingStrategy": "form_direct",
+      "nativeBindingModule": "src/events/score.events.js",
+      "migrationStatus": "pending",
+      "wave": "2E.4",
+      "risk": "high"
+    },
+    "showRefereeCard": {
+      "handler": "showRefereeCard",
+      "legacyOccurrences": 2,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "player",
+      "bindingStrategy": "direct",
+      "nativeBindingModule": "src/events/score.events.js",
+      "migrationStatus": "pending",
+      "wave": "2E.4",
+      "risk": "high"
+    },
+    "tossRefCoin": {
+      "handler": "tossRefCoin",
+      "legacyOccurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "miscellaneous",
+      "bindingStrategy": "direct",
+      "nativeBindingModule": "src/events/score.events.js",
+      "migrationStatus": "pending",
+      "wave": "2E.4",
+      "risk": "high"
+    },
+    "changeFoulCount": {
+      "handler": "changeFoulCount",
+      "legacyOccurrences": 4,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "miscellaneous",
+      "bindingStrategy": "direct",
+      "nativeBindingModule": "src/events/score.events.js",
+      "migrationStatus": "pending",
+      "wave": "2E.4",
+      "risk": "high"
+    },
+    "toggleRefStopwatch": {
+      "handler": "toggleRefStopwatch",
+      "legacyOccurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "navigation_ui",
+      "bindingStrategy": "direct",
+      "nativeBindingModule": "src/events/score.events.js",
+      "migrationStatus": "pending",
+      "wave": "2E.4",
+      "risk": "high"
+    },
+    "resetRefStopwatch": {
+      "handler": "resetRefStopwatch",
+      "legacyOccurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "navigation_ui",
+      "bindingStrategy": "direct",
+      "nativeBindingModule": "src/events/score.events.js",
+      "migrationStatus": "pending",
+      "wave": "2E.4",
+      "risk": "high"
+    },
+    "playWhistleSound": {
+      "handler": "playWhistleSound",
+      "legacyOccurrences": 2,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "miscellaneous",
+      "bindingStrategy": "direct",
+      "nativeBindingModule": "src/events/admin.events.js",
+      "migrationStatus": "pending",
+      "wave": "2E.5",
+      "risk": "critical"
+    },
+    "playFinalSirenSound": {
+      "handler": "playFinalSirenSound",
+      "legacyOccurrences": 2,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "miscellaneous",
+      "bindingStrategy": "direct",
+      "nativeBindingModule": "src/events/admin.events.js",
+      "migrationStatus": "pending",
+      "wave": "2E.5",
+      "risk": "critical"
+    },
+    "clearRefTimelineLog": {
+      "handler": "clearRefTimelineLog",
+      "legacyOccurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "miscellaneous",
+      "bindingStrategy": "direct",
+      "nativeBindingModule": "src/events/score.events.js",
+      "migrationStatus": "pending",
+      "wave": "2E.4",
+      "risk": "high"
+    },
+    "closeStadiumDJModal": {
+      "handler": "closeStadiumDJModal",
+      "legacyOccurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "navigation_ui",
+      "bindingStrategy": "direct",
+      "nativeBindingModule": "src/events/navigation.events.js",
+      "migrationStatus": "migrated",
+      "wave": "2E.1",
+      "risk": "low"
+    },
+    "playCrowdCheerSound": {
+      "handler": "playCrowdCheerSound",
+      "legacyOccurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "miscellaneous",
+      "bindingStrategy": "direct",
+      "nativeBindingModule": "src/events/admin.events.js",
+      "migrationStatus": "pending",
+      "wave": "2E.5",
+      "risk": "critical"
+    },
+    "playStadiumDrumsSound": {
+      "handler": "playStadiumDrumsSound",
+      "legacyOccurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "miscellaneous",
+      "bindingStrategy": "direct",
+      "nativeBindingModule": "src/events/admin.events.js",
+      "migrationStatus": "pending",
+      "wave": "2E.5",
+      "risk": "critical"
+    },
+    "playVuvuzelaSound": {
+      "handler": "playVuvuzelaSound",
+      "legacyOccurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "miscellaneous",
+      "bindingStrategy": "direct",
+      "nativeBindingModule": "src/events/admin.events.js",
+      "migrationStatus": "pending",
+      "wave": "2E.5",
+      "risk": "critical"
+    },
+    "closeLiveStreamHubModal": {
+      "handler": "closeLiveStreamHubModal",
+      "legacyOccurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "navigation_ui",
+      "bindingStrategy": "direct",
+      "nativeBindingModule": "src/events/navigation.events.js",
+      "migrationStatus": "migrated",
+      "wave": "2E.1",
+      "risk": "low"
+    },
+    "onLiveStreamMatchChange": {
+      "handler": "onLiveStreamMatchChange",
+      "legacyOccurrences": 1,
+      "eventTypes": [
+        "change"
+      ],
+      "category": "match_score",
+      "bindingStrategy": "form_direct",
+      "nativeBindingModule": "src/events/admin.events.js",
+      "migrationStatus": "pending",
+      "wave": "2E.5",
+      "risk": "critical"
+    },
+    "loadCustomLiveStream": {
+      "handler": "loadCustomLiveStream",
+      "legacyOccurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "miscellaneous",
+      "bindingStrategy": "direct",
+      "nativeBindingModule": "src/events/prediction.events.js",
+      "migrationStatus": "pending",
+      "wave": "2E.3",
+      "risk": "medium"
+    },
+    "sendLiveReaction": {
+      "handler": "sendLiveReaction",
+      "legacyOccurrences": 3,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "miscellaneous",
+      "bindingStrategy": "direct",
+      "nativeBindingModule": "src/events/prediction.events.js",
+      "migrationStatus": "pending",
+      "wave": "2E.3",
+      "risk": "medium"
+    },
+    "sendLiveChatMessage": {
+      "handler": "sendLiveChatMessage",
+      "legacyOccurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "miscellaneous",
+      "bindingStrategy": "direct",
+      "nativeBindingModule": "src/events/prediction.events.js",
+      "migrationStatus": "pending",
+      "wave": "2E.3",
+      "risk": "medium"
+    },
+    "closeAiPressReleaseModal": {
+      "handler": "closeAiPressReleaseModal",
+      "legacyOccurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "navigation_ui",
+      "bindingStrategy": "direct",
+      "nativeBindingModule": "src/events/navigation.events.js",
+      "migrationStatus": "migrated",
+      "wave": "2E.1",
+      "risk": "low"
+    },
+    "generateAIPressRelease": {
+      "handler": "generateAIPressRelease",
+      "legacyOccurrences": 2,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "miscellaneous",
+      "bindingStrategy": "direct",
+      "nativeBindingModule": "src/events/prediction.events.js",
+      "migrationStatus": "pending",
+      "wave": "2E.3",
+      "risk": "medium"
+    },
+    "copyPressReleaseText": {
+      "handler": "copyPressReleaseText",
+      "legacyOccurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "miscellaneous",
+      "bindingStrategy": "direct",
+      "nativeBindingModule": "src/events/prediction.events.js",
+      "migrationStatus": "pending",
+      "wave": "2E.3",
+      "risk": "medium"
+    },
+    "toggleFloatingAdmin": {
+      "handler": "toggleFloatingAdmin",
+      "legacyOccurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "admin",
+      "bindingStrategy": "auth_direct",
+      "nativeBindingModule": "src/events/admin.events.js",
+      "migrationStatus": "pending",
+      "wave": "2E.5",
+      "risk": "critical"
+    },
+    "quickGoalFromFloat": {
+      "handler": "quickGoalFromFloat",
+      "legacyOccurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "match_score",
+      "bindingStrategy": "form_direct",
+      "nativeBindingModule": "src/events/score.events.js",
+      "migrationStatus": "pending",
+      "wave": "2E.4",
+      "risk": "high"
+    },
+    "togglePTXChatbotWindow": {
+      "handler": "togglePTXChatbotWindow",
+      "legacyOccurrences": 2,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "miscellaneous",
+      "bindingStrategy": "direct",
+      "nativeBindingModule": "src/events/prediction.events.js",
+      "migrationStatus": "pending",
+      "wave": "2E.3",
+      "risk": "medium"
+    },
+    "sendPTXChatQuick": {
+      "handler": "sendPTXChatQuick",
+      "legacyOccurrences": 5,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "miscellaneous",
+      "bindingStrategy": "direct",
+      "nativeBindingModule": "src/events/prediction.events.js",
+      "migrationStatus": "pending",
+      "wave": "2E.3",
+      "risk": "medium"
+    },
+    "sendPTXChatMessage": {
+      "handler": "sendPTXChatMessage",
+      "legacyOccurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "miscellaneous",
+      "bindingStrategy": "direct",
+      "nativeBindingModule": "src/events/prediction.events.js",
+      "migrationStatus": "pending",
+      "wave": "2E.3",
+      "risk": "medium"
+    },
+    "downloadVIPPredictionTicket": {
+      "handler": "downloadVIPPredictionTicket",
+      "legacyOccurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "prediction",
+      "bindingStrategy": "form_direct",
+      "nativeBindingModule": "src/events/prediction.events.js",
+      "migrationStatus": "pending",
+      "wave": "2E.3",
+      "risk": "medium"
+    },
+    "showToast": {
+      "handler": "showToast",
+      "legacyOccurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "miscellaneous",
+      "bindingStrategy": "direct",
+      "nativeBindingModule": "src/events/admin.events.js",
+      "migrationStatus": "pending",
+      "wave": "2E.5",
+      "risk": "critical"
+    },
+    "loadSamplePredictions": {
+      "handler": "loadSamplePredictions",
+      "legacyOccurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "prediction",
+      "bindingStrategy": "form_direct",
+      "nativeBindingModule": "src/events/prediction.events.js",
+      "migrationStatus": "pending",
+      "wave": "2E.3",
+      "risk": "medium"
+    },
+    "clearAllPredictionsList": {
+      "handler": "clearAllPredictionsList",
+      "legacyOccurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "prediction",
+      "bindingStrategy": "form_direct",
+      "nativeBindingModule": "src/events/prediction.events.js",
+      "migrationStatus": "pending",
+      "wave": "2E.3",
+      "risk": "medium"
+    }
+  }
+}

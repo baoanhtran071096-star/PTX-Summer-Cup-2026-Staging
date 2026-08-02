@@ -45,6 +45,7 @@ import {
     openAiPressReleaseModalAdapter, closeAiPressReleaseModalAdapter,
     openStadiumDJModalAdapter, closeStadiumDJModalAdapter
 } from './adapters/ui.adapters.js';
+import { initEvents } from './events/index.js';
 
 // Export utilities & infrastructure helpers to window scope for runtime compatibility
 if (typeof window !== 'undefined') {
@@ -153,9 +154,10 @@ if (typeof window !== 'undefined') {
     registerLegacyHandler('openStadiumDJModal', openStadiumDJModalAdapter);
     registerLegacyHandler('closeStadiumDJModal', closeStadiumDJModalAdapter);
 
-    // Initialize PWA Listeners & Legacy Bridge
+    // Initialize PWA Listeners, Legacy Bridge & Native Events
     initPWAHelpers();
     initLegacyBridge();
+    initEvents();
 }
 
 console.log(`🚀 [PTX App] Initialized ${APP_CONFIG.name} (${APP_CONFIG.version})`);

@@ -55,7 +55,25 @@ class MockElement {
 
 const domElements = {};
 
+const eventListeners = {};
+
 global.document = {
+    listeners: eventListeners,
+    addEventListener: (event, fn) => {
+        if (!eventListeners[event]) eventListeners[event] = [];
+        eventListeners[event].push(fn);
+    },
+    removeEventListener: (event, fn) => {
+        if (eventListeners[event]) {
+            eventListeners[event] = eventListeners[event].filter(cb => cb !== fn);
+        }
+    },
+    dispatchEvent: (eventObj) => {
+        const eventType = eventObj.type || 'click';
+        if (eventListeners[eventType]) {
+            eventListeners[eventType].forEach(cb => cb(eventObj));
+        }
+    },
     getElementById: (id) => {
         if (!domElements[id]) {
             domElements[id] = new MockElement(id);
@@ -379,6 +397,19 @@ async function runUiTests() {
         }
     } else {
         console.error('  ❌ [FAIL] renderGalleryGrid - Gallery card count mismatch');
+        failedUiTests++;
+    }
+
+    // Testing 5: Phase 2E Event Architecture & Idempotency
+    console.log('\nTesting 5: Phase 2E Event Architecture & Idempotency...');
+    const eventsModule = await import('../src/events/index.js');
+    const firstCall = eventsModule.initEvents();
+    const secondCall = eventsModule.initEvents();
+    if (firstCall === true && secondCall === false) {
+        console.log('  ✅ [PASS] initEvents Idempotency - Duplicate bootstrap prevented (initEvents twice -> second call returned false)');
+        passedUiTests++;
+    } else {
+        console.error('  ❌ [FAIL] initEvents Idempotency - Duplicate bootstrap guard failed');
         failedUiTests++;
     }
 

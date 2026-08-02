@@ -118,7 +118,13 @@ scannedAssets.forEach(ref => {
     }
 });
 
-// 2. Scan Runtime Inline Event Handlers (index.html + src/**/*.js templates) and verify allowlist parity
+// 2. PHASE 2E.0: Event Migration Registry Verification & Burn-down Invariant Gate
+const registryPath = path.join(rootDir, 'config', 'event-migration-registry.json');
+let migrationRegistry = { handlers: {} };
+if (fs.existsSync(registryPath)) {
+    migrationRegistry = JSON.parse(fs.readFileSync(registryPath, 'utf8'));
+}
+
 const bridgeJsPath = path.join(rootDir, 'src', 'legacy', 'bridge.js');
 const bridgeJsContent = fs.readFileSync(bridgeJsPath, 'utf8');
 const allowlistMatch = bridgeJsContent.match(/export const LEGACY_HANDLERS_ALLOWLIST = \[([\s\S]*?)\];/);
@@ -131,8 +137,10 @@ if (allowlistMatch) {
     }
 }
 
+// Scan inline event occurrences
 const inlineEventRegex = /on(click|change|submit|input|keydown|keyup|onload|onerror)\s*=\s*["']([^"']+)["']/gi;
-const inlineHandlers = new Set();
+const inlineHandlersDiscovered = new Set();
+let currentInlineOccurrences = 0;
 
 while ((match = inlineEventRegex.exec(fullRuntimeGraph)) !== null) {
     const code = match[2].trim();
@@ -140,10 +148,41 @@ while ((match = inlineEventRegex.exec(fullRuntimeGraph)) !== null) {
     for (const fm of funcMatches) {
         const funcName = fm[1];
         if (legacyAllowlistSet.has(funcName)) {
-            inlineHandlers.add(funcName);
+            inlineHandlersDiscovered.add(funcName);
+            currentInlineOccurrences++;
         }
     }
 }
+
+// Scan native event bindings under src/events/
+const eventsDir = path.join(rootDir, 'src', 'events');
+const eventFiles = getAllSourceFiles(eventsDir);
+let nativeEventsContent = '';
+eventFiles.forEach(f => {
+    nativeEventsContent += '\n' + fs.readFileSync(f, 'utf8');
+});
+
+const nativeBindingsDiscovered = new Set();
+legacyAllowlistSet.forEach(handler => {
+    const actionRegex = new RegExp(`data-action=["']${handler}["']|['"]${handler}['"]`, 'g');
+    const bindingRegex = new RegExp(`bind[A-Z][a-zA-Z0-9_$]*`, 'g');
+    if (actionRegex.test(nativeEventsContent) || nativeEventsContent.includes(handler)) {
+        nativeBindingsDiscovered.add(handler);
+    }
+});
+
+// Check Phase 2E Invariant: Every handler must be either in inline occurrences OR in native bindings
+let unresolvedHandlers = 0;
+const registryHandlers = Object.keys(migrationRegistry.handlers);
+
+registryHandlers.forEach(handler => {
+    const hasInline = inlineHandlersDiscovered.has(handler);
+    const hasNative = nativeBindingsDiscovered.has(handler);
+    if (!hasInline && !hasNative) {
+        console.warn(`  ⚠️ Unresolved Handler (Neither Inline nor Native Bound): ${handler}`);
+        unresolvedHandlers++;
+    }
+});
 
 // Extract function declarations across index.html AND src/**/*.js
 const funcDeclRegex = /function\s+([a-zA-Z0-9_$]+)\s*\(/g;
@@ -165,7 +204,7 @@ while ((match = bridgeRegisterRegex.exec(fullRuntimeGraph)) !== null) {
     definedFuncs.add(match[1]);
 }
 
-inlineHandlers.forEach(funcName => {
+inlineHandlersDiscovered.forEach(funcName => {
     if (!definedFuncs.has(funcName)) {
         console.warn(`  ⚠️ Missing Handler Function: ${funcName}`);
         missingHandlers++;
@@ -330,8 +369,14 @@ console.log(`Package Version Check:      ${!packageVersionMismatch ? `VALIDATED 
 console.log(`Assets Scanned:             ${scannedAssets.size}`);
 console.log(`Missing Assets:             ${missingAssets}`);
 console.log(`Legacy Runtime Paths:       ${legacyPathsCount}`);
-console.log(`Unique Runtime Inline Handlers: ${inlineHandlers.size}`);
-console.log(`Missing Handlers:           ${missingHandlers}`);
+console.log(`--------------------------------------------------`);
+console.log(`PHASE 2E EVENT MIGRATION BURN-DOWN:`);
+console.log(`  - Inline Unique Handlers:    ${inlineHandlersDiscovered.size} / ${registryHandlers.length}`);
+console.log(`  - Inline Event Occurrences:  ${currentInlineOccurrences} (baseline: 163)`);
+console.log(`  - Native Migrated Bindings:  ${nativeBindingsDiscovered.size}`);
+console.log(`  - Unresolved Handlers:       ${unresolvedHandlers}`);
+console.log(`  - Missing Handler Functions: ${missingHandlers}`);
+console.log(`--------------------------------------------------`);
 console.log(`Duplicate Extracted Funcs:  ${duplicateExtractedFunctions}`);
 console.log(`Direct Storage API Calls:   ${directLocalStorageApiCalls} calls`);
 console.log(`Inline Script Blocks:       ${inlineScriptBlocks} blocks`);
