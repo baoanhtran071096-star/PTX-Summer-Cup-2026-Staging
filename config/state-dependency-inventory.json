@@ -1,0 +1,146 @@
+{
+  "version": "2.6.3-wave2d",
+  "timestamp": "2026-08-02T05:23:43.382Z",
+  "totalStateVarsTracked": 10,
+  "stateVars": [
+    {
+      "variable": "ADMIN_HASH_KEY",
+      "domain": "admin",
+      "persistence": "localStorage",
+      "readers": [
+        "checkAdminAuth",
+        "verifyAdminPassword",
+        "changeAdminPassword"
+      ],
+      "writers": [
+        "verifyAdminPassword",
+        "changeAdminPassword"
+      ],
+      "risk": "high"
+    },
+    {
+      "variable": "SALT_STORAGE_KEY",
+      "domain": "admin",
+      "persistence": "localStorage",
+      "readers": [
+        "getSalt",
+        "hashPassword"
+      ],
+      "writers": [
+        "getSalt"
+      ],
+      "risk": "high"
+    },
+    {
+      "variable": "ptx_players_data",
+      "domain": "player",
+      "persistence": "localStorage",
+      "readers": [
+        "getOfficialPlayers",
+        "renderRoster",
+        "renderTopScorers",
+        "showPlayerDetail"
+      ],
+      "writers": [
+        "savePlayerAdminDetail",
+        "resetSystemDataToOfficialDefaults"
+      ],
+      "risk": "medium"
+    },
+    {
+      "variable": "ptx_result_1",
+      "domain": "match_score",
+      "persistence": "localStorage",
+      "readers": [
+        "calculateStandings",
+        "renderMatchResults",
+        "getMatchScores"
+      ],
+      "writers": [
+        "updateStandingsAndResults",
+        "addQuickGoal"
+      ],
+      "risk": "medium"
+    },
+    {
+      "variable": "ptx_result_2",
+      "domain": "match_score",
+      "persistence": "localStorage",
+      "readers": [
+        "calculateStandings",
+        "renderMatchResults"
+      ],
+      "writers": [
+        "updateStandingsAndResults"
+      ],
+      "risk": "medium"
+    },
+    {
+      "variable": "ptx_result_3",
+      "domain": "match_score",
+      "persistence": "localStorage",
+      "readers": [
+        "calculateStandings",
+        "renderMatchResults"
+      ],
+      "writers": [
+        "updateStandingsAndResults"
+      ],
+      "risk": "medium"
+    },
+    {
+      "variable": "ptx_stat_goals",
+      "domain": "statistics",
+      "persistence": "localStorage",
+      "readers": [
+        "renderTournamentStats",
+        "updateStatsAdmin"
+      ],
+      "writers": [
+        "updateStatsAdmin",
+        "addQuickGoal"
+      ],
+      "risk": "low"
+    },
+    {
+      "variable": "ptx_user_predictions_list",
+      "domain": "prediction",
+      "persistence": "localStorage",
+      "readers": [
+        "renderFanPredictionsList",
+        "submitFanPrediction"
+      ],
+      "writers": [
+        "submitFanPrediction",
+        "clearAllPredictionsList"
+      ],
+      "risk": "medium"
+    },
+    {
+      "variable": "currentTeamFilter",
+      "domain": "ui_state",
+      "persistence": "in-memory",
+      "readers": [
+        "filterRoster",
+        "switchTeamSubTab"
+      ],
+      "writers": [
+        "switchTeamSubTab"
+      ],
+      "risk": "low"
+    },
+    {
+      "variable": "activePage",
+      "domain": "ui_state",
+      "persistence": "localStorage",
+      "readers": [
+        "navigate",
+        "handleTabSwitch"
+      ],
+      "writers": [
+        "navigate"
+      ],
+      "risk": "low"
+    }
+  ]
+}
