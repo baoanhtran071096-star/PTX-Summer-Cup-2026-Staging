@@ -285,11 +285,19 @@ const OFFICIAL_PRE_KICKOFF_SEED = {
 export function ensureOfficialPreKickoffSeed(customSeed = null) {
     if (!isStorageAvailable()) return false;
 
+    // Fail-safe Fresh-State Detection (P0-002 Invariant):
+    // IF ANY legitimate tournament state, player roster, seed version, or match result exists in storage,
+    // DO NOT BOOTSTRAP! Preserve live user/admin state byte-for-byte!
     const existingPlayers = getStorageItem('ptx_players_data', null);
+    const existingRes1 = getStorageItem('ptx_result_1', null);
+    const existingRes2 = getStorageItem('ptx_result_2', null);
+    const existingRes3 = getStorageItem('ptx_result_3', null);
+    const existingMatches = getStorageItem('ptx_stat_matches', null);
+    const existingGoals = getStorageItem('ptx_stat_goals', null);
     const existingSeedVersion = getStorageItem('ptx_seed_version', null);
 
-    if (existingPlayers && existingSeedVersion === '3.0.2') {
-        return false;
+    if (existingPlayers !== null || existingRes1 !== null || existingRes2 !== null || existingRes3 !== null || existingSeedVersion !== null || (existingMatches !== null && existingMatches !== '0') || (existingGoals !== null && existingGoals !== '0')) {
+        return false; // FORBIDDEN: Live tournament state detected. Preserve existing state!
     }
 
     const seed = customSeed || OFFICIAL_PRE_KICKOFF_SEED;

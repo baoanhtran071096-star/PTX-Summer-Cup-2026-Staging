@@ -1209,8 +1209,8 @@ async function runUiTests() {
         failedUiTests++;
     }
 
-    // Testing 15: Fresh Visitor Official Pre-Kickoff Data Bootstrap Gate (P0-001 Verification)
-    console.log('\nTesting 15: Fresh Visitor Official Data Bootstrap Gate (P0-001 Verification)...');
+    // Testing 15: Fresh Visitor Official Pre-Kickoff Data Bootstrap & Preservation Gate (P0-001 & P0-002 Verification)
+    console.log('\nTesting 15: Fresh Visitor Data Bootstrap & Non-Destructive Preservation Gate (P0-001 & P0-002)...');
     
     // Clear storage completely to simulate fresh visitor
     window.localStorage.clear();
@@ -1234,31 +1234,55 @@ async function runUiTests() {
         freshGoals === '0' && freshMatches === '0'
     );
 
-    // 2. Refresh Non-Overwrite & Non-Duplicate Test
+    // 2. Refresh Non-Overwrite & Idempotency Test
     const refreshBootstrapRan = ensureOfficialPreKickoffSeed();
     const refreshedPlayers = window.getJSON('ptx_players_data', []);
     const refreshPass = (refreshBootstrapRan === false && refreshedPlayers.length === 24);
 
-    // 3. Played Match Non-Overwrite Test
+    // 3. Played Match Non-Overwrite Test (Missing Seed Version)
+    window.localStorage.clear();
     window.localStorage.setItem('ptx_result_1', '2-1 | Goal: Test');
     const matchBootstrapRan = ensureOfficialPreKickoffSeed();
     const preservedResult = window.localStorage.getItem('ptx_result_1');
     const matchPreservePass = (matchBootstrapRan === false && preservedResult === '2-1 | Goal: Test');
 
-    const testing15Pass = freshBootstrapPass && refreshPass && matchPreservePass;
+    // 4. Existing Players Data Non-Overwrite Test (Missing Seed Version)
+    window.localStorage.clear();
+    const customPlayers = [{ id: 1, name: "Live Player", goals: 5, assists: 3, mvp: 2 }];
+    window.localStorage.setItem('ptx_players_data', JSON.stringify(customPlayers));
+    const playersNoVersionRan = ensureOfficialPreKickoffSeed();
+    const readBackPlayers = window.getJSON('ptx_players_data', []);
+    const playersNoVersionPass = (playersNoVersionRan === false && readBackPlayers.length === 1 && readBackPlayers[0].goals === 5);
+
+    // 5. Old Seed Version Non-Reset Test (Version Migration Safety)
+    window.localStorage.clear();
+    window.localStorage.setItem('ptx_players_data', JSON.stringify(customPlayers));
+    window.localStorage.setItem('ptx_seed_version', '1.0.0');
+    const oldVersionRan = ensureOfficialPreKickoffSeed();
+    const readBackOldVersionPlayers = window.getJSON('ptx_players_data', []);
+    const oldVersionNoResetPass = (oldVersionRan === false && readBackOldVersionPlayers.length === 1 && readBackOldVersionPlayers[0].goals === 5);
+
+    const destructiveBootstrapMutations = (freshBootstrapPass && refreshPass && matchPreservePass && playersNoVersionPass && oldVersionNoResetPass) ? 0 : 1;
+    const existingTournamentStatePreserved = destructiveBootstrapMutations === 0;
+
+    const testing15Pass = existingTournamentStatePreserved;
 
     const testing15Metrics = {
         freshVisitorBootstrap: freshBootstrapPass ? 'PASS' : 'FAIL',
         refreshNonOverwrite: refreshPass ? 'PASS' : 'FAIL',
         playedMatchPreservation: matchPreservePass ? 'PASS' : 'FAIL',
+        playersNoVersionPreservation: playersNoVersionPass ? 'PASS' : 'FAIL',
+        oldVersionNoResetPreservation: oldVersionNoResetPass ? 'PASS' : 'FAIL',
+        destructiveBootstrapMutations,
+        existingTournamentStatePreserved,
         testing15Pass
     };
 
     if (testing15Pass) {
-        console.log('  ✅ [PASS] Fresh Visitor Data Bootstrap Gate - P0-001 Invariants Verified (3 teams, 24 players, 0 preloaded results, non-overwrite on refresh/match)');
+        console.log('  ✅ [PASS] Fresh Visitor Data Bootstrap & Preservation Gate - P0-001 & P0-002 Invariants Verified (destructiveBootstrapMutations = 0, existingTournamentStatePreserved = true)');
         passedUiTests++;
     } else {
-        console.error('  ❌ [FAIL] Fresh Visitor Data Bootstrap Gate - Invariant check failed', testing15Metrics);
+        console.error('  ❌ [FAIL] Fresh Visitor Data Bootstrap & Preservation Gate - Invariant check failed', testing15Metrics);
         failedUiTests++;
     }
 

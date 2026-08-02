@@ -1,10 +1,10 @@
 {
   "project": "PTX Summer Cup 2026",
-  "version": "3.0.2-hotfix-rc1",
-  "wave": "HOTFIX_P0_FRESH_BOOTSTRAP",
-  "artifact_tree_commit_sha": "e443e422fecb390b26c3dcea4a9ba74a6cc456f7",
-  "artifact_source_commit_sha": "e443e422fecb390b26c3dcea4a9ba74a6cc456f7",
-  "provenance_commit_sha": "e443e422fecb390b26c3dcea4a9ba74a6cc456f7",
-  "buildTimestamp": "2026-08-02T18:03:00.000Z",
+  "version": "3.0.2-hotfix-rc2",
+  "wave": "HOTFIX_P0_NON_DESTRUCTIVE_PRESERVATION_RC2",
+  "artifact_tree_commit_sha": "e627543a64a0ce5da2605cead949d30e34a6264e",
+  "artifact_source_commit_sha": "e627543a64a0ce5da2605cead949d30e34a6264e",
+  "provenance_commit_sha": "e627543a64a0ce5da2605cead949d30e34a6264e",
+  "buildTimestamp": "2026-08-02T18:06:00.000Z",
   "provenanceVerified": true
 }
