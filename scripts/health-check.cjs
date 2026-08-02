@@ -452,15 +452,26 @@ try {
 
 // Read machine-readable structured test results from verify-ui-behavior.cjs
 const uiResultsPath = path.join(rootDir, 'config', 'ui-smoke-results.json');
-const uiResults = fs.existsSync(uiResultsPath) ? JSON.parse(fs.readFileSync(uiResultsPath, 'utf8')) : {};
-const m11 = uiResults.testing11Metrics || {
-    writeCommandsTested: 5,
-    canonicalCommandsExecuted: 5,
-    writeCommandDoubleInvocations: 0,
-    persistenceBoundaryViolations: 0,
-    renderBoundaryViolations: 0,
-    writeParityViolations: 0
-};
+if (!fs.existsSync(uiResultsPath)) {
+    console.error('❌ FAIL-CLOSED: Machine-readable test results file config/ui-smoke-results.json is missing!');
+    process.exit(1);
+}
+
+let uiResults;
+try {
+    uiResults = JSON.parse(fs.readFileSync(uiResultsPath, 'utf8'));
+} catch (e) {
+    console.error(`❌ FAIL-CLOSED: Machine-readable test results file config/ui-smoke-results.json is malformed: ${e.message}`);
+    process.exit(1);
+}
+
+if (!uiResults.testing11Metrics || !uiResults.testing12Metrics) {
+    console.error('❌ FAIL-CLOSED: Machine-readable test results incomplete (missing testing11Metrics or testing12Metrics)');
+    process.exit(1);
+}
+
+const m11 = uiResults.testing11Metrics;
+const m12 = uiResults.testing12Metrics;
 
 // Output Comprehensive Gate Report
 console.log(`Source Modules Scanned:     ${srcFiles.length + 3} files (index.html + manifest + sw + src/**/*)`);
@@ -472,13 +483,21 @@ console.log(`--------------------------------------------------`);
 console.log(`PHASE 2E EVENT MIGRATION BURN-DOWN:`);
 console.log(`  - Baseline Inline Occurrences:     163`);
 console.log(`  - Pre-2E.4 Inline Occurrences:        52`);
+console.log(`  - Pre-2E.5 Inline Occurrences:        23`);
 console.log(`  - Current Inline Occurrences:      ${currentInlineOccurrences}`);
 console.log(`  - 2E.1 Certified Migrated:          31`);
 console.log(`  - 2E.2 Certified Migrated:           7`);
 console.log(`  - 2E.3 Certified Migrated:          27`);
-console.log(`  - 2E.4 Candidates Audited:         ${wave2e4CandidatesCount}`);
-console.log(`  - 2E.4 Approved Safe:              ${wave2e4CandidatesCount}`);
-console.log(`  - 2E.4 Native Migration Completed: ${wave2e4NativeCompletedCount} / ${wave2e4CandidatesCount}`);
+console.log(`  - 2E.4 Certified Migrated:          19`);
+console.log(`  - 2E.5 Candidate Handlers:         ${m12.candidateHandlers}`);
+console.log(`  - 2E.5 Native Owners:              ${m12.nativeOwners}`);
+console.log(`  - 2E.5 Adapter Paths:              ${m12.adapterPaths}`);
+console.log(`  - 2E.5 Canonical Paths:            ${m12.canonicalPaths}`);
+console.log(`  - Duplicate Owners:                 ${m12.duplicateOwners}`);
+console.log(`  - Double Dispatches:                ${m12.doubleDispatches}`);
+console.log(`  - Unauthorized Executions:          ${m12.unauthorizedExecutions}`);
+console.log(`  - Export Mutation Violations:       ${m12.exportMutationViolations}`);
+console.log(`  - Destructive Boundary Violations:  ${m12.destructiveBoundaryViolations}`);
 console.log(`  - Write Commands Tested:            ${m11.writeCommandsTested} / 5`);
 console.log(`  - Canonical Commands Executed:       ${m11.canonicalCommandsExecuted} / 5`);
 console.log(`  - Write Command Double Invocation:  ${m11.writeCommandDoubleInvocations}`);
@@ -486,7 +505,8 @@ console.log(`  - Persistence Boundary Violations:   ${m11.persistenceBoundaryVio
 console.log(`  - Render Boundary Violations:        ${m11.renderBoundaryViolations}`);
 console.log(`  - Write-Parity Violations:           ${m11.writeParityViolations}`);
 console.log(`  - Registry Strategy Drift:          ${registryStrategyDriftCount}`);
-console.log(`  - Total Native Migrated:           ${nativeMigrationCompleted.size} / 84`);
+console.log(`  - Total Native Migrated:           ${m12.totalNativeMigrated}`);
+console.log(`  - Legacy Bridge Retirement Ready:   ${m12.legacyBridgeRetirementReady}`);
 console.log(`  - Migrated Handlers Still Inline:  ${migratedHandlersStillInline}`);
 console.log(`  - Unresolved Handlers:             ${unresolvedHandlers}`);
 console.log(`  - Double-Bound Handlers:           ${doubleBoundHandlers}`);

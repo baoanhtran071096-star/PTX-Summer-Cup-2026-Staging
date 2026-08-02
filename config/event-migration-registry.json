@@ -102,7 +102,7 @@
       "category": "admin",
       "bindingStrategy": "auth_direct",
       "nativeBindingModule": "src/events/admin.events.js",
-      "migrationStatus": "pending",
+      "migrationStatus": "migrated",
       "wave": "2E.5",
       "risk": "critical"
     },
@@ -128,7 +128,7 @@
       "category": "navigation_ui",
       "bindingStrategy": "direct",
       "nativeBindingModule": "src/events/admin.events.js",
-      "migrationStatus": "pending",
+      "migrationStatus": "migrated",
       "wave": "2E.5",
       "risk": "critical"
     },
@@ -180,7 +180,7 @@
       "category": "miscellaneous",
       "bindingStrategy": "direct",
       "nativeBindingModule": "src/events/admin.events.js",
-      "migrationStatus": "pending",
+      "migrationStatus": "migrated",
       "wave": "2E.5",
       "risk": "critical"
     },
@@ -218,7 +218,7 @@
       ],
       "category": "statistics",
       "bindingStrategy": "direct",
-      "migrationStatus": "pending",
+      "migrationStatus": "migrated",
       "wave": "2E.5",
       "risk": "high"
     },
@@ -231,7 +231,7 @@
       "category": "navigation_ui",
       "bindingStrategy": "direct",
       "nativeBindingModule": "src/events/admin.events.js",
-      "migrationStatus": "pending",
+      "migrationStatus": "migrated",
       "wave": "2E.5",
       "risk": "critical"
     },
@@ -257,7 +257,7 @@
       "category": "miscellaneous",
       "bindingStrategy": "direct",
       "nativeBindingModule": "src/events/admin.events.js",
-      "migrationStatus": "pending",
+      "migrationStatus": "migrated",
       "wave": "2E.5",
       "risk": "critical"
     },
@@ -530,7 +530,7 @@
       "category": "miscellaneous",
       "bindingStrategy": "direct",
       "nativeBindingModule": "src/events/admin.events.js",
-      "migrationStatus": "pending",
+      "migrationStatus": "migrated",
       "wave": "2E.5",
       "risk": "critical"
     },
@@ -621,7 +621,7 @@
       "category": "player",
       "bindingStrategy": "direct",
       "nativeBindingModule": "src/events/admin.events.js",
-      "migrationStatus": "pending",
+      "migrationStatus": "migrated",
       "wave": "2E.5",
       "risk": "critical"
     },
@@ -634,7 +634,7 @@
       "category": "player",
       "bindingStrategy": "direct",
       "nativeBindingModule": "src/events/admin.events.js",
-      "migrationStatus": "pending",
+      "migrationStatus": "migrated",
       "wave": "2E.5",
       "risk": "critical"
     },
@@ -647,7 +647,7 @@
       "category": "admin",
       "bindingStrategy": "auth_direct",
       "nativeBindingModule": "src/events/admin.events.js",
-      "migrationStatus": "pending",
+      "migrationStatus": "migrated",
       "wave": "2E.5",
       "risk": "critical"
     },
@@ -660,7 +660,7 @@
       "category": "admin",
       "bindingStrategy": "auth_direct",
       "nativeBindingModule": "src/events/admin.events.js",
-      "migrationStatus": "pending",
+      "migrationStatus": "migrated",
       "wave": "2E.5",
       "risk": "critical"
     },
@@ -673,7 +673,7 @@
       "category": "admin",
       "bindingStrategy": "auth_direct",
       "nativeBindingModule": "src/events/admin.events.js",
-      "migrationStatus": "pending",
+      "migrationStatus": "migrated",
       "wave": "2E.5",
       "risk": "critical"
     },
@@ -712,7 +712,7 @@
       "category": "admin",
       "bindingStrategy": "auth_direct",
       "nativeBindingModule": "src/events/admin.events.js",
-      "migrationStatus": "pending",
+      "migrationStatus": "migrated",
       "wave": "2E.5",
       "risk": "critical"
     },
@@ -1037,7 +1037,7 @@
       "category": "miscellaneous",
       "bindingStrategy": "direct",
       "nativeBindingModule": "src/events/admin.events.js",
-      "migrationStatus": "pending",
+      "migrationStatus": "migrated",
       "wave": "2E.5",
       "risk": "critical"
     },
@@ -1050,7 +1050,7 @@
       "category": "miscellaneous",
       "bindingStrategy": "direct",
       "nativeBindingModule": "src/events/admin.events.js",
-      "migrationStatus": "pending",
+      "migrationStatus": "migrated",
       "wave": "2E.5",
       "risk": "critical"
     },
@@ -1089,7 +1089,7 @@
       "category": "miscellaneous",
       "bindingStrategy": "direct",
       "nativeBindingModule": "src/events/admin.events.js",
-      "migrationStatus": "pending",
+      "migrationStatus": "migrated",
       "wave": "2E.5",
       "risk": "critical"
     },
@@ -1102,7 +1102,7 @@
       "category": "miscellaneous",
       "bindingStrategy": "direct",
       "nativeBindingModule": "src/events/admin.events.js",
-      "migrationStatus": "pending",
+      "migrationStatus": "migrated",
       "wave": "2E.5",
       "risk": "critical"
     },
@@ -1115,7 +1115,7 @@
       "category": "miscellaneous",
       "bindingStrategy": "direct",
       "nativeBindingModule": "src/events/admin.events.js",
-      "migrationStatus": "pending",
+      "migrationStatus": "migrated",
       "wave": "2E.5",
       "risk": "critical"
     },
@@ -1310,7 +1310,7 @@
       "category": "miscellaneous",
       "bindingStrategy": "direct",
       "nativeBindingModule": "src/events/admin.events.js",
-      "migrationStatus": "pending",
+      "migrationStatus": "migrated",
       "wave": "2E.5",
       "risk": "critical"
     },

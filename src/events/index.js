@@ -8,6 +8,7 @@ import { initModalEvents } from './modal.events.js';
 import { initPlayerEvents } from './player.events.js';
 import { initPredictionEvents } from './prediction.events.js';
 import { initMatchEvents } from './match.events.js';
+import { initAdminEvents } from './admin.events.js';
 
 let eventsBootstrapInitialized = false;
 
@@ -17,12 +18,13 @@ export function initEvents() {
     }
     eventsBootstrapInitialized = true;
 
-    // Initialize Wave 2E.1, 2E.2, 2E.3 & 2E.4 Event Modules
+    // Initialize Wave 2E.1, 2E.2, 2E.3, 2E.4 & 2E.5 Event Modules
     initNavigationEvents();
     initModalEvents();
     initPlayerEvents();
     initPredictionEvents();
     initMatchEvents();
+    initAdminEvents();
 
     return true;
 }

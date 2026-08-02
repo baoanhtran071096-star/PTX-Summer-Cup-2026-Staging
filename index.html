@@ -228,7 +228,7 @@
                             <div style="font-size:11px; font-weight:900; color:#38bdf8; text-transform:uppercase; letter-spacing:1px; margin-bottom:4px; border-bottom:1px solid rgba(56,189,248,0.2); padding-bottom:4px; font-family:var(--font-title);">
                                 ⚡ QUẢN TRỊ & CÔNG NGHỆ PRO
                             </div>
-                            <a href="#admin" id="navAdminLink" onclick="checkAdminNavClick(event)" style="color:#fdba74; font-weight:700; background:rgba(253,186,116,0.08);">
+                            <a href="#admin" id="navAdminLink" data-action="check-admin-nav-click" style="color:#fdba74; font-weight:700; background:rgba(253,186,116,0.08);">
                                 <span>🔐 Ban Tổ Chức / Quản trị</span> <span style="font-size:9px; background:#f97316; color:#fff; padding:1px 6px; border-radius:6px; font-weight:900;">ADMIN</span>
                             </a>
                             <a href="#" data-action="openLiveStreamHubModal" style="color:#ef4444; font-weight:700; background:rgba(239,68,68,0.08);">
@@ -243,7 +243,7 @@
                             <a href="#" data-action="openStadiumDJModal" style="color:#ec4899;">
                                 <span>🎵 Stadium DJ Soundboard</span>
                             </a>
-                            <a href="#" id="audioToggleBtn" onclick="togglePTXAudio(); return false;" style="color:#38bdf8;">
+                            <a href="#" id="audioToggleBtn" data-action="toggle-ptx-audio" style="color:#38bdf8;">
                                 <span>🔊 Hiệu ứng Âm thanh</span>
                             </a>
                             <a href="#" data-action="openInfographicModal" style="color:#fbbf24;">
@@ -255,8 +255,8 @@
             </ul>
             <div class="nav-right-actions" style="display:flex;align-items:center;gap:10px;flex-shrink:0;">
                 <div class="lang-switch">
-                    <button class="active" data-lang="vi" onclick="applyLanguage('vi')">VI</button>
-                    <button data-lang="en" onclick="applyLanguage('en')">EN</button>
+                    <button class="active" data-lang="vi" data-action="apply-language" data-lang="vi">VI</button>
+                    <button data-lang="en" data-action="apply-language" data-lang="en">EN</button>
                 </div>
                 <button class="theme-toggle" data-action="toggleTheme">
                     <span id="themeIcon">🌙</span> <span id="themeLabel">Dark</span>
@@ -347,7 +347,7 @@
                         <div style="display:inline-block;background:rgba(124,58,237,0.25);color:#c084fc;border:1px solid rgba(192,132,252,0.4);font-size:11px;font-weight:800;padding:4px 12px;border-radius:20px;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">🤖 PTX AI TACTICAL ENGINE</div>
                         <h3 style="font-size:20px;font-weight:900;color:#f8fafc;font-family:var(--font-title);margin:0;">AI PHÂN TÍCH CHIẾN THUẬT & DỰ ĐOÁN TỶ SỐ</h3>
                     </div>
-                    <button onclick="runAITacticalAnalysis()" style="background:linear-gradient(135deg,#7c3aed,#c084fc);color:#fff;border:none;padding:10px 22px;border-radius:30px;font-size:13px;font-weight:900;cursor:pointer;font-family:var(--font-title);letter-spacing:1px;box-shadow:0 6px 20px rgba(124,58,237,0.4);">
+                    <button data-action="run-ai-tactical-analysis" style="background:linear-gradient(135deg,#7c3aed,#c084fc);color:#fff;border:none;padding:10px 22px;border-radius:30px;font-size:13px;font-weight:900;cursor:pointer;font-family:var(--font-title);letter-spacing:1px;box-shadow:0 6px 20px rgba(124,58,237,0.4);">
                         ⚡ CHẠY AI PHÂN TÍCH
                     </button>
                 </div>
@@ -482,7 +482,7 @@
                 <button type="button" data-action="switch-to-pre-match-state" style="background:rgba(56,189,248,0.18);color:#38bdf8;border:1.5px solid #38bdf8;padding:8px 18px;border-radius:20px;font-size:12px;font-weight:900;cursor:pointer;display:flex;align-items:center;gap:6px;box-shadow:0 4px 12px rgba(56,189,248,0.25);">
                     ⏳ KHÔI PHỤC CHẾ ĐỘ TRƯỚC TRẬN ĐẤU (0 TRẬN / 0 ĐIỂM)
                 </button>
-                <button onclick="resetSystemDataToOfficialDefaults(); return false;" style="background:rgba(251,191,36,0.18);color:#fbbf24;border:1.5px solid #fbbf24;padding:8px 18px;border-radius:20px;font-size:12px;font-weight:900;cursor:pointer;display:flex;align-items:center;gap:6px;box-shadow:0 4px 12px rgba(251,191,36,0.25);">
+                <button data-action="reset-system-data" style="background:rgba(251,191,36,0.18);color:#fbbf24;border:1.5px solid #fbbf24;padding:8px 18px;border-radius:20px;font-size:12px;font-weight:900;cursor:pointer;display:flex;align-items:center;gap:6px;box-shadow:0 4px 12px rgba(251,191,36,0.25);">
                     ⚽ NẠP KẾT QUẢ ĐÃ THI ĐẤU (DEMO RESULTS)
                 </button>
             </div>
@@ -1549,10 +1549,10 @@
                         </div>
                     </div>
                     <div style="display:flex;align-items:center;gap:12px;">
-                        <button onclick="exportPtxMigrationData()" style="background:rgba(124,58,237,0.2);color:#c084fc;border:1px solid #7c3aed;padding:10px 18px;border-radius:12px;font-weight:700;font-size:13px;cursor:pointer;">
+                        <button data-action="export-ptx-migration-data" style="background:rgba(124,58,237,0.2);color:#c084fc;border:1px solid #7c3aed;padding:10px 18px;border-radius:12px;font-weight:700;font-size:13px;cursor:pointer;">
                             📥 Export JSON
                         </button>
-                        <button onclick="handleLogout()" style="background:#dc2626;color:#fff;border:none;padding:10px 22px;border-radius:12px;font-weight:700;font-size:13px;cursor:pointer;box-shadow:0 4px 12px rgba(220,38,38,0.4);">
+                        <button data-action="handle-logout" style="background:#dc2626;color:#fff;border:none;padding:10px 22px;border-radius:12px;font-weight:700;font-size:13px;cursor:pointer;box-shadow:0 4px 12px rgba(220,38,38,0.4);">
                             🔒 Đăng xuất
                         </button>
                     </div>
@@ -1639,7 +1639,7 @@
                     <div class="admin-card" style="max-width:800px;margin:0 auto;">
                         <h4 style="color:#c084fc;margin-bottom:12px;font-size:15px;">👤 Quản Lý Chỉ Số 24 Thẻ FIFA Cầu Thủ</h4>
                         <label>Chọn Cầu Thủ:</label>
-                        <select id="adminPlayerSelect" onchange="loadAdminPlayerDetail(this.value)" style="background:#0f172a;color:#fff;border:1px solid #334155;padding:10px;border-radius:10px;width:100%;margin-bottom:16px;font-weight:700;">
+                        <select id="adminPlayerSelect" data-action="load-admin-player-detail" style="background:#0f172a;color:#fff;border:1px solid #334155;padding:10px;border-radius:10px;width:100%;margin-bottom:16px;font-weight:700;">
                             <!-- Populated by JS -->
                         </select>
 
@@ -1662,7 +1662,7 @@
                             <div><label>Link Ảnh Avatar (PostImage)</label><input type="text" id="admin-p-avatar"></div>
                         </div>
 
-                        <button onclick="savePlayerAdminDetail()" style="margin-top:16px;">💾 Lưu Chỉ Số Cầu Thủ</button>
+                        <button data-action="save-player-admin-detail" style="margin-top:16px;">💾 Lưu Chỉ Số Cầu Thủ</button>
                     </div>
                 </div>
 
@@ -1675,7 +1675,7 @@
                             <label>Thông điệp BTC</label><textarea id="admin-msg" placeholder="Nội dung thông điệp..."></textarea>
                             <label>Ngày thi đấu</label><input type="text" id="admin-date" placeholder="VD: Tháng 08/2026">
                             <label>Địa điểm</label><input type="text" id="admin-location" placeholder="VD: Sân bóng đá...">
-                            <button onclick="saveContentAdmin()">💾 Lưu Nội Dung Giải</button>
+                            <button data-action="save-content-admin">💾 Lưu Nội Dung Giải</button>
                         </div>
                         <div class="admin-card">
                             <h4 style="color:#fbbf24;margin-bottom:12px;font-size:15px;">🏆 Hall of Fame (2025-2030)</h4>
@@ -1683,7 +1683,7 @@
                             <input type="text" id="admin-hof-2025" placeholder="2025">
                             <input type="text" id="admin-hof-2026" placeholder="2026">
                             <input type="text" id="admin-hof-2027" placeholder="2027">
-                            <button onclick="saveHallOfFameAdmin()">💾 Lưu Hall of Fame</button>
+                            <button data-action="save-hall-of-fame-admin">💾 Lưu Hall of Fame</button>
                         </div>
                     </div>
                 </div>
@@ -1695,12 +1695,12 @@
                             <h4 style="color:#ef4444;margin-bottom:12px;font-size:15px;">🔐 Đổi Mật Khẩu Đăng Nhập Admin</h4>
                             <label>Mật khẩu mới</label>
                             <input type="password" id="admin-new-pass" placeholder="Nhập mật khẩu mới">
-                            <button onclick="changeAdminPassword()">🔒 Đổi Mật Khẩu Hash</button>
+                            <button data-action="change-admin-password">🔒 Đổi Mật Khẩu Hash</button>
                         </div>
 
                         <div class="admin-card">
                             <h4 style="color:#c084fc;margin-bottom:12px;font-size:15px;">🚀 Sao Lưu & AI Growth Hub</h4>
-                            <button onclick="exportPtxMigrationData()" style="background:#7c3aed;margin-bottom:10px;">📥 Export JSON File (ptx_migration_data.json)</button>
+                            <button data-action="export-ptx-migration-data" style="background:#7c3aed;margin-bottom:10px;">📥 Export JSON File (ptx_migration_data.json)</button>
                             <button data-action="openAiGrowthModal" style="background:#ea580c;">🤖 Mở AI & Growth Dashboard</button>
                         </div>
                     </div>
@@ -1721,7 +1721,7 @@
     </footer>
 
     <!-- ===== LOGIN MODAL ===== -->
-    <div id="loginModal"><div class="login-box"><span class="close-modal" data-action="closeLogin">×</span><h3 data-i18n="login_title">🔐 Quản trị viên</h3><input type="text" id="userInput" placeholder="Tên đăng nhập" data-i18n="login_user"><input type="password" id="passInput" placeholder="Mật khẩu" data-i18n="login_pass"><button onclick="handleLogin()" data-i18n="login_btn">Đăng nhập</button><div class="error" id="loginError" data-i18n="login_error">Sai tên đăng nhập hoặc mật khẩu!</div></div></div>
+    <div id="loginModal"><div class="login-box"><span class="close-modal" data-action="closeLogin">×</span><h3 data-i18n="login_title">🔐 Quản trị viên</h3><input type="text" id="userInput" placeholder="Tên đăng nhập" data-i18n="login_user"><input type="password" id="passInput" placeholder="Mật khẩu" data-i18n="login_pass"><button data-action="handle-login" data-i18n="login_btn">Đăng nhập</button><div class="error" id="loginError" data-i18n="login_error">Sai tên đăng nhập hoặc mật khẩu!</div></div></div>
 
     <!-- ===== AI & GROWTH DASHBOARD MODAL ===== -->
     <div id="aiGrowthModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);backdrop-filter:blur(8px);z-index:2000;align-items:center;justify-content:center;padding:20px;">
@@ -4898,9 +4898,9 @@
                 </div>
 
                 <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
-                    <button onclick="playWhistleSound()" style="background:rgba(59,130,246,0.2);color:#60a5fa;border:1px solid #3b82f6;padding:8px 14px;border-radius:10px;font-weight:800;font-size:11px;cursor:pointer;">⚽ CÒI GIAO BÓNG</button>
-                    <button onclick="playWhistleSound()" style="background:rgba(234,179,8,0.2);color:#fbbf24;border:1px solid #eab308;padding:8px 14px;border-radius:10px;font-weight:800;font-size:11px;cursor:pointer;">🟨 CÒI PHẠM LỖI</button>
-                    <button onclick="playFinalSirenSound()" style="background:rgba(239,68,68,0.2);color:#fca5a5;border:1px solid #ef4444;padding:8px 14px;border-radius:10px;font-weight:800;font-size:11px;cursor:pointer;">🏁 CÒI FIFA HẾT GIỜ (3 TIẾNG)</button>
+                    <button data-action="play-whistle-sound" style="background:rgba(59,130,246,0.2);color:#60a5fa;border:1px solid #3b82f6;padding:8px 14px;border-radius:10px;font-weight:800;font-size:11px;cursor:pointer;">⚽ CÒI GIAO BÓNG</button>
+                    <button data-action="play-whistle-sound" style="background:rgba(234,179,8,0.2);color:#fbbf24;border:1px solid #eab308;padding:8px 14px;border-radius:10px;font-weight:800;font-size:11px;cursor:pointer;">🟨 CÒI PHẠM LỖI</button>
+                    <button data-action="play-final-siren-sound" style="background:rgba(239,68,68,0.2);color:#fca5a5;border:1px solid #ef4444;padding:8px 14px;border-radius:10px;font-weight:800;font-size:11px;cursor:pointer;">🏁 CÒI FIFA HẾT GIỜ (3 TIẾNG)</button>
                 </div>
             </div>
 
@@ -4969,16 +4969,16 @@
             <div style="font-size:12px;color:#94a3b8;margin-bottom:20px;">Phát hiệu ứng âm thanh cổ vũ, nhịp trống & nhạc ra sân rộn ràng tại sân bóng</div>
 
             <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-bottom:20px;">
-                <button onclick="playCrowdCheerSound()" style="background:linear-gradient(135deg,#ec4899,#db2777);color:#fff;border:none;padding:18px;border-radius:16px;font-weight:900;font-size:14px;cursor:pointer;box-shadow:0 8px 25px rgba(236,72,153,0.4);display:flex;align-items:center;justify-content:center;gap:10px;font-family:var(--font-title);">
+                <button data-action="play-crowd-cheer-sound" style="background:linear-gradient(135deg,#ec4899,#db2777);color:#fff;border:none;padding:18px;border-radius:16px;font-weight:900;font-size:14px;cursor:pointer;box-shadow:0 8px 25px rgba(236,72,153,0.4);display:flex;align-items:center;justify-content:center;gap:10px;font-family:var(--font-title);">
                     <span style="font-size:24px;">📣</span> <span>KHÁN ĐÀI REO HÒ</span>
                 </button>
-                <button onclick="playStadiumDrumsSound()" style="background:linear-gradient(135deg,#8b5cf6,#7c3aed);color:#fff;border:none;padding:18px;border-radius:16px;font-weight:900;font-size:14px;cursor:pointer;box-shadow:0 8px 25px rgba(139,92,246,0.4);display:flex;align-items:center;justify-content:center;gap:10px;font-family:var(--font-title);">
+                <button data-action="play-stadium-drums-sound" style="background:linear-gradient(135deg,#8b5cf6,#7c3aed);color:#fff;border:none;padding:18px;border-radius:16px;font-weight:900;font-size:14px;cursor:pointer;box-shadow:0 8px 25px rgba(139,92,246,0.4);display:flex;align-items:center;justify-content:center;gap:10px;font-family:var(--font-title);">
                     <span style="font-size:24px;">🥁</span> <span>NHỊP TRỐNG CỔ ĐỘNG</span>
                 </button>
-                <button onclick="playVuvuzelaSound()" style="background:linear-gradient(135deg,#eab308,#ca8a04);color:#000;border:none;padding:18px;border-radius:16px;font-weight:900;font-size:14px;cursor:pointer;box-shadow:0 8px 25px rgba(234,179,8,0.4);display:flex;align-items:center;justify-content:center;gap:10px;font-family:var(--font-title);">
+                <button data-action="play-vuvuzela-sound" style="background:linear-gradient(135deg,#eab308,#ca8a04);color:#000;border:none;padding:18px;border-radius:16px;font-weight:900;font-size:14px;cursor:pointer;box-shadow:0 8px 25px rgba(234,179,8,0.4);display:flex;align-items:center;justify-content:center;gap:10px;font-family:var(--font-title);">
                     <span style="font-size:24px;">🎺</span> <span>KÈN VUVUZELA & HORN</span>
                 </button>
-                <button onclick="playFinalSirenSound()" style="background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;border:none;padding:18px;border-radius:16px;font-weight:900;font-size:14px;cursor:pointer;box-shadow:0 8px 25px rgba(239,68,68,0.4);display:flex;align-items:center;justify-content:center;gap:10px;font-family:var(--font-title);">
+                <button data-action="play-final-siren-sound" style="background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;border:none;padding:18px;border-radius:16px;font-weight:900;font-size:14px;cursor:pointer;box-shadow:0 8px 25px rgba(239,68,68,0.4);display:flex;align-items:center;justify-content:center;gap:10px;font-family:var(--font-title);">
                     <span style="font-size:24px;">🚨</span> <span>CÒI BÁO KẾT THÚC</span>
                 </button>
             </div>
@@ -5269,7 +5269,7 @@
                         <button type="button" data-action="download-vip-prediction-ticket" style="flex:1;background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#0f172a;border:none;padding:10px;border-radius:12px;font-size:12px;font-weight:900;cursor:pointer;font-family:var(--font-title);letter-spacing:0.5px;box-shadow:0 4px 15px rgba(245,158,11,0.4);">
                             📥 TẢI THẺ VÉ VÀNG HD
                         </button>
-                        <button onclick="showToast('🎟️ Mã vé ' + '${p.ticket}' + ' đã sẵn sàng tham gia bốc thăm!', 'success')" style="background:rgba(255,255,255,0.1);color:#fff;border:1px solid rgba(255,255,255,0.2);padding:10px 14px;border-radius:12px;font-size:12px;font-weight:700;cursor:pointer;">
+                        <button data-action="show-toast-sample" style="background:rgba(255,255,255,0.1);color:#fff;border:1px solid rgba(255,255,255,0.2);padding:10px 14px;border-radius:12px;font-size:12px;font-weight:700;cursor:pointer;">
                             📱 BỐC THĂM
                         </button>
                     </div>

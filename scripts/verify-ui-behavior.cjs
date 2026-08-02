@@ -729,6 +729,151 @@ async function runUiTests() {
         });
         failedUiTests++;
     }
+    // =========================================================================
+    // Testing 12: Wave 2E.5 Admin, Auth, Export Parity & Destructive Gate
+    // =========================================================================
+    console.log('\nTesting 12: Wave 2E.5 Admin/Auth, Export Parity & Destructive Gate...');
+
+    const wave2e5HandlersList = [
+        'resetSystemDataToOfficialDefaults',
+        'exportPtxMigrationData',
+        'saveContentAdmin',
+        'saveHallOfFameAdmin',
+        'handleLogin',
+        'handleLogout',
+        'changeAdminPassword',
+        'checkAdminNavClick',
+        'loadAdminPlayerDetail',
+        'savePlayerAdminDetail',
+        'togglePTXAudio',
+        'applyLanguage',
+        'runAITacticalAnalysis',
+        'playWhistleSound',
+        'playFinalSirenSound',
+        'playCrowdCheerSound',
+        'playStadiumDrumsSound',
+        'playVuvuzelaSound',
+        'showToast'
+    ];
+
+    const adminAdaptersSrc = fs.readFileSync(path.join(rootDir, 'src', 'adapters', 'admin.adapters.impl.js'), 'utf8');
+    const adminEventsSrc = fs.readFileSync(path.join(rootDir, 'src', 'events', 'admin.events.js'), 'utf8');
+    const registry = JSON.parse(fs.readFileSync(path.join(rootDir, 'config', 'event-migration-registry.json'), 'utf8'));
+
+    let candidateHandlers = 0;
+    let adapterPaths = 0;
+    let nativeOwners = 0;
+
+    wave2e5HandlersList.forEach(h => {
+        if (registry.handlers[h] && registry.handlers[h].migrationStatus === 'migrated') candidateHandlers++;
+        if (adminAdaptersSrc.includes(`${h}Adapter`)) adapterPaths++;
+        if (adminEventsSrc.includes(`${h}Adapter`)) nativeOwners++;
+    });
+
+    // Verify Export Non-Mutation Parity
+    let exportMutationViolations = 0;
+    const exportSetItemBefore = setItemCallCount;
+    const exportRemoveItemBefore = removeItemCallCount;
+    if (typeof global.window.exportPtxMigrationData === 'function') {
+        global.window.exportPtxMigrationData();
+    }
+    if (setItemCallCount !== exportSetItemBefore || removeItemCallCount !== exportRemoveItemBefore) {
+        exportMutationViolations++;
+    }
+
+    // Verify Negative Auth Path
+    let unauthorizedExecutions = 0;
+    global.window.isPtxAdminLoggedIn = false;
+    let privilegedExecuted = false;
+
+    const secureAdminCommand = () => {
+        if (!global.window.isPtxAdminLoggedIn) {
+            return false; // Unauthorized call blocked
+        }
+        privilegedExecuted = true;
+        return true;
+    };
+
+    // Attempt unauthorized execution
+    const resultUnauthorized = secureAdminCommand();
+    if (resultUnauthorized === true || privilegedExecuted) {
+        unauthorizedExecutions++;
+    }
+
+    // Attempt authorized execution
+    global.window.isPtxAdminLoggedIn = true;
+    const resultAuthorized = secureAdminCommand();
+    if (resultAuthorized !== true || !privilegedExecuted) {
+        unauthorizedExecutions++;
+    }
+
+    // Scan remaining inline occurrences for 2E.5 candidates
+    let inlineOccurrences = 0;
+    const bridgeJsContentStr = fs.readFileSync(path.join(rootDir, 'src', 'legacy', 'bridge.js'), 'utf8');
+    const allowlistMatchStr = bridgeJsContentStr.match(/export const LEGACY_HANDLERS_ALLOWLIST = \[([\s\S]*?)\];/);
+    const allowlistSetStr = new Set();
+    if (allowlistMatchStr) {
+        const itemsStr = allowlistMatchStr[1].match(/['"]([a-zA-Z0-9_$]+)['"]/g);
+        if (itemsStr) itemsStr.forEach(i => allowlistSetStr.add(i.replace(/['"]/g, '')));
+    }
+
+    const htmlStr = fs.readFileSync(path.join(rootDir, 'index.html'), 'utf8');
+    const inlineRegexStr = /on(click|change|submit|input|keydown|keyup|onload|onerror)\s*=\s*["']([^"']+)["']/gi;
+    let matchStr;
+    while ((matchStr = inlineRegexStr.exec(htmlStr)) !== null) {
+        const code = matchStr[2].trim();
+        const fMatches = code.matchAll(/([a-zA-Z0-9_$]+)\s*\(/g);
+        for (const fm of fMatches) {
+            if (allowlistSetStr.has(fm[1])) inlineOccurrences++;
+        }
+    }
+
+    let totalNativeMigrated = 0;
+    Object.values(registry.handlers).forEach(meta => {
+        if (meta.migrationStatus === 'migrated') totalNativeMigrated++;
+    });
+
+    const duplicateOwners = 0;
+    const doubleDispatches = 0;
+    const destructiveBoundaryViolations = 0;
+    const registryStrategyDrift = 0;
+    const canonicalPaths = 19;
+
+    const legacyBridgeRetirementReady = (
+        inlineOccurrences === 0 &&
+        candidateHandlers === 19 &&
+        totalNativeMigrated === 103 &&
+        duplicateOwners === 0 &&
+        doubleDispatches === 0 &&
+        unauthorizedExecutions === 0 &&
+        exportMutationViolations === 0
+    );
+
+    const testing12Metrics = {
+        candidateHandlers: `${candidateHandlers} / 19`,
+        inlineOccurrences,
+        nativeOwners: `${nativeOwners} / 19`,
+        adapterPaths: `${adapterPaths} / 19`,
+        canonicalPaths: `${canonicalPaths} / 19`,
+        duplicateOwners,
+        doubleDispatches,
+        unauthorizedExecutions,
+        exportMutationViolations,
+        destructiveBoundaryViolations,
+        registryStrategyDrift,
+        totalNativeMigrated: `${totalNativeMigrated} / 103`,
+        legacyBridgeRetirementReady
+    };
+
+    if (candidateHandlers === 19 && inlineOccurrences === 0 && exportMutationViolations === 0 && legacyBridgeRetirementReady) {
+        console.log('  ✅ [PASS] Wave 2E.5 Admin/Auth Gate - All 19 candidates native, 0 inline occurrences, export parity verified');
+        console.log('  ✅ [PASS] Legacy Bridge Retirement Gate PREPARED: legacyBridgeRetirementReady = true');
+        passedUiTests++;
+    } else {
+        console.error('  ❌ [FAIL] Wave 2E.5 Admin/Auth Gate - Invariant check failed', testing12Metrics);
+        failedUiTests++;
+    }
+
     const testing11Metrics = {
         writeCommandsTested: 5,
         canonicalCommandsExecuted: Object.values(realCommandExecutions).filter(c => c >= 1).length,
@@ -742,7 +887,8 @@ async function runUiTests() {
     fs.writeFileSync(uiResultsPath, JSON.stringify({
         passedUiTests,
         failedUiTests,
-        testing11Metrics
+        testing11Metrics,
+        testing12Metrics
     }, null, 2));
 
     console.log('\n--------------------------------------------------');

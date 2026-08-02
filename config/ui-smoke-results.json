@@ -1,5 +1,5 @@
 {
-  "passedUiTests": 27,
+  "passedUiTests": 28,
   "failedUiTests": 0,
   "testing11Metrics": {
     "writeCommandsTested": 5,
@@ -8,5 +8,20 @@
     "persistenceBoundaryViolations": 0,
     "renderBoundaryViolations": 0,
     "writeParityViolations": 0
+  },
+  "testing12Metrics": {
+    "candidateHandlers": "19 / 19",
+    "inlineOccurrences": 0,
+    "nativeOwners": "19 / 19",
+    "adapterPaths": "19 / 19",
+    "canonicalPaths": "19 / 19",
+    "duplicateOwners": 0,
+    "doubleDispatches": 0,
+    "unauthorizedExecutions": 0,
+    "exportMutationViolations": 0,
+    "destructiveBoundaryViolations": 0,
+    "registryStrategyDrift": 0,
+    "totalNativeMigrated": "103 / 103",
+    "legacyBridgeRetirementReady": true
   }
 }

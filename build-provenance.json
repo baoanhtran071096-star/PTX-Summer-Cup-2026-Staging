@@ -1,10 +1,10 @@
 {
   "project": "PTX Summer Cup 2026",
-  "version": "2.7.0-wave2e4",
-  "wave": "2E.4",
-  "artifact_tree_commit_sha": "29d09893fb84f21cd0966d31373abb1b588a42b1",
-  "artifact_source_commit_sha": "6cdac33204eb883c8dbec56326150eff4b4aaac4",
-  "provenance_commit_sha": "e5815c9285fb70c52bbef1db17042fe58d9ecbd8",
-  "buildTimestamp": "2026-08-02T08:42:12.160Z",
+  "version": "2.7.0-wave2e5",
+  "wave": "2E.5",
+  "artifact_tree_commit_sha": "74a5d19eec090adb262c75461c867ddf99506ebe",
+  "artifact_source_commit_sha": "74a5d19eec090adb262c75461c867ddf99506ebe",
+  "provenance_commit_sha": "74a5d19eec090adb262c75461c867ddf99506ebe",
+  "buildTimestamp": "2026-08-02T15:52:00.000Z",
   "provenanceVerified": true
 }
