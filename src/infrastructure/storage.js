@@ -282,21 +282,38 @@ const OFFICIAL_PRE_KICKOFF_SEED = {
     }
 };
 
+export function hasExistingTournamentState() {
+    if (!isStorageAvailable()) return false;
+    try {
+        const len = window.localStorage.length;
+        for (let i = 0; i < len; i++) {
+            const key = window.localStorage.key(i);
+            if (!key) continue;
+
+            if (key === 'ptx_players_data' || key === 'ptx_seed_version' || key === 'ptx_seeded_flag' || key === 'ptx_user_prediction' || key === 'ptx_user_predictions_list') {
+                return true;
+            }
+            if (/^ptx_result_[0-9]+$/.test(key)) {
+                return true;
+            }
+            if (/^ptx_stat_[a-z_]+$/.test(key)) {
+                return true;
+            }
+        }
+    } catch (e) {
+        console.warn('[Storage] Fail-safe error checking tournament state:', e);
+        return true; // Fail-closed: assume state exists if reading storage fails
+    }
+    return false;
+}
+
 export function ensureOfficialPreKickoffSeed(customSeed = null) {
     if (!isStorageAvailable()) return false;
 
-    // Fail-safe Fresh-State Detection (P0-002 Invariant):
-    // IF ANY legitimate tournament state, player roster, seed version, or match result exists in storage,
-    // DO NOT BOOTSTRAP! Preserve live user/admin state byte-for-byte!
-    const existingPlayers = getStorageItem('ptx_players_data', null);
-    const existingRes1 = getStorageItem('ptx_result_1', null);
-    const existingRes2 = getStorageItem('ptx_result_2', null);
-    const existingRes3 = getStorageItem('ptx_result_3', null);
-    const existingMatches = getStorageItem('ptx_stat_matches', null);
-    const existingGoals = getStorageItem('ptx_stat_goals', null);
-    const existingSeedVersion = getStorageItem('ptx_seed_version', null);
-
-    if (existingPlayers !== null || existingRes1 !== null || existingRes2 !== null || existingRes3 !== null || existingSeedVersion !== null || (existingMatches !== null && existingMatches !== '0') || (existingGoals !== null && existingGoals !== '0')) {
+    // Fail-safe Dynamic Key Tournament State Detection (P0-002 Invariant):
+    // IF ANY authoritative tournament state key, result key (e.g. ptx_result_4), stat key (e.g. ptx_stat_yellow),
+    // or player roster exists, DO NOT BOOTSTRAP! Preserve live user/admin state byte-for-byte!
+    if (hasExistingTournamentState()) {
         return false; // FORBIDDEN: Live tournament state detected. Preserve existing state!
     }
 

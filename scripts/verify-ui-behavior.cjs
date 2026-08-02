@@ -571,7 +571,9 @@ async function runUiTests() {
         getItem: (k) => storageStore[k] || null,
         setItem: (k, v) => { setItemCallCount++; storageStore[k] = String(v); },
         removeItem: (k) => { removeItemCallCount++; delete storageStore[k]; },
-        clear: () => { Object.keys(storageStore).forEach(k => delete storageStore[k]); }
+        clear: () => { Object.keys(storageStore).forEach(k => delete storageStore[k]); },
+        key: (i) => Object.keys(storageStore)[i] || null,
+        get length() { return Object.keys(storageStore).length; }
     };
 
     // Render boundary spies
@@ -1218,7 +1220,7 @@ async function runUiTests() {
     const storageModuleT15 = await import(`file:///${path.join(rootDir, 'src', 'infrastructure', 'storage.js').replace(/\\/g, '/')}`);
     const ensureOfficialPreKickoffSeed = storageModuleT15.ensureOfficialPreKickoffSeed;
 
-    // 1. Fresh Visitor Bootstrap Test
+    // 1. Fresh Visitor Bootstrap Test (Empty Storage)
     const bootstrapRan = ensureOfficialPreKickoffSeed();
     const freshPlayers = window.getJSON('ptx_players_data', []);
     const freshRes1 = window.localStorage.getItem('ptx_result_1');
@@ -1234,19 +1236,42 @@ async function runUiTests() {
         freshGoals === '0' && freshMatches === '0'
     );
 
-    // 2. Refresh Non-Overwrite & Idempotency Test
+    // 2. Preference-Only Storage Test (Theme/Lang present -> Seed ALLOWED & Theme Preserved)
+    window.localStorage.clear();
+    window.localStorage.setItem('theme', 'dark');
+    window.localStorage.setItem('lang', 'vi');
+    const prefRan = ensureOfficialPreKickoffSeed();
+    const prefPlayers = window.getJSON('ptx_players_data', []);
+    const prefTheme = window.localStorage.getItem('theme');
+    const preferenceOnlyBootstrapPass = (prefRan === true && prefPlayers.length === 24 && prefTheme === 'dark');
+
+    // 3. Refresh Non-Overwrite & Idempotency Test
     const refreshBootstrapRan = ensureOfficialPreKickoffSeed();
     const refreshedPlayers = window.getJSON('ptx_players_data', []);
     const refreshPass = (refreshBootstrapRan === false && refreshedPlayers.length === 24);
 
-    // 3. Played Match Non-Overwrite Test (Missing Seed Version)
+    // 4. Played Match Non-Overwrite Test (Missing Seed Version)
     window.localStorage.clear();
     window.localStorage.setItem('ptx_result_1', '2-1 | Goal: Test');
     const matchBootstrapRan = ensureOfficialPreKickoffSeed();
     const preservedResult = window.localStorage.getItem('ptx_result_1');
     const matchPreservePass = (matchBootstrapRan === false && preservedResult === '2-1 | Goal: Test');
 
-    // 4. Existing Players Data Non-Overwrite Test (Missing Seed Version)
+    // 5. Result Beyond 3 Non-Overwrite Test (ptx_result_4)
+    window.localStorage.clear();
+    window.localStorage.setItem('ptx_result_4', '1-0 | Goal: Test 4');
+    const res4BootstrapRan = ensureOfficialPreKickoffSeed();
+    const res4Preserved = window.localStorage.getItem('ptx_result_4');
+    const resultBeyond3Pass = (res4BootstrapRan === false && res4Preserved === '1-0 | Goal: Test 4');
+
+    // 6. Stat-Only Partial State Test (ptx_stat_yellow = 2)
+    window.localStorage.clear();
+    window.localStorage.setItem('ptx_stat_yellow', '2');
+    const statOnlyRan = ensureOfficialPreKickoffSeed();
+    const statYellowPreserved = window.localStorage.getItem('ptx_stat_yellow');
+    const statOnlyPass = (statOnlyRan === false && statYellowPreserved === '2');
+
+    // 7. Existing Players Data Non-Overwrite Test (Missing Seed Version)
     window.localStorage.clear();
     const customPlayers = [{ id: 1, name: "Live Player", goals: 5, assists: 3, mvp: 2 }];
     window.localStorage.setItem('ptx_players_data', JSON.stringify(customPlayers));
@@ -1254,7 +1279,7 @@ async function runUiTests() {
     const readBackPlayers = window.getJSON('ptx_players_data', []);
     const playersNoVersionPass = (playersNoVersionRan === false && readBackPlayers.length === 1 && readBackPlayers[0].goals === 5);
 
-    // 5. Old Seed Version Non-Reset Test (Version Migration Safety)
+    // 8. Old Seed Version Non-Reset Test (Version Migration Safety)
     window.localStorage.clear();
     window.localStorage.setItem('ptx_players_data', JSON.stringify(customPlayers));
     window.localStorage.setItem('ptx_seed_version', '1.0.0');
@@ -1262,15 +1287,18 @@ async function runUiTests() {
     const readBackOldVersionPlayers = window.getJSON('ptx_players_data', []);
     const oldVersionNoResetPass = (oldVersionRan === false && readBackOldVersionPlayers.length === 1 && readBackOldVersionPlayers[0].goals === 5);
 
-    const destructiveBootstrapMutations = (freshBootstrapPass && refreshPass && matchPreservePass && playersNoVersionPass && oldVersionNoResetPass) ? 0 : 1;
+    const destructiveBootstrapMutations = (freshBootstrapPass && preferenceOnlyBootstrapPass && refreshPass && matchPreservePass && resultBeyond3Pass && statOnlyPass && playersNoVersionPass && oldVersionNoResetPass) ? 0 : 1;
     const existingTournamentStatePreserved = destructiveBootstrapMutations === 0;
 
     const testing15Pass = existingTournamentStatePreserved;
 
     const testing15Metrics = {
         freshVisitorBootstrap: freshBootstrapPass ? 'PASS' : 'FAIL',
+        preferenceOnlyBootstrap: preferenceOnlyBootstrapPass ? 'PASS' : 'FAIL',
         refreshNonOverwrite: refreshPass ? 'PASS' : 'FAIL',
         playedMatchPreservation: matchPreservePass ? 'PASS' : 'FAIL',
+        resultBeyond3Preservation: resultBeyond3Pass ? 'PASS' : 'FAIL',
+        statOnlyPreservation: statOnlyPass ? 'PASS' : 'FAIL',
         playersNoVersionPreservation: playersNoVersionPass ? 'PASS' : 'FAIL',
         oldVersionNoResetPreservation: oldVersionNoResetPass ? 'PASS' : 'FAIL',
         destructiveBootstrapMutations,
