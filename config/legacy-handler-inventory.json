@@ -1,0 +1,945 @@
+{
+  "version": "2.6.0-phase2b",
+  "timestamp": "2026-08-02T05:20:15.124Z",
+  "totalOccurrences": 163,
+  "uniqueHandlersCount": 103,
+  "categoriesSummary": {
+    "navigation_ui": 39,
+    "player": 3,
+    "match_score": 10,
+    "statistics": 4,
+    "gallery_media": 0,
+    "prediction": 7,
+    "admin": 6,
+    "miscellaneous": 34
+  },
+  "handlers": {
+    "installPTXPWAApp": {
+      "occurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "navigation_ui",
+      "migration": "event-delegation",
+      "risk": "low"
+    },
+    "dismissPWABanner": {
+      "occurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "navigation_ui",
+      "migration": "event-delegation",
+      "risk": "low"
+    },
+    "navigate": {
+      "occurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "navigation_ui",
+      "migration": "event-delegation",
+      "risk": "low"
+    },
+    "openLiveStreamHubModal": {
+      "occurrences": 3,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "navigation_ui",
+      "migration": "event-delegation",
+      "risk": "low"
+    },
+    "openVipTicketModal": {
+      "occurrences": 4,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "navigation_ui",
+      "migration": "event-delegation",
+      "risk": "low"
+    },
+    "openComparePlayersModal": {
+      "occurrences": 2,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "navigation_ui",
+      "migration": "event-delegation",
+      "risk": "low"
+    },
+    "switchToPreMatchState": {
+      "occurrences": 2,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "match_score",
+      "migration": "direct-listener",
+      "risk": "medium"
+    },
+    "resetSystemDataToOfficialDefaults": {
+      "occurrences": 2,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "admin",
+      "migration": "authenticated-listener",
+      "risk": "high"
+    },
+    "openRefereeToolkit": {
+      "occurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "navigation_ui",
+      "migration": "event-delegation",
+      "risk": "low"
+    },
+    "checkAdminNavClick": {
+      "occurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "navigation_ui",
+      "migration": "event-delegation",
+      "risk": "low"
+    },
+    "openAiPressReleaseModal": {
+      "occurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "navigation_ui",
+      "migration": "event-delegation",
+      "risk": "low"
+    },
+    "triggerVARReview": {
+      "occurrences": 3,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "navigation_ui",
+      "migration": "event-delegation",
+      "risk": "low"
+    },
+    "openStadiumDJModal": {
+      "occurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "navigation_ui",
+      "migration": "event-delegation",
+      "risk": "low"
+    },
+    "togglePTXAudio": {
+      "occurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "miscellaneous",
+      "migration": "direct-listener",
+      "risk": "medium"
+    },
+    "openInfographicModal": {
+      "occurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "navigation_ui",
+      "migration": "event-delegation",
+      "risk": "low"
+    },
+    "exportOfficialMatchReport": {
+      "occurrences": 2,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "match_score",
+      "migration": "direct-listener",
+      "risk": "medium"
+    },
+    "exportPtxMigrationData": {
+      "occurrences": 3,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "statistics",
+      "migration": "direct-listener",
+      "risk": "low"
+    },
+    "applyLanguage": {
+      "occurrences": 2,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "navigation_ui",
+      "migration": "event-delegation",
+      "risk": "low"
+    },
+    "toggleTheme": {
+      "occurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "navigation_ui",
+      "migration": "event-delegation",
+      "risk": "low"
+    },
+    "runAITacticalAnalysis": {
+      "occurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "miscellaneous",
+      "migration": "direct-listener",
+      "risk": "medium"
+    },
+    "filterMatchRound": {
+      "occurrences": 4,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "match_score",
+      "migration": "direct-listener",
+      "risk": "medium"
+    },
+    "aiAutoSuggestPrediction": {
+      "occurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "prediction",
+      "migration": "form-submit-listener",
+      "risk": "medium"
+    },
+    "submitFanPrediction": {
+      "occurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "prediction",
+      "migration": "form-submit-listener",
+      "risk": "medium"
+    },
+    "loadVideoClip": {
+      "occurrences": 5,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "match_score",
+      "migration": "direct-listener",
+      "risk": "medium"
+    },
+    "shareResult": {
+      "occurrences": 3,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "miscellaneous",
+      "migration": "direct-listener",
+      "risk": "medium"
+    },
+    "switchTeamSubTab": {
+      "occurrences": 2,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "navigation_ui",
+      "migration": "event-delegation",
+      "risk": "low"
+    },
+    "selectPitchTeam": {
+      "occurrences": 3,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "miscellaneous",
+      "migration": "direct-listener",
+      "risk": "medium"
+    },
+    "changePitchFormation": {
+      "occurrences": 1,
+      "eventTypes": [
+        "change"
+      ],
+      "category": "miscellaneous",
+      "migration": "direct-listener",
+      "risk": "medium"
+    },
+    "openTacticalVisualizerModal": {
+      "occurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "navigation_ui",
+      "migration": "event-delegation",
+      "risk": "low"
+    },
+    "autoOptimize5v5Squad": {
+      "occurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "miscellaneous",
+      "migration": "direct-listener",
+      "risk": "medium"
+    },
+    "filterFifaByTeam": {
+      "occurrences": 4,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "statistics",
+      "migration": "direct-listener",
+      "risk": "low"
+    },
+    "closePlayerCompareModal": {
+      "occurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "navigation_ui",
+      "migration": "event-delegation",
+      "risk": "low"
+    },
+    "renderCompareView": {
+      "occurrences": 4,
+      "eventTypes": [
+        "change"
+      ],
+      "category": "navigation_ui",
+      "migration": "event-delegation",
+      "risk": "low"
+    },
+    "filterGalleryPage": {
+      "occurrences": 4,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "statistics",
+      "migration": "direct-listener",
+      "risk": "low"
+    },
+    "triggerTrophyRotate": {
+      "occurrences": 3,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "miscellaneous",
+      "migration": "direct-listener",
+      "risk": "medium"
+    },
+    "copyBankStk": {
+      "occurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "miscellaneous",
+      "migration": "direct-listener",
+      "risk": "medium"
+    },
+    "scrollSponsorForm": {
+      "occurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "navigation_ui",
+      "migration": "event-delegation",
+      "risk": "low"
+    },
+    "selectSponsorPackage": {
+      "occurrences": 3,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "miscellaneous",
+      "migration": "direct-listener",
+      "risk": "medium"
+    },
+    "submitSponsorContact": {
+      "occurrences": 1,
+      "eventTypes": [
+        "submit"
+      ],
+      "category": "miscellaneous",
+      "migration": "direct-listener",
+      "risk": "medium"
+    },
+    "openLogin": {
+      "occurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "navigation_ui",
+      "migration": "event-delegation",
+      "risk": "low"
+    },
+    "handleLogout": {
+      "occurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "miscellaneous",
+      "migration": "direct-listener",
+      "risk": "medium"
+    },
+    "switchAdminTab": {
+      "occurrences": 4,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "navigation_ui",
+      "migration": "event-delegation",
+      "risk": "low"
+    },
+    "setZeroMatchesState": {
+      "occurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "match_score",
+      "migration": "direct-listener",
+      "risk": "medium"
+    },
+    "setDemoScoresState": {
+      "occurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "match_score",
+      "migration": "direct-listener",
+      "risk": "medium"
+    },
+    "updateStandingsAndResults": {
+      "occurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "miscellaneous",
+      "migration": "direct-listener",
+      "risk": "medium"
+    },
+    "addQuickGoal": {
+      "occurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "match_score",
+      "migration": "direct-listener",
+      "risk": "medium"
+    },
+    "updateStatsAdmin": {
+      "occurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "statistics",
+      "migration": "direct-listener",
+      "risk": "low"
+    },
+    "loadAdminPlayerDetail": {
+      "occurrences": 1,
+      "eventTypes": [
+        "change"
+      ],
+      "category": "player",
+      "migration": "component-listener",
+      "risk": "medium"
+    },
+    "savePlayerAdminDetail": {
+      "occurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "player",
+      "migration": "component-listener",
+      "risk": "medium"
+    },
+    "saveContentAdmin": {
+      "occurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "admin",
+      "migration": "authenticated-listener",
+      "risk": "high"
+    },
+    "saveHallOfFameAdmin": {
+      "occurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "admin",
+      "migration": "authenticated-listener",
+      "risk": "high"
+    },
+    "changeAdminPassword": {
+      "occurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "admin",
+      "migration": "authenticated-listener",
+      "risk": "high"
+    },
+    "openAiGrowthModal": {
+      "occurrences": 2,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "navigation_ui",
+      "migration": "event-delegation",
+      "risk": "low"
+    },
+    "closeLogin": {
+      "occurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "navigation_ui",
+      "migration": "event-delegation",
+      "risk": "low"
+    },
+    "handleLogin": {
+      "occurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "admin",
+      "migration": "authenticated-listener",
+      "risk": "high"
+    },
+    "closeAiGrowthModal": {
+      "occurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "navigation_ui",
+      "migration": "event-delegation",
+      "risk": "low"
+    },
+    "runAiPredictionDemo": {
+      "occurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "prediction",
+      "migration": "form-submit-listener",
+      "risk": "medium"
+    },
+    "predictChampionDemo": {
+      "occurrences": 3,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "prediction",
+      "migration": "form-submit-listener",
+      "risk": "medium"
+    },
+    "generateReferralDemo": {
+      "occurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "miscellaneous",
+      "migration": "direct-listener",
+      "risk": "medium"
+    },
+    "closePlayerModal": {
+      "occurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "navigation_ui",
+      "migration": "event-delegation",
+      "risk": "low"
+    },
+    "closeSubstitutionModal": {
+      "occurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "navigation_ui",
+      "migration": "event-delegation",
+      "risk": "low"
+    },
+    "closeTacticalVisualizerModal": {
+      "occurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "navigation_ui",
+      "migration": "event-delegation",
+      "risk": "low"
+    },
+    "closeVipTicketModal": {
+      "occurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "navigation_ui",
+      "migration": "event-delegation",
+      "risk": "low"
+    },
+    "updateTicketName": {
+      "occurrences": 1,
+      "eventTypes": [
+        "input"
+      ],
+      "category": "miscellaneous",
+      "migration": "direct-listener",
+      "risk": "medium"
+    },
+    "randomizeTicketSerial": {
+      "occurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "miscellaneous",
+      "migration": "direct-listener",
+      "risk": "medium"
+    },
+    "downloadVipTicketImage": {
+      "occurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "miscellaneous",
+      "migration": "direct-listener",
+      "risk": "medium"
+    },
+    "closeComparePlayersModal": {
+      "occurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "navigation_ui",
+      "migration": "event-delegation",
+      "risk": "low"
+    },
+    "openSubstitutionModalById": {
+      "occurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "navigation_ui",
+      "migration": "event-delegation",
+      "risk": "low"
+    },
+    "openPlayerModalById": {
+      "occurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "navigation_ui",
+      "migration": "event-delegation",
+      "risk": "low"
+    },
+    "openLightbox": {
+      "occurrences": 2,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "navigation_ui",
+      "migration": "event-delegation",
+      "risk": "low"
+    },
+    "closeInfographicModal": {
+      "occurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "navigation_ui",
+      "migration": "event-delegation",
+      "risk": "low"
+    },
+    "downloadInfographicImage": {
+      "occurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "miscellaneous",
+      "migration": "direct-listener",
+      "risk": "medium"
+    },
+    "closeRefereeToolkit": {
+      "occurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "navigation_ui",
+      "migration": "event-delegation",
+      "risk": "low"
+    },
+    "onRefMatchChange": {
+      "occurrences": 1,
+      "eventTypes": [
+        "change"
+      ],
+      "category": "match_score",
+      "migration": "direct-listener",
+      "risk": "medium"
+    },
+    "showRefereeCard": {
+      "occurrences": 2,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "player",
+      "migration": "component-listener",
+      "risk": "medium"
+    },
+    "tossRefCoin": {
+      "occurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "miscellaneous",
+      "migration": "direct-listener",
+      "risk": "medium"
+    },
+    "changeFoulCount": {
+      "occurrences": 4,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "miscellaneous",
+      "migration": "direct-listener",
+      "risk": "medium"
+    },
+    "toggleRefStopwatch": {
+      "occurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "navigation_ui",
+      "migration": "event-delegation",
+      "risk": "low"
+    },
+    "resetRefStopwatch": {
+      "occurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "navigation_ui",
+      "migration": "event-delegation",
+      "risk": "low"
+    },
+    "playWhistleSound": {
+      "occurrences": 2,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "miscellaneous",
+      "migration": "direct-listener",
+      "risk": "medium"
+    },
+    "playFinalSirenSound": {
+      "occurrences": 2,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "miscellaneous",
+      "migration": "direct-listener",
+      "risk": "medium"
+    },
+    "clearRefTimelineLog": {
+      "occurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "miscellaneous",
+      "migration": "direct-listener",
+      "risk": "medium"
+    },
+    "closeStadiumDJModal": {
+      "occurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "navigation_ui",
+      "migration": "event-delegation",
+      "risk": "low"
+    },
+    "playCrowdCheerSound": {
+      "occurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "miscellaneous",
+      "migration": "direct-listener",
+      "risk": "medium"
+    },
+    "playStadiumDrumsSound": {
+      "occurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "miscellaneous",
+      "migration": "direct-listener",
+      "risk": "medium"
+    },
+    "playVuvuzelaSound": {
+      "occurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "miscellaneous",
+      "migration": "direct-listener",
+      "risk": "medium"
+    },
+    "closeLiveStreamHubModal": {
+      "occurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "navigation_ui",
+      "migration": "event-delegation",
+      "risk": "low"
+    },
+    "onLiveStreamMatchChange": {
+      "occurrences": 1,
+      "eventTypes": [
+        "change"
+      ],
+      "category": "match_score",
+      "migration": "direct-listener",
+      "risk": "medium"
+    },
+    "loadCustomLiveStream": {
+      "occurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "miscellaneous",
+      "migration": "direct-listener",
+      "risk": "medium"
+    },
+    "sendLiveReaction": {
+      "occurrences": 3,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "miscellaneous",
+      "migration": "direct-listener",
+      "risk": "medium"
+    },
+    "sendLiveChatMessage": {
+      "occurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "miscellaneous",
+      "migration": "direct-listener",
+      "risk": "medium"
+    },
+    "closeAiPressReleaseModal": {
+      "occurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "navigation_ui",
+      "migration": "event-delegation",
+      "risk": "low"
+    },
+    "generateAIPressRelease": {
+      "occurrences": 2,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "miscellaneous",
+      "migration": "direct-listener",
+      "risk": "medium"
+    },
+    "copyPressReleaseText": {
+      "occurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "miscellaneous",
+      "migration": "direct-listener",
+      "risk": "medium"
+    },
+    "toggleFloatingAdmin": {
+      "occurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "admin",
+      "migration": "authenticated-listener",
+      "risk": "high"
+    },
+    "quickGoalFromFloat": {
+      "occurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "match_score",
+      "migration": "direct-listener",
+      "risk": "medium"
+    },
+    "togglePTXChatbotWindow": {
+      "occurrences": 2,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "miscellaneous",
+      "migration": "direct-listener",
+      "risk": "medium"
+    },
+    "sendPTXChatQuick": {
+      "occurrences": 5,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "miscellaneous",
+      "migration": "direct-listener",
+      "risk": "medium"
+    },
+    "sendPTXChatMessage": {
+      "occurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "miscellaneous",
+      "migration": "direct-listener",
+      "risk": "medium"
+    },
+    "downloadVIPPredictionTicket": {
+      "occurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "prediction",
+      "migration": "form-submit-listener",
+      "risk": "medium"
+    },
+    "showToast": {
+      "occurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "miscellaneous",
+      "migration": "direct-listener",
+      "risk": "medium"
+    },
+    "loadSamplePredictions": {
+      "occurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "prediction",
+      "migration": "form-submit-listener",
+      "risk": "medium"
+    },
+    "clearAllPredictionsList": {
+      "occurrences": 1,
+      "eventTypes": [
+        "click"
+      ],
+      "category": "prediction",
+      "migration": "form-submit-listener",
+      "risk": "medium"
+    }
+  }
+}
