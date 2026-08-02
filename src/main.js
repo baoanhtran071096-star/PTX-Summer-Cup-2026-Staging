@@ -7,7 +7,7 @@ import { APP_CONFIG, STORAGE_KEYS } from './config/app.config.js';
 import { TEAMS, POSITIONS } from './config/constants.js';
 import { formatScore, formatJerseyName, truncateText } from './utils/formatters.js';
 import { normalizeAssetUrl, handleImageError, FALLBACK_PLAYER_SVG, FALLBACK_TEAM_SVG, FALLBACK_GENERAL_SVG } from './utils/assets.js';
-import { isStorageAvailable, getStorageItem, setStorageItem, removeStorageItem, getJSON, setJSON } from './infrastructure/storage.js';
+import { isStorageAvailable, getStorageItem, setStorageItem, removeStorageItem, getJSON, setJSON, validateAndImportPtxData, initAdminSessionTimeout, cleanupAdminSessionListeners } from './infrastructure/storage.js';
 import { initPWAHelpers, installPTXPWAApp, dismissPWABanner } from './infrastructure/pwa.js';
 import {
     calculateStandingsAdapter,
@@ -68,6 +68,9 @@ if (typeof window !== 'undefined') {
     window.removeStorageItem = removeStorageItem;
     window.getJSON = getJSON;
     window.setJSON = setJSON;
+    window.validateAndImportPtxData = validateAndImportPtxData;
+    window.initAdminSessionTimeout = initAdminSessionTimeout;
+    window.cleanupAdminSessionListeners = cleanupAdminSessionListeners;
 
     // UI Modules & View Adapters
     window.showToast = showToast;
@@ -115,8 +118,9 @@ if (typeof window !== 'undefined') {
     window.parseGoalDataWithTeam = parseGoalDataWithTeamAdapter;
     window.getMatchResult = getMatchResultAdapter;
 
-    // Initialize PWA Listeners & Native Events
+    // Initialize PWA Listeners, Admin Session Timeout & Native Events
     initPWAHelpers();
+    initAdminSessionTimeout();
     initEvents();
 }
 

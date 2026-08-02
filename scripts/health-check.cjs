@@ -460,13 +460,35 @@ try {
     process.exit(1);
 }
 
-if (!uiResults.testing11Metrics || !uiResults.testing12Metrics) {
-    console.error('❌ FAIL-CLOSED: Machine-readable test results incomplete (missing testing11Metrics or testing12Metrics)');
+if (!uiResults.testing11Metrics || !uiResults.testing12Metrics || !uiResults.testing13Metrics) {
+    console.error('❌ FAIL-CLOSED: Machine-readable test results incomplete (missing testing11Metrics, testing12Metrics, or testing13Metrics)');
     process.exit(1);
 }
 
 const m11 = uiResults.testing11Metrics;
 const m12 = uiResults.testing12Metrics;
+const m13 = uiResults.testing13Metrics;
+
+const testing13Pass = (
+    m13.product002ValidImport === 'PASS' &&
+    m13.product002MalformedRejection === 'PASS' &&
+    m13.product002UnknownKeyRejection === 'PASS' &&
+    m13.product002ProtoPollutionDefense === 'PASS' &&
+    m13.product002PreValidationMutations === 0 &&
+    m13.product002PartialCommitStates === 0 &&
+    m13.product003InactivityExpiry === 'PASS' &&
+    m13.product003ActivityExtension === 'PASS' &&
+    m13.product003ListenerCleanup === 'PASS' &&
+    m13.product003ExpiredRestoration === 0 &&
+    m13.product004MalformedJsonCrash === 0 &&
+    m13.product004DestructiveAutoRepair === 0 &&
+    m13.product004SafeFallback === 'PASS' &&
+    m13.testing13Pass === true
+);
+
+if (!testing13Pass) {
+    console.warn(`  ⚠️ Testing 13 Failure: Wave 3B.1 Data & Security Hardening gate failed.`);
+}
 
 const testing12Pass = (
     m12.candidateHandlers === '19 / 19' &&
@@ -564,7 +586,8 @@ const pass = missingAssets <= contract.allowedMissingAssets &&
              delegationBoundaryViolations === 0 &&
              provenanceErrors === 0 &&
              !packageVersionMismatch &&
-             testing12Pass;
+             testing12Pass &&
+             testing13Pass;
 
 if (pass) {
     console.log('✅ RESULT: PASS (Exit code 0)\n');

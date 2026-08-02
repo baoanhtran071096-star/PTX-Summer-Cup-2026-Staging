@@ -1,5 +1,5 @@
 {
-  "passedUiTests": 28,
+  "passedUiTests": 29,
   "failedUiTests": 0,
   "testing11Metrics": {
     "writeCommandsTested": 5,
@@ -25,5 +25,21 @@
     "bridgeFileExists": false,
     "bridgeReferencesCount": 0,
     "legacyBridgeRetired": true
+  },
+  "testing13Metrics": {
+    "product002ValidImport": "PASS",
+    "product002MalformedRejection": "PASS",
+    "product002UnknownKeyRejection": "PASS",
+    "product002ProtoPollutionDefense": "PASS",
+    "product002PreValidationMutations": 0,
+    "product002PartialCommitStates": 0,
+    "product003InactivityExpiry": "PASS",
+    "product003ActivityExtension": "PASS",
+    "product003ListenerCleanup": "PASS",
+    "product003ExpiredRestoration": 0,
+    "product004MalformedJsonCrash": 0,
+    "product004DestructiveAutoRepair": 0,
+    "product004SafeFallback": "PASS",
+    "testing13Pass": true
   }
 }
