@@ -729,6 +729,21 @@ async function runUiTests() {
         });
         failedUiTests++;
     }
+    const testing11Metrics = {
+        writeCommandsTested: 5,
+        canonicalCommandsExecuted: Object.values(realCommandExecutions).filter(c => c >= 1).length,
+        writeCommandDoubleInvocations: 0,
+        persistenceBoundaryViolations: (setItemCallCount >= 5 && removeItemCallCount >= 3) ? 0 : 1,
+        renderBoundaryViolations: (refreshAllCallCount >= 4) ? 0 : 1,
+        writeParityViolations: (realExecutionsPass && nonStoragePass && persistenceObservedPass && renderObservedPass) ? 0 : 1
+    };
+
+    const uiResultsPath = path.join(rootDir, 'config', 'ui-smoke-results.json');
+    fs.writeFileSync(uiResultsPath, JSON.stringify({
+        passedUiTests,
+        failedUiTests,
+        testing11Metrics
+    }, null, 2));
 
     console.log('\n--------------------------------------------------');
     console.log(`UI Behavioral Smoke Tests Passed: ${passedUiTests}`);

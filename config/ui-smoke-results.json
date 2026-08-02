@@ -1,0 +1,12 @@
+{
+  "passedUiTests": 27,
+  "failedUiTests": 0,
+  "testing11Metrics": {
+    "writeCommandsTested": 5,
+    "canonicalCommandsExecuted": 5,
+    "writeCommandDoubleInvocations": 0,
+    "persistenceBoundaryViolations": 0,
+    "renderBoundaryViolations": 0,
+    "writeParityViolations": 0
+  }
+}
